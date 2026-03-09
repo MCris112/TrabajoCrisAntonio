@@ -1,25 +1,28 @@
 package com.trabajocrisantonio.modelos;
 
-public class prestamo {
+import com.darkredgm.querymc.Annotations.Column;
+
+public class Prestamo {
   
-    @DbColumn
+    @Column
     //Clave foranea
     private int id_libro;
 
-    @DbColumn
+
+    @Column
     private int numero_prestamo;
 
-    @DbColumn
+    @Column
     //Clave foranea
     private String nif;
 
-    @DbColumn
+    @Column
     private String fecha_inicio;
 
-    @DbColumn
+    @Column
     private String fecha_fin;
 
-    @DbColumn
+    @Column
     private boolean devuelto;
 
 }

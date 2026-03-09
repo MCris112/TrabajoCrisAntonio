@@ -1,24 +1,27 @@
 package com.trabajocrisantonio.modelos;
 
-public class usuario {
+import com.darkredgm.querymc.Annotations.Column;
+import com.darkredgm.querymc.Annotations.Primary;
+
+public class Usuario {
    
-    @DbColumn
+    @Column
     private String nombre;
     
-    @DBColPrimary
-    @DbColumn
+    @Primary
+    @Column
     private String nif;
 
-    @DbColumn
+    @Column
     private String apellido1;
 
-    @DbColumn
+    @Column
     private String apellido2;
 
-    @DbColumn
+    @Column
     private String direccion;
 
-    @DbColumn
+    @Column
     private String telefono;
 
 }

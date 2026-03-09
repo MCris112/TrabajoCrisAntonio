@@ -3,30 +3,30 @@ package com.trabajocrisantonio.modelos;
 import com.darkredgm.querymc.Annotations.Column;
 import com.darkredgm.querymc.Annotations.Primary;
 
-public class libro {
+public class Libro {
     @Primary
     @Column
     private int id_libro;
 
-    @DbColumn
+    @Column
     private String editorial;
 
-    @DbColumn
+    @Column
     private int numero_hojas;
 
-    @DbColumn
+    @Column
     private String titulo;
 
-    @DbColumn
+    @Column
     private String autor;
 
-    @DbColumn
+    @Column
     private String genero;
 
-    @DbColumn
+    @Column
     private double precio;
 
-    @DbColumn
+    @Column
     private boolean bestseller;
 
 }

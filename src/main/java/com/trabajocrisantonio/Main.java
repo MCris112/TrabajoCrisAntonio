@@ -7,5 +7,8 @@ public class Main {
         // Cargar migraciones
 
         // Mostrar app principal
+
+        new App();
+
     }
 }

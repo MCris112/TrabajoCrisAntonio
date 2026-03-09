@@ -4,13 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f0745b5-c5ec-42af-a20f-d02b8110f6bc" name="Changes" comment="Maven">
+    <list default="true" id="9f0745b5-c5ec-42af-a20f-d02b8110f6bc" name="Changes" comment="Maven update">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/CategoriaController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/PiezaController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/ProveedorController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/SuministroController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/BaseView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/CategoriaView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/PiezaView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/ProveedorView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/SuministroView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Modelos/libro.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Modelos/prestamo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Modelos/usuario.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/libro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Libro.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/prestamo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Prestamo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Usuario.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,12 +68,14 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "master",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/crisv/Desktop/Project/TrabajoCrisAntonio/src/main/java/com/trabajocrisantonio",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -75,6 +88,11 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\crisv\Desktop\Project\TrabajoCrisAntonio\src\main\java\com\trabajocrisantonio" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -90,7 +108,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773056556681</updated>
-      <workItem from="1773056558907" duration="1199000" />
+      <workItem from="1773056558907" duration="1755000" />
     </task>
     <task id="LOCAL-00001" summary="Maven">
       <option name="closed" value="true" />
@@ -108,7 +126,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773056642159</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Maven update">
+      <option name="closed" value="true" />
+      <created>1773057785235</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1773057785235</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -116,6 +142,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Maven" />
-    <option name="LAST_COMMIT_MESSAGE" value="Maven" />
+    <MESSAGE value="Maven update" />
+    <option name="LAST_COMMIT_MESSAGE" value="Maven update" />
   </component>
 </project>
