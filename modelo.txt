@@ -1,3 +1,0 @@
-Libro = id_libro, editorial, numero_hojas, titulo, autor, genero, precio, bestseller(boolean)
-Usuario = nombre, nif, apellido1, apellido2, dirección, telefono
-Préstamo = numero_prestamo, nif, id_libro, fecha_inicio, fecha_fin, devuelto(boolean)
