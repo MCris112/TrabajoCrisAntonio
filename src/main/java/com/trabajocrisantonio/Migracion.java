@@ -9,6 +9,11 @@ import com.trabajocrisantonio.modelos.Usuario;
 
 public class Migracion {
     public static void main(String[] args) throws SQLException {
+
+        try{
+            DB.deleteDatabase("tareaDomingo");
+        }catch (SQLException e){}
+
         DB.createDatabase("tareaDomingo");
         DB.verify(Libro.class, Usuario.class, Prestamo.class);
     }

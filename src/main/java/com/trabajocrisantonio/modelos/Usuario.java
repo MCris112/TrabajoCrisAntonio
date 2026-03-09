@@ -5,13 +5,13 @@ import com.darkredgm.querymc.Annotations.Primary;
 import com.darkredgm.querymc.Database.Model;
 
 public class Usuario extends Model {
-   
-    @Column
-    private String nombre;
-    
-    @Primary
+
+    @Primary(autoincrement = false)
     @Column
     private String nif;
+
+    @Column
+    private String nombre;
 
     @Column
     private String apellido1;

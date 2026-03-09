@@ -1,11 +1,11 @@
 package com.trabajocrisantonio.Controllers;
 
-import Core.PanelField;
-import Views.BaseView;
 import com.darkredgm.querymc.Collections.MCList;
 import com.darkredgm.querymc.Database.Model;
 import com.darkredgm.querymc.Database.ModelAttribute;
 import com.darkredgm.querymc.Database.ORM.QueryBuilder;
+import com.trabajocrisantonio.Core.PanelField;
+import com.trabajocrisantonio.Views.BaseView;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;

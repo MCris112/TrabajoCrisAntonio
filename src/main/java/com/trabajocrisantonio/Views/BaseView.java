@@ -1,9 +1,9 @@
 package com.trabajocrisantonio.Views;
 
-import Core.PanelField;
-import com.darkredgm.querymc.Annotations.DBColPrimary;
+import com.darkredgm.querymc.Annotations.Primary;
 import com.darkredgm.querymc.Database.Model;
 import com.darkredgm.querymc.Database.ModelAttribute;
+import com.trabajocrisantonio.Core.PanelField;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -89,7 +89,7 @@ abstract public class BaseView extends JPanel {
 
             if ( attr.isPrimaryKey() )
             {
-                DBColPrimary primary = attr.asField().getAnnotation(DBColPrimary.class);
+                Primary primary = attr.asField().getAnnotation(Primary.class);
 
                 // En caso la clave primaria sea dinamica, desactivar el código para editar
                 if ( primary.autoincrement() )
