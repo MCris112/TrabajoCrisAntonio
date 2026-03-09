@@ -2,8 +2,9 @@ package com.trabajocrisantonio.modelos;
 
 import com.darkredgm.querymc.Annotations.Column;
 import com.darkredgm.querymc.Annotations.Primary;
+import com.darkredgm.querymc.Database.Model;
 
-public class Usuario {
+public class Usuario extends Model {
    
     @Column
     private String nombre;

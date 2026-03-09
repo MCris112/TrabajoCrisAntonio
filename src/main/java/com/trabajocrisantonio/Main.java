@@ -1,7 +1,7 @@
 package com.trabajocrisantonio;
 
 public class Main {
-
+    
     static void main() {
 
         // Cargar migraciones

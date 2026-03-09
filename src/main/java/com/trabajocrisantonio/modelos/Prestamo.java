@@ -1,8 +1,9 @@
 package com.trabajocrisantonio.modelos;
 
 import com.darkredgm.querymc.Annotations.Column;
+import com.darkredgm.querymc.Database.Model;
 
-public class Prestamo {
+public class Prestamo extends Model {
   
     @Column
     //Clave foranea
