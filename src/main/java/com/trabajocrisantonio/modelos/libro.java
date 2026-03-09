@@ -1,11 +1,11 @@
-package Modelos;
+package com.trabajocrisantonio.modelos;
 
-import com.darkredgm.querymc.Annotations.DBColPrimary;
-import com.darkredgm.querymc.Annotations.DbColumn;
+import com.darkredgm.querymc.Annotations.Column;
+import com.darkredgm.querymc.Annotations.Primary;
 
 public class libro {
-    @DBColPrimary
-    @DbColumn
+    @Primary
+    @Column
     private int id_libro;
 
     @DbColumn

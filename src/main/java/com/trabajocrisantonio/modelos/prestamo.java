@@ -1,4 +1,4 @@
-package main.java.Modelos;
+package com.trabajocrisantonio.modelos;
 
 public class prestamo {
   
