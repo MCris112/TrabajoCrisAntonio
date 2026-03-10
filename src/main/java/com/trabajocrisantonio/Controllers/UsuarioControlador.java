@@ -97,7 +97,10 @@ public class UsuarioControlador {
         }catch(SQLException e){
             JOptionPane.showMessageDialog(vista, e.getMessage(),"SQL error", JOptionPane.ERROR_MESSAGE);
         }
+    cargarTabla();
+    limpiar();
     }
+    
 
     }
     public void limpiar(){
