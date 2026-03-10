@@ -8,8 +8,7 @@ import javax.swing.event.ListSelectionListener;
 
 import com.darkredgm.querymc.Collections.MCList;
 import com.darkredgm.querymc.Database.ORM.QueryBuilder;
-import com.trabajocrisantonio.Views.LibroVista;
-import com.trabajocrisantonio.Views.UsuarioVista;
+import com.trabajocrisantonio.Views.Admin.LibroVista;
 import com.trabajocrisantonio.modelos.Libro;
 import com.trabajocrisantonio.modelos.Usuario;
 

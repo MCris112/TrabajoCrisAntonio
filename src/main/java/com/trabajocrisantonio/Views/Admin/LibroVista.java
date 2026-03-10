@@ -1,4 +1,4 @@
-package com.trabajocrisantonio.Views;
+package com.trabajocrisantonio.Views.Admin;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

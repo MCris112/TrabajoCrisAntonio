@@ -4,11 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import com.trabajocrisantonio.Controllers.LibroController;
 import com.trabajocrisantonio.Controllers.UsuarioControlador;
-import com.trabajocrisantonio.Views.LibroVista;
-import com.trabajocrisantonio.Views.UsuarioVista;
+import com.trabajocrisantonio.Views.Admin.LibroVista;
+import com.trabajocrisantonio.Views.Admin.UsuarioVista;
 
 public class App extends JFrame {
 
@@ -36,29 +34,23 @@ public class App extends JFrame {
         tabbedPane.setFont(new Font("Roboto", Font.BOLD, 14));
         tabbedPane.setBackground(new Color(245, 245, 245)); // Gris claro Material
         tabbedPane.setForeground(new Color(66, 66, 66));
-        tabbedPane.setBorder(null); // Quitar bordes para que parezca una sidebar integrada
+        tabbedPane.setBorder(null);
 
         UsuarioVista usuarioVista = new UsuarioVista();
+        new UsuarioControlador(usuarioVista);
+
         tabbedPane.addTab("Usuarios", usuarioVista);
 
         // Estilo de "caja" para la pestaña
         JLabel lab = new JLabel("Usuarios");
-        lab.setPreferredSize(new Dimension(150, 40)); // Ancho fijo para la sidebar
+        lab.setPreferredSize(new Dimension(160, 45)); // Ancho fijo para la sidebar
         lab.setFont(new Font("Roboto", Font.BOLD, 14));
         lab.setForeground(new Color(33, 150, 243)); // Azul Material
         lab.setHorizontalAlignment(SwingConstants.CENTER);
         tabbedPane.setTabComponentAt(0, lab);
 
-        // Inicializar controlador (si existe)
-        try {
-            new UsuarioControlador(usuarioVista);
-        } catch (Exception e) {
-            System.err.println("No se pudo cargar el controlador: " + e.getMessage());
-        }
-
         LibroVista libroVista = new LibroVista();
-        new LibroController( libroVista);
-        tabbedPane.add("Libros", libroVista);
+        tabbedPane.addTab("Libros", libroVista);
 
         // Unir todo
         mainPanel.add(toolbar, BorderLayout.NORTH);
@@ -68,8 +60,7 @@ public class App extends JFrame {
         setVisible(true);
     }
 
-    public void initToolbar()
-    {
+    public void initToolbar() {
         toolbar = new JPanel(new BorderLayout());
         toolbar.setPreferredSize(new Dimension(0, 50));
         toolbar.setBackground(Color.WHITE);

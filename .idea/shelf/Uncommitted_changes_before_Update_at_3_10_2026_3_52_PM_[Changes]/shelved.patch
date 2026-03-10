@@ -1,0 +1,979 @@
+Index: src/main/java/com/trabajocrisantonio/App.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trabajocrisantonio;\r\n\r\nimport javax.swing.*;\r\nimport java.awt.*;\r\nimport java.awt.event.MouseAdapter;\r\nimport java.awt.event.MouseEvent;\r\n\r\nimport com.trabajocrisantonio.Controllers.LibroController;\r\nimport com.trabajocrisantonio.Controllers.UsuarioControlador;\r\nimport com.trabajocrisantonio.Views.LibroVista;\r\nimport com.trabajocrisantonio.Views.UsuarioVista;\r\n\r\npublic class App extends JFrame {\r\n\r\n    // Variables para el arrastre de la ventana (necesario si es undecorated)\r\n    private int xMouse, yMouse;\r\n\r\n    private JPanel toolbar;\r\n\r\n    public App() {\r\n        setUndecorated(true); // Estilo Material real sin marcos del sistema\r\n        setSize(1000, 600);\r\n        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\r\n        setLocationRelativeTo(null);\r\n\r\n        // Contenedor principal\r\n        JPanel mainPanel = new JPanel(new BorderLayout());\r\n        mainPanel.setBackground(Color.WHITE);\r\n\r\n        // Toolbar Material\r\n        initToolbar();\r\n\r\n        // App Body (Tabs en la izquierda)\r\n        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);\r\n        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);\r\n        tabbedPane.setFont(new Font(\"Roboto\", Font.BOLD, 14));\r\n        tabbedPane.setBackground(new Color(245, 245, 245)); // Gris claro Material\r\n        tabbedPane.setForeground(new Color(66, 66, 66));\r\n        tabbedPane.setBorder(null); // Quitar bordes para que parezca una sidebar integrada\r\n\r\n        UsuarioVista usuarioVista = new UsuarioVista();\r\n        tabbedPane.addTab(\"Usuarios\", usuarioVista);\r\n\r\n        // Estilo de \"caja\" para la pestaña\r\n        JLabel lab = new JLabel(\"Usuarios\");\r\n        lab.setPreferredSize(new Dimension(150, 40)); // Ancho fijo para la sidebar\r\n        lab.setFont(new Font(\"Roboto\", Font.BOLD, 14));\r\n        lab.setForeground(new Color(33, 150, 243)); // Azul Material\r\n        lab.setHorizontalAlignment(SwingConstants.CENTER);\r\n        tabbedPane.setTabComponentAt(0, lab);\r\n\r\n        // Inicializar controlador (si existe)\r\n        try {\r\n            new UsuarioControlador(usuarioVista);\r\n        } catch (Exception e) {\r\n            System.err.println(\"No se pudo cargar el controlador: \" + e.getMessage());\r\n        }\r\n\r\n        LibroVista libroVista = new LibroVista();\r\n        new LibroController( libroVista);\r\n        tabbedPane.add(\"Libros\", libroVista);\r\n\r\n        // Unir todo\r\n        mainPanel.add(toolbar, BorderLayout.NORTH);\r\n        mainPanel.add(tabbedPane, BorderLayout.CENTER);\r\n\r\n        setContentPane(mainPanel);\r\n        setVisible(true);\r\n    }\r\n\r\n    public void initToolbar()\r\n    {\r\n        toolbar = new JPanel(new BorderLayout());\r\n        toolbar.setPreferredSize(new Dimension(0, 50));\r\n        toolbar.setBackground(Color.WHITE);\r\n\r\n        // Soporte para arrastrar la ventana desde el toolbar\r\n        toolbar.addMouseListener(new MouseAdapter() {\r\n            public void mousePressed(MouseEvent e) {\r\n                xMouse = e.getX();\r\n                yMouse = e.getY();\r\n            }\r\n        });\r\n        toolbar.addMouseMotionListener(new MouseAdapter() {\r\n            public void mouseDragged(MouseEvent e) {\r\n                int x = e.getXOnScreen();\r\n                int y = e.getYOnScreen();\r\n                setLocation(x - xMouse, y - yMouse);\r\n            }\r\n        });\r\n\r\n        // Botón cerrar (Simulado con un Panel y Label)\r\n        JPanel closeBtnContainer = new JPanel(new GridBagLayout());\r\n        closeBtnContainer.setPreferredSize(new Dimension(50, 50));\r\n        closeBtnContainer.setBackground(Color.WHITE);\r\n        closeBtnContainer.setCursor(new Cursor(Cursor.HAND_CURSOR));\r\n\r\n        JLabel closeLabel = new JLabel(\"x\"); // Símbolo X\r\n        closeLabel.setFont(new Font(\"Roboto\", Font.PLAIN, 20));\r\n        closeLabel.setForeground(Color.BLACK);\r\n        closeBtnContainer.add(closeLabel);\r\n\r\n        // Eventos Hover para el botón cerrar\r\n        closeBtnContainer.addMouseListener(new MouseAdapter() {\r\n            @Override\r\n            public void mouseEntered(MouseEvent e) {\r\n                closeBtnContainer.setBackground(Color.RED);\r\n                closeLabel.setForeground(Color.WHITE);\r\n            }\r\n\r\n            @Override\r\n            public void mouseExited(MouseEvent e) {\r\n                closeBtnContainer.setBackground(Color.WHITE);\r\n                closeLabel.setForeground(Color.BLACK);\r\n            }\r\n\r\n            @Override\r\n            public void mouseClicked(MouseEvent e) {\r\n                System.exit(0);\r\n            }\r\n        });\r\n\r\n        toolbar.add(closeBtnContainer, BorderLayout.EAST);\r\n\r\n        // Titulo en Toolbar\r\n        JLabel title = new JLabel(\"     Gestor Biblioteca - Trabajo Cristopher - Antonio\");\r\n        title.setFont(new Font(\"Roboto\", Font.BOLD, 14));\r\n        title.setForeground(new Color(33, 33, 33));\r\n        toolbar.add(title, BorderLayout.WEST);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/App.java b/src/main/java/com/trabajocrisantonio/App.java
+--- a/src/main/java/com/trabajocrisantonio/App.java	(revision b8ecc54d105228ad39150981aaeb2c3530a3ec44)
++++ b/src/main/java/com/trabajocrisantonio/App.java	(date 1773154286432)
+@@ -4,11 +4,9 @@
+ import java.awt.*;
+ import java.awt.event.MouseAdapter;
+ import java.awt.event.MouseEvent;
+-
+-import com.trabajocrisantonio.Controllers.LibroController;
+ import com.trabajocrisantonio.Controllers.UsuarioControlador;
+-import com.trabajocrisantonio.Views.LibroVista;
+-import com.trabajocrisantonio.Views.UsuarioVista;
++import com.trabajocrisantonio.Views.Admin.LibroVista;
++import com.trabajocrisantonio.Views.Admin.UsuarioVista;
+ 
+ public class App extends JFrame {
+ 
+@@ -36,29 +34,23 @@
+         tabbedPane.setFont(new Font("Roboto", Font.BOLD, 14));
+         tabbedPane.setBackground(new Color(245, 245, 245)); // Gris claro Material
+         tabbedPane.setForeground(new Color(66, 66, 66));
+-        tabbedPane.setBorder(null); // Quitar bordes para que parezca una sidebar integrada
++        tabbedPane.setBorder(null);
+ 
+         UsuarioVista usuarioVista = new UsuarioVista();
++        new UsuarioControlador(usuarioVista);
++
+         tabbedPane.addTab("Usuarios", usuarioVista);
+ 
+         // Estilo de "caja" para la pestaña
+         JLabel lab = new JLabel("Usuarios");
+-        lab.setPreferredSize(new Dimension(150, 40)); // Ancho fijo para la sidebar
++        lab.setPreferredSize(new Dimension(160, 45)); // Ancho fijo para la sidebar
+         lab.setFont(new Font("Roboto", Font.BOLD, 14));
+         lab.setForeground(new Color(33, 150, 243)); // Azul Material
+         lab.setHorizontalAlignment(SwingConstants.CENTER);
+         tabbedPane.setTabComponentAt(0, lab);
+ 
+-        // Inicializar controlador (si existe)
+-        try {
+-            new UsuarioControlador(usuarioVista);
+-        } catch (Exception e) {
+-            System.err.println("No se pudo cargar el controlador: " + e.getMessage());
+-        }
+-
+         LibroVista libroVista = new LibroVista();
+-        new LibroController( libroVista);
+-        tabbedPane.add("Libros", libroVista);
++        tabbedPane.addTab("Libros", libroVista);
+ 
+         // Unir todo
+         mainPanel.add(toolbar, BorderLayout.NORTH);
+@@ -68,8 +60,7 @@
+         setVisible(true);
+     }
+ 
+-    public void initToolbar()
+-    {
++    public void initToolbar() {
+         toolbar = new JPanel(new BorderLayout());
+         toolbar.setPreferredSize(new Dimension(0, 50));
+         toolbar.setBackground(Color.WHITE);
+Index: src/main/java/com/trabajocrisantonio/Views/UsuarioVista.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Views/UsuarioVista.java b/src/main/java/com/trabajocrisantonio/Views/Admin/UsuarioVista.java
+rename from src/main/java/com/trabajocrisantonio/Views/UsuarioVista.java
+rename to src/main/java/com/trabajocrisantonio/Views/Admin/UsuarioVista.java
+--- a/src/main/java/com/trabajocrisantonio/Views/UsuarioVista.java	(revision b8ecc54d105228ad39150981aaeb2c3530a3ec44)
++++ b/src/main/java/com/trabajocrisantonio/Views/Admin/UsuarioVista.java	(date 1773153856823)
+@@ -1,4 +1,4 @@
+-package com.trabajocrisantonio.Views;
++package com.trabajocrisantonio.Views.Admin;
+ 
+ import javax.swing.*;
+ import javax.swing.table.DefaultTableCellRenderer;
+@@ -7,6 +7,7 @@
+ import java.awt.*;
+ 
+ public class UsuarioVista extends JPanel {
++
+     public JButton btnInsertar = new JButton("Insertar");
+     public JButton btnActualizar = new JButton("Actualizar");
+     public JButton btnBorrar = new JButton("Borrar");
+Index: src/main/java/com/trabajocrisantonio/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trabajocrisantonio;\r\n\r\npublic class Main {\r\n\r\n\r\n    public static void main(String[] args) {\r\n        // Cargar migraciones\r\n\r\n\r\n        // Mostrar el cargador\r\n//        Loader loader = new Loader();\r\n//\r\n//        // Esperar 2 segundos\r\n//        try {\r\n//            Thread.sleep(3000);\r\n//        } catch (InterruptedException e) {\r\n//            e.printStackTrace();\r\n//        }\r\n//\r\n//        // Esconder el cargador y mostrar la aplicación\r\n//        loader.setVisible(false);\r\n//        loader.dispose();\r\n        \r\n        // Cargar app\r\n        new App();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Main.java b/src/main/java/com/trabajocrisantonio/Main.java
+--- a/src/main/java/com/trabajocrisantonio/Main.java	(revision b8ecc54d105228ad39150981aaeb2c3530a3ec44)
++++ b/src/main/java/com/trabajocrisantonio/Main.java	(date 1773153856850)
+@@ -1,5 +1,7 @@
+ package com.trabajocrisantonio;
+ 
++import com.trabajocrisantonio.Views.SeleccionarVista;
++
+ public class Main {
+ 
+ 
+@@ -8,20 +10,20 @@
+ 
+ 
+         // Mostrar el cargador
+-//        Loader loader = new Loader();
+-//
+-//        // Esperar 2 segundos
+-//        try {
+-//            Thread.sleep(3000);
+-//        } catch (InterruptedException e) {
+-//            e.printStackTrace();
+-//        }
+-//
+-//        // Esconder el cargador y mostrar la aplicación
+-//        loader.setVisible(false);
+-//        loader.dispose();
++        Loader loader = new Loader();
++
++        // Esperar 2 segundos
++        try {
++            Thread.sleep(3000);
++        } catch (InterruptedException e) {
++            e.printStackTrace();
++        }
++
++        // Esconder el cargador y mostrar la aplicación
++        loader.setVisible(false);
++        loader.dispose();
+         
+         // Cargar app
+-        new App();
++        new SeleccionarVista();
+     }
+ }
+Index: src/main/java/com/trabajocrisantonio/Controllers/LibroController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trabajocrisantonio.Controllers;\r\n\r\nimport java.sql.SQLException;\r\n\r\nimport javax.swing.JOptionPane;\r\nimport javax.swing.event.ListSelectionEvent;\r\nimport javax.swing.event.ListSelectionListener;\r\n\r\nimport com.darkredgm.querymc.Collections.MCList;\r\nimport com.darkredgm.querymc.Database.ORM.QueryBuilder;\r\nimport com.trabajocrisantonio.Views.LibroVista;\r\nimport com.trabajocrisantonio.Views.UsuarioVista;\r\nimport com.trabajocrisantonio.modelos.Libro;\r\nimport com.trabajocrisantonio.modelos.Usuario;\r\n\r\npublic class LibroController {\r\n    protected LibroVista vista;\r\n\r\n    public LibroController(LibroVista vista) {\r\n        this.vista = vista;\r\n\r\n        initController();\r\n        cargarTabla();\r\n    }\r\n\r\n    private void cargarTabla() {\r\n        vista.modeloTabla.setRowCount(0);\r\n\r\n        try {\r\n            MCList<Libro> listaLibros = QueryBuilder.use(Libro.class).get();\r\n            for (Libro libro : listaLibros) {\r\n                String[] columna = {String.valueOf(libro.getId_libro()), libro.getEditorial(), String.valueOf(libro.getNumero_hojas()), libro.getTitulo(), libro.getAutor(), libro.getGenero(), String.valueOf(libro.getPrecio()), String.valueOf(libro.isBestseller())};\r\n\r\n                vista.modeloTabla.addRow(\r\n                        columna\r\n                );\r\n            }\r\n        } catch (SQLException e) {\r\n            JOptionPane.showMessageDialog(vista, e.getMessage(), \"SQL Error\", JOptionPane.ERROR_MESSAGE);\r\n        }\r\n    }\r\n\r\n\r\n    public void initController() {\r\n\r\n        vista.btnInsertar.addActionListener(e -> insertar());\r\n        vista.btnActualizar.addActionListener(e -> actualizar());\r\n        vista.btnLimpiar.addActionListener(e -> limpiar());\r\n        vista.btnBorrar.addActionListener(e -> borrar());\r\n\r\n        vista.table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {\r\n            @Override\r\n            public void valueChanged(ListSelectionEvent e) {\r\n                // TODO Auto-generated method stub\r\n                if (!e.getValueIsAdjusting()) {\r\n                    seleccionarFila();\r\n                }\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n    public void insertar() {\r\n        try {\r\n            Libro libro = new Libro(\r\n                    Integer.parseInt(vista.fieldidLibro.getText()),\r\n                    vista.fieldEditorial.getText(),\r\n                    Integer.parseInt(vista.fieldNumerohojas.getText()),\r\n                    vista.fieldTitulo.getText(),\r\n                    vista.fieldAutor.getText(),\r\n                    vista.fieldGenero.getText(),\r\n                    Double.parseDouble(vista.fieldPrecio.getText()),\r\n                    Boolean.parseBoolean(vista.fieldBestseller.getText()));\r\n\r\n            libro.save();\r\n        } catch (SQLException e) {\r\n            JOptionPane.showMessageDialog(vista, e.getMessage(), \"SQL Error\", JOptionPane.ERROR_MESSAGE);\r\n        }\r\n        cargarTabla();\r\n        limpiar();\r\n    }\r\n\r\n    public void actualizar() {\r\n        try {\r\n            QueryBuilder.use(Usuario.class).whereKey(vista.fieldidLibro.getText()).update(builder -> {\r\n                builder.set(\"id_Libro\", vista.fieldidLibro.getText());\r\n                builder.set(\"editorial\", vista.fieldEditorial.getText());\r\n                builder.set(\"numero hojas\", vista.fieldNumerohojas.getText());\r\n                builder.set(\"titulo\", vista.fieldTitulo.getText());\r\n                builder.set(\"autor\", vista.fieldAutor.getText());\r\n                builder.set(\"genero\", vista.fieldGenero.getText());\r\n                builder.set(\"precio\", vista.fieldPrecio.getText());\r\n                builder.set(\"bestseller\", vista.fieldBestseller.getText());\r\n            });\r\n        } catch (SQLException e) {\r\n            JOptionPane.showMessageDialog(vista, e.getMessage(), \"SQL error\", JOptionPane.ERROR_MESSAGE);\r\n\r\n        }\r\n        cargarTabla();\r\n        limpiar();\r\n    }\r\n\r\n    public void borrar() {\r\n        if (vista.fieldidLibro.getText().isEmpty()) {\r\n            JOptionPane.showMessageDialog(vista, \"Necesitas seleccionar para borrar\");\r\n        } else {\r\n            try {\r\n                QueryBuilder.use(Usuario.class).whereKey(vista.fieldidLibro.getText()).delete();\r\n            } catch (SQLException e) {\r\n                JOptionPane.showMessageDialog(vista, e.getMessage(), \"SQL error\", JOptionPane.ERROR_MESSAGE);\r\n            }\r\n            cargarTabla();\r\n            limpiar();\r\n        }\r\n\r\n\r\n    }\r\n\r\n    public void limpiar() {\r\n        vista.fieldidLibro.setText(\"\");\r\n        vista.fieldEditorial.setText(\"\");\r\n        vista.fieldNumerohojas.setText(\"\");\r\n        vista.fieldTitulo.setText(\"\");\r\n        vista.fieldAutor.setText(\"\");\r\n        vista.fieldGenero.setText(\"\");\r\n        vista.fieldPrecio.setText(\"\");\r\n        vista.fieldBestseller.setText(\"\");\r\n\r\n        vista.table.clearSelection();\r\n    }\r\n\r\n    public void seleccionarFila() {\r\n        int fila = vista.table.getSelectedRow();\r\n        if (fila < 0) return;\r\n\r\n        vista.fieldidLibro.setText((String) vista.modeloTabla.getValueAt(fila, 0));\r\n        vista.fieldEditorial.setText((String) vista.modeloTabla.getValueAt(fila, 1));\r\n        vista.fieldTitulo.setText((String) vista.modeloTabla.getValueAt(fila, 2));\r\n        vista.fieldAutor.setText((String) vista.modeloTabla.getValueAt(fila, 3));\r\n        vista.fieldGenero.setText((String) vista.modeloTabla.getValueAt(fila, 4));\r\n        vista.fieldPrecio.setText((String) vista.modeloTabla.getValueAt(fila, 5));\r\n        vista.fieldBestseller.setText((String) vista.modeloTabla.getValueAt(fila, 6));\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Controllers/LibroController.java b/src/main/java/com/trabajocrisantonio/Controllers/LibroController.java
+--- a/src/main/java/com/trabajocrisantonio/Controllers/LibroController.java	(revision b8ecc54d105228ad39150981aaeb2c3530a3ec44)
++++ b/src/main/java/com/trabajocrisantonio/Controllers/LibroController.java	(date 1773153856932)
+@@ -8,8 +8,7 @@
+ 
+ import com.darkredgm.querymc.Collections.MCList;
+ import com.darkredgm.querymc.Database.ORM.QueryBuilder;
+-import com.trabajocrisantonio.Views.LibroVista;
+-import com.trabajocrisantonio.Views.UsuarioVista;
++import com.trabajocrisantonio.Views.Admin.LibroVista;
+ import com.trabajocrisantonio.modelos.Libro;
+ import com.trabajocrisantonio.modelos.Usuario;
+ 
+Index: src/main/java/com/trabajocrisantonio/Controllers/UsuarioControlador.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trabajocrisantonio.Controllers;\r\n\r\nimport java.sql.SQLException;\r\n\r\nimport javax.swing.JOptionPane;\r\nimport javax.swing.event.ListSelectionEvent;\r\nimport javax.swing.event.ListSelectionListener;\r\n\r\nimport com.darkredgm.querymc.Collections.MCList;\r\nimport com.darkredgm.querymc.Database.ORM.QueryBuilder;\r\nimport com.trabajocrisantonio.Views.UsuarioVista;\r\nimport com.trabajocrisantonio.modelos.Usuario;\r\n\r\npublic class UsuarioControlador {\r\n    private UsuarioVista vista;\r\n\r\n    public UsuarioControlador(UsuarioVista vista) {\r\n        this.vista = vista;\r\n\r\n        initController();\r\n        cargarTabla();\r\n    }\r\n\r\n    private void cargarTabla() {\r\n        vista.modeloTabla.setRowCount(0);\r\n\r\n        try {\r\n            MCList<Usuario> listaUsuarios = QueryBuilder.use(Usuario.class).get();\r\n            for (Usuario usuario : listaUsuarios) {\r\n                String[] columna = {usuario.getNif(), usuario.getNombre(), usuario.getApellidos(), usuario.getDireccion(), usuario.getTelefono()};\r\n\r\n                vista.modeloTabla.addRow(\r\n                        columna\r\n                );\r\n            }\r\n        } catch (SQLException e) {\r\n            JOptionPane.showMessageDialog(vista, e.getMessage(), \"SQL Error\", JOptionPane.ERROR_MESSAGE);\r\n        }\r\n    }\r\n\r\n\r\n    public void initController() {\r\n\r\n        vista.btnInsertar.addActionListener(e -> insertar());\r\n        vista.btnActualizar.addActionListener(e -> actualizar());\r\n        vista.btnLimpiar.addActionListener(e -> limpiar());\r\n        vista.btnBorrar.addActionListener(e -> borrar());\r\n\r\n        vista.table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {\r\n            @Override\r\n            public void valueChanged(ListSelectionEvent e) {\r\n                // TODO Auto-generated method stub\r\n                if (!e.getValueIsAdjusting()) {\r\n                    seleccionarFila();\r\n                }\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n    public void insertar() {\r\n        try {\r\n            Usuario usuario = new Usuario(\r\n                    vista.fieldNif.getText(),\r\n                    vista.fieldNombre.getText(),\r\n                    vista.fieldApellido.getText(),\r\n                    vista.fieldDireccion.getText(),\r\n                    vista.fieldTelefono.getText()\r\n            );\r\n\r\n            usuario.save();\r\n        } catch (SQLException e) {\r\n            JOptionPane.showMessageDialog(vista, e.getMessage(), \"SQL Error\", JOptionPane.ERROR_MESSAGE);\r\n        }\r\n        cargarTabla();\r\n        limpiar();\r\n    }\r\n\r\n    public void actualizar() {\r\n        try {\r\n            QueryBuilder.use(Usuario.class).whereKey(vista.fieldNif.getText()).update(builder -> {\r\n                builder.set(\"nif\", vista.fieldNif.getText());\r\n                builder.set(\"nombre\", vista.fieldNombre.getText());\r\n                builder.set(\"apellidos\", vista.fieldApellido.getText());\r\n                builder.set(\"direccion\", vista.fieldDireccion.getText());\r\n                builder.set(\"telefono\", vista.fieldTelefono.getText());\r\n            });\r\n        } catch (SQLException e) {\r\n            JOptionPane.showMessageDialog(vista, e.getMessage(), \"SQL error\", JOptionPane.ERROR_MESSAGE);\r\n\r\n        }\r\n        cargarTabla();\r\n        limpiar();\r\n    }\r\n\r\n    public void borrar() {\r\n        if (vista.fieldNif.getText().isEmpty()) {\r\n            JOptionPane.showMessageDialog(vista, \"Necesitas seleccionar para borrar\");\r\n        } else {\r\n            try {\r\n                QueryBuilder.use(Usuario.class).whereKey(vista.fieldNif.getText()).delete();\r\n            } catch (SQLException e) {\r\n                JOptionPane.showMessageDialog(vista, e.getMessage(), \"SQL error\", JOptionPane.ERROR_MESSAGE);\r\n            }\r\n            cargarTabla();\r\n            limpiar();\r\n        }\r\n\r\n\r\n    }\r\n\r\n    public void limpiar() {\r\n        vista.fieldNif.setText(\"\");\r\n        vista.fieldNombre.setText(\"\");\r\n        vista.fieldApellido.setText(\"\");\r\n        vista.fieldDireccion.setText(\"\");\r\n        vista.fieldTelefono.setText(\"\");\r\n\r\n        vista.table.clearSelection();\r\n    }\r\n\r\n    public void seleccionarFila() {\r\n        int fila = vista.table.getSelectedRow();\r\n        if (fila < 0) return;\r\n\r\n        vista.fieldNif.setText((String) vista.modeloTabla.getValueAt(fila, 0));\r\n        vista.fieldNombre.setText((String) vista.modeloTabla.getValueAt(fila, 1));\r\n        vista.fieldApellido.setText((String) vista.modeloTabla.getValueAt(fila, 2));\r\n        vista.fieldDireccion.setText((String) vista.modeloTabla.getValueAt(fila, 3));\r\n        vista.fieldTelefono.setText((String) vista.modeloTabla.getValueAt(fila, 4));\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Controllers/UsuarioControlador.java b/src/main/java/com/trabajocrisantonio/Controllers/UsuarioControlador.java
+--- a/src/main/java/com/trabajocrisantonio/Controllers/UsuarioControlador.java	(revision b8ecc54d105228ad39150981aaeb2c3530a3ec44)
++++ b/src/main/java/com/trabajocrisantonio/Controllers/UsuarioControlador.java	(date 1773153856869)
+@@ -8,7 +8,7 @@
+ 
+ import com.darkredgm.querymc.Collections.MCList;
+ import com.darkredgm.querymc.Database.ORM.QueryBuilder;
+-import com.trabajocrisantonio.Views.UsuarioVista;
++import com.trabajocrisantonio.Views.Admin.UsuarioVista;
+ import com.trabajocrisantonio.modelos.Usuario;
+ 
+ public class UsuarioControlador {
+Index: src/main/java/com/trabajocrisantonio/Vista.form
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Vista.form b/src/main/java/com/trabajocrisantonio/Vista.form
+deleted file mode 100644
+--- a/src/main/java/com/trabajocrisantonio/Vista.form	(revision b8ecc54d105228ad39150981aaeb2c3530a3ec44)
++++ /dev/null	(revision b8ecc54d105228ad39150981aaeb2c3530a3ec44)
+@@ -1,78 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8" ?>
+-
+-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+-  <NonVisualComponents>
+-    <Container class="javax.swing.JPanel" name="jPanel1">
+-
+-      <Layout>
+-        <DimensionLayout dim="0">
+-          <Group type="103" groupAlignment="0" attributes="0">
+-              <EmptySpace min="0" pref="100" max="32767" attributes="0"/>
+-          </Group>
+-        </DimensionLayout>
+-        <DimensionLayout dim="1">
+-          <Group type="103" groupAlignment="0" attributes="0">
+-              <EmptySpace min="0" pref="100" max="32767" attributes="0"/>
+-          </Group>
+-        </DimensionLayout>
+-      </Layout>
+-    </Container>
+-  </NonVisualComponents>
+-  <Properties>
+-    <Property name="defaultCloseOperation" type="int" value="3"/>
+-    <Property name="resizable" type="boolean" value="false"/>
+-  </Properties>
+-  <SyntheticProperties>
+-    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+-    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+-  </SyntheticProperties>
+-  <AuxValues>
+-    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+-    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+-    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+-    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+-    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+-    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+-    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="3"/>
+-    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+-    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+-  </AuxValues>
+-
+-  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+-    <Property name="useNullLayout" type="boolean" value="false"/>
+-  </Layout>
+-  <SubComponents>
+-    <Component class="javax.swing.JButton" name="jButton1">
+-      <Properties>
+-        <Property name="text" type="java.lang.String" value="Admin"/>
+-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+-          <Border info="null"/>
+-        </Property>
+-      </Properties>
+-      <Events>
+-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+-      </Events>
+-      <Constraints>
+-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+-          <AbsoluteConstraints x="200" y="130" width="100" height="50"/>
+-        </Constraint>
+-      </Constraints>
+-    </Component>
+-    <Component class="javax.swing.JButton" name="jButton2">
+-      <Properties>
+-        <Property name="text" type="java.lang.String" value="Usuario"/>
+-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+-          <Border info="null"/>
+-        </Property>
+-      </Properties>
+-      <Events>
+-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+-      </Events>
+-      <Constraints>
+-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+-          <AbsoluteConstraints x="70" y="130" width="100" height="50"/>
+-        </Constraint>
+-      </Constraints>
+-    </Component>
+-  </SubComponents>
+-</Form>
+Index: .env
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.env b/.env
+deleted file mode 100644
+--- a/.env	(revision b8ecc54d105228ad39150981aaeb2c3530a3ec44)
++++ /dev/null	(revision b8ecc54d105228ad39150981aaeb2c3530a3ec44)
+@@ -1,4 +0,0 @@
+-DB_DATABASE=tareaDomingo
+-DB_PORT=3306
+-DB_USER=root
+-DB_PASSWORD=12345678
+\ No newline at end of file
+Index: src/main/java/com/trabajocrisantonio/Vista.java
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Vista.java b/src/main/java/com/trabajocrisantonio/Vista.java
+deleted file mode 100644
+--- a/src/main/java/com/trabajocrisantonio/Vista.java	(revision b8ecc54d105228ad39150981aaeb2c3530a3ec44)
++++ /dev/null	(revision b8ecc54d105228ad39150981aaeb2c3530a3ec44)
+@@ -1,101 +0,0 @@
+-/*
+- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+- */
+-package com.trabajocrisantonio;
+-
+-/**
+- *
+- * @author crisv
+- */
+-public class Vista extends javax.swing.JFrame {
+-    
+-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Vista.class.getName());
+-
+-    /**
+-     * Creates new form Vista
+-     */
+-    public Vista() {
+-        initComponents();
+-    }
+-
+-    /**
+-     * This method is called from within the constructor to initialize the form.
+-     * WARNING: Do NOT modify this code. The content of this method is always
+-     * regenerated by the Form Editor.
+-     */
+-    @SuppressWarnings("unchecked")
+-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+-    private void initComponents() {
+-
+-        jPanel1 = new javax.swing.JPanel();
+-        jButton1 = new javax.swing.JButton();
+-        jButton2 = new javax.swing.JButton();
+-
+-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+-        jPanel1.setLayout(jPanel1Layout);
+-        jPanel1Layout.setHorizontalGroup(
+-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+-            .addGap(0, 100, Short.MAX_VALUE)
+-        );
+-        jPanel1Layout.setVerticalGroup(
+-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+-            .addGap(0, 100, Short.MAX_VALUE)
+-        );
+-
+-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+-        setResizable(false);
+-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+-
+-        jButton1.setText("Admin");
+-        jButton1.setBorder(null);
+-        jButton1.addActionListener(this::jButton1ActionPerformed);
+-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 130, 100, 50));
+-
+-        jButton2.setText("Usuario");
+-        jButton2.setBorder(null);
+-        jButton2.addActionListener(this::jButton2ActionPerformed);
+-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 130, 100, 50));
+-
+-        pack();
+-    }// </editor-fold>//GEN-END:initComponents
+-
+-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+-        // TODO add your handling code here:
+-    }//GEN-LAST:event_jButton1ActionPerformed
+-
+-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+-        // TODO add your handling code here:
+-    }//GEN-LAST:event_jButton2ActionPerformed
+-
+-    /**
+-     * @param args the command line arguments
+-     */
+-    public static void main(String args[]) {
+-        /* Set the Nimbus look and feel */
+-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+-         */
+-        try {
+-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+-                if ("Nimbus".equals(info.getName())) {
+-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+-                    break;
+-                }
+-            }
+-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+-            logger.log(java.util.logging.Level.SEVERE, null, ex);
+-        }
+-        //</editor-fold>
+-
+-        /* Create and display the form */
+-        java.awt.EventQueue.invokeLater(() -> new Vista().setVisible(true));
+-    }
+-
+-    // Variables declaration - do not modify//GEN-BEGIN:variables
+-    private javax.swing.JButton jButton1;
+-    private javax.swing.JButton jButton2;
+-    private javax.swing.JPanel jPanel1;
+-    // End of variables declaration//GEN-END:variables
+-}
+Index: src/main/java/com/trabajocrisantonio/Controllers/User/PrestarController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Controllers/User/PrestarController.java b/src/main/java/com/trabajocrisantonio/Controllers/User/PrestarController.java
+new file mode 100644
+--- /dev/null	(date 1773145339712)
++++ b/src/main/java/com/trabajocrisantonio/Controllers/User/PrestarController.java	(date 1773145339712)
+@@ -0,0 +1,12 @@
++package com.trabajocrisantonio.Controllers.User;
++
++import com.trabajocrisantonio.Views.User.PrestarVista;
++
++public class PrestarController {
++
++    private PrestarVista vista;
++
++    public PrestarController(PrestarVista vista) {
++        this.vista = vista;
++    }
++}
+Index: src/main/java/com/trabajocrisantonio/Views/User/PrestarVista.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Views/User/PrestarVista.java b/src/main/java/com/trabajocrisantonio/Views/User/PrestarVista.java
+new file mode 100644
+--- /dev/null	(date 1773152858348)
++++ b/src/main/java/com/trabajocrisantonio/Views/User/PrestarVista.java	(date 1773152858348)
+@@ -0,0 +1,118 @@
++package com.trabajocrisantonio.Views.User;
++
++import javax.swing.*;
++import javax.swing.table.*;
++import java.awt.*;
++
++/**
++ * Vista para realizar préstamos de libros.
++ * Sigue los principios de Material Design.
++ */
++public class PrestarVista extends JPanel {
++
++    // Componentes de búsqueda
++    public JTextField fieldBuscar = new JTextField(20);
++    public JButton btnBuscar = new JButton("Buscar Libro");
++
++    // Componentes de resultados
++    public DefaultTableModel modeloTabla = new DefaultTableModel(
++            new Object[] { "ID", "Título", "Autor", "ISBN", "Estado" }, 0);
++    public JTable tableResultados = new JTable(modeloTabla);
++
++    // Botón de acción principal
++    public JButton btnPrestar = new JButton("Solicitar Libro Seleccionado");
++
++    public PrestarVista() {
++        setLayout(new BorderLayout(15, 15));
++        setBackground(Color.WHITE);
++        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
++
++        // --- Panel de Búsqueda (Arriba) ---
++        JPanel panelBusqueda = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
++        panelBusqueda.setBackground(Color.WHITE);
++        panelBusqueda.setBorder(BorderFactory.createTitledBorder("Buscador de Libros"));
++
++        JLabel lblBuscar = new JLabel("Ingrese título o autor:");
++        lblBuscar.setFont(new Font("Roboto", Font.PLAIN, 14));
++
++        styleTextField(fieldBuscar);
++        styleButton(btnBuscar, new Color(33, 150, 243)); // Material Blue
++
++        panelBusqueda.add(lblBuscar);
++        panelBusqueda.add(fieldBuscar);
++        panelBusqueda.add(btnBuscar);
++
++        // --- Tabla de Resultados (Centro) ---
++        styleTable();
++        JScrollPane scrollPane = new JScrollPane(tableResultados);
++        scrollPane.setBorder(BorderFactory.createTitledBorder("Resultados de la búsqueda"));
++        scrollPane.getViewport().setBackground(Color.WHITE);
++
++        // --- Panel de Acción (Abajo) ---
++        JPanel panelAccion = new JPanel(new FlowLayout(FlowLayout.RIGHT));
++        panelAccion.setBackground(Color.WHITE);
++
++        styleButton(btnPrestar, new Color(76, 175, 80)); // Material Green
++        btnPrestar.setFont(new Font("Roboto", Font.BOLD, 14));
++        btnPrestar.setPreferredSize(new Dimension(250, 45));
++
++        panelAccion.add(btnPrestar);
++
++        // Añadirlo al panel
++        add(panelBusqueda, BorderLayout.NORTH);
++        add(scrollPane, BorderLayout.CENTER);
++        add(panelAccion, BorderLayout.SOUTH);
++    }
++
++    private void styleTable() {
++        tableResultados.setRowHeight(40);
++        tableResultados.setSelectionBackground(new Color(225, 245, 254));
++        tableResultados.setSelectionForeground(Color.BLACK);
++        tableResultados.setShowVerticalLines(false);
++        tableResultados.setGridColor(new Color(240, 240, 240));
++        tableResultados.setFont(new Font("Roboto", Font.PLAIN, 14));
++
++        // Header de la tabla
++        JTableHeader header = tableResultados.getTableHeader();
++        header.setFont(new Font("Roboto", Font.BOLD, 14));
++        header.setBackground(new Color(33, 150, 243));
++        header.setForeground(Color.WHITE);
++        header.setPreferredSize(new Dimension(0, 40));
++
++        // Renderizado de celdas
++        DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer() {
++            @Override
++            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
++                    boolean hasFocus, int row, int column) {
++                JLabel c = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
++                        column);
++                c.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
++                if (!isSelected) {
++                    c.setBackground(row % 2 == 0 ? Color.WHITE : new Color(252, 252, 252));
++                }
++                return c;
++            }
++        };
++
++        for (int i = 0; i < tableResultados.getColumnCount(); i++) {
++            tableResultados.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
++        }
++    }
++
++    private void styleTextField(JTextField field) {
++        field.setPreferredSize(new Dimension(250, 35));
++        field.setFont(new Font("Roboto", Font.PLAIN, 14));
++        field.setBorder(BorderFactory.createCompoundBorder(
++                BorderFactory.createLineBorder(new Color(200, 200, 200)),
++                BorderFactory.createEmptyBorder(5, 10, 5, 10)));
++    }
++
++    private void styleButton(JButton btn, Color color) {
++        btn.setBackground(color);
++        btn.setForeground(Color.WHITE);
++        btn.setFocusPainted(false);
++        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
++        btn.setFont(new Font("Roboto", Font.BOLD, 13));
++        btn.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
++    }
++}
+Index: src/main/java/com/trabajocrisantonio/Views/User/UserLibrosVista.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Views/User/UserLibrosVista.java b/src/main/java/com/trabajocrisantonio/Views/User/UserLibrosVista.java
+new file mode 100644
+--- /dev/null	(date 1773153071364)
++++ b/src/main/java/com/trabajocrisantonio/Views/User/UserLibrosVista.java	(date 1773153071364)
+@@ -0,0 +1,113 @@
++package com.trabajocrisantonio.Views.User;
++
++import javax.swing.*;
++import javax.swing.table.DefaultTableCellRenderer;
++import javax.swing.table.DefaultTableModel;
++import javax.swing.table.JTableHeader;
++import java.awt.*;
++
++/**
++ * Vista para que el usuario visualice sus libros prestados actualmente.
++ * Diseño Material Design con una tabla limpia y un botón de devolución.
++ */
++public class UserLibrosVista extends JPanel {
++
++    // Modelo de tabla para libros prestados
++    public DefaultTableModel modeloTabla = new DefaultTableModel(
++            new Object[] { "ID Préstamo", "Título del Libro", "Fecha Préstamo", "Fecha Devolución", "Estado" }, 0);
++    public JTable tableLibros = new JTable(modeloTabla);
++
++    // Botón para devolver libro (acción principal)
++    public JButton btnDevolver = new JButton("Devolver Libro Seleccionado");
++
++    public UserLibrosVista() {
++        setLayout(new BorderLayout(15, 15));
++        setBackground(Color.WHITE);
++        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
++
++        // --- Título del Panel ---
++        JLabel lblTitulo = new JLabel("Mis Libros Prestados");
++        lblTitulo.setFont(new Font("Roboto", Font.BOLD, 22));
++        lblTitulo.setForeground(new Color(33, 33, 33));
++        lblTitulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
++
++        // --- Tabla de Libros (Centro) ---
++        styleTable();
++        JScrollPane scrollPane = new JScrollPane(tableLibros);
++        scrollPane.setBorder(BorderFactory.createTitledBorder("Historial activo de préstamos"));
++        scrollPane.getViewport().setBackground(Color.WHITE);
++
++        // --- Panel de Acciones (Abajo) ---
++        JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
++        panelAcciones.setBackground(Color.WHITE);
++
++        styleButton(btnDevolver, new Color(33, 150, 243)); // Azul Material
++        btnDevolver.setPreferredSize(new Dimension(250, 45));
++
++        panelAcciones.add(btnDevolver);
++
++        // Añadir componentes al panel principal
++        add(lblTitulo, BorderLayout.NORTH);
++        add(scrollPane, BorderLayout.CENTER);
++        add(panelAcciones, BorderLayout.SOUTH);
++    }
++
++    private void styleTable() {
++        tableLibros.setRowHeight(40);
++        tableLibros.setSelectionBackground(new Color(232, 245, 233)); // Verde muy claro para selección
++        tableLibros.setSelectionForeground(Color.BLACK);
++        tableLibros.setShowVerticalLines(false);
++        tableLibros.setGridColor(new Color(245, 245, 245));
++        tableLibros.setFont(new Font("Roboto", Font.PLAIN, 14));
++        tableLibros.setBackground(Color.WHITE);
++
++        // Estilo del Header
++        JTableHeader header = tableLibros.getTableHeader();
++        header.setFont(new Font("Roboto", Font.BOLD, 14));
++        header.setBackground(new Color(33, 150, 243)); // Azul Material
++        header.setForeground(Color.WHITE);
++        header.setPreferredSize(new Dimension(0, 40));
++        header.setReorderingAllowed(false);
++
++        // Renderizado de celdas
++        DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer() {
++            @Override
++            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
++                    boolean hasFocus, int row, int column) {
++                JLabel c = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
++                        column);
++                c.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 12));
++                if (!isSelected) {
++                    c.setBackground(row % 2 == 0 ? Color.WHITE : new Color(250, 250, 250));
++                }
++
++                // Color especial para la columna de Estado (índice 4)
++                if (column == 4 && value != null) {
++                    if (value.toString().equalsIgnoreCase("Pendiente")) {
++                        c.setForeground(new Color(255, 152, 0)); // Naranja Material
++                    } else if (value.toString().equalsIgnoreCase("Devuelto")) {
++                        c.setForeground(new Color(76, 175, 80)); // Verde Material
++                    }
++                } else {
++                    c.setForeground(new Color(66, 66, 66));
++                }
++
++                return c;
++            }
++        };
++        cellRenderer.setHorizontalAlignment(SwingConstants.LEFT);
++
++        for (int i = 0; i < tableLibros.getColumnCount(); i++) {
++            tableLibros.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
++        }
++    }
++
++    private void styleButton(JButton btn, Color color) {
++        btn.setBackground(color);
++        btn.setForeground(Color.WHITE);
++        btn.setFocusPainted(false);
++        btn.setFont(new Font("Roboto", Font.BOLD, 14));
++        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
++        btn.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
++    }
++}
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"45c860c1-d215-4f4c-b166-7f1d61618db8\" name=\"Changes\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Loader.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Loader.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/UsuarioVista.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/UsuarioVista.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;MCris112&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/MCris112/TrabajoCrisAntonio.git&quot;,\r\n    &quot;accountId&quot;: &quot;df79e3d7-f232-4af6-bd23-1566a68dc2cd&quot;\r\n  }\r\n}</component>\r\n  <component name=\"McpProjectServerCommands\">\r\n    <commands />\r\n    <urls />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;customColor&quot;: &quot;&quot;,\r\n  &quot;associatedIndex&quot;: 2\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"3AiM5LweBMHV0V71hJezzpY3cPx\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;Application.Main.executor&quot;: &quot;Run&quot;,\r\n    &quot;Application.Migracion.executor&quot;: &quot;Run&quot;,\r\n    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,\r\n    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;master&quot;,\r\n    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,\r\n    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,\r\n    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/Lozano/Desktop/programacion-daw-main/TrabajoCrisAntonio&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"Main\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.trabajocrisantonio.Main\" />\r\n      <module name=\"TrabajoCrisAntonio\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.trabajocrisantonio.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.Main\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"45c860c1-d215-4f4c-b166-7f1d61618db8\" name=\"Changes\" comment=\"\" />\r\n      <created>1773070755142</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1773070755142</updated>\r\n      <workItem from=\"1773070758617\" duration=\"252000\" />\r\n      <workItem from=\"1773138907129\" duration=\"1463000\" />\r\n      <workItem from=\"1773140677406\" duration=\"3342000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision b8ecc54d105228ad39150981aaeb2c3530a3ec44)
++++ b/.idea/workspace.xml	(date 1773154286532)
+@@ -4,12 +4,22 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="">
++    <list default="true" id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="Merge">
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/User/PrestarController.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/SeleccionarVista.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/User/PrestarVista.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/User/UserLibrosVista.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/UserActivity.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Loader.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/LibroController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/LibroController.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/UsuarioControlador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/UsuarioControlador.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/UsuarioVista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/UsuarioVista.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/LibroVista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/Admin/LibroVista.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/UsuarioVista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/Admin/UsuarioVista.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.form" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.java" beforeDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -51,37 +61,40 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+-    &quot;Application.Migracion.executor&quot;: &quot;Run&quot;,
+-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Lozano/Desktop/programacion-daw-main/TrabajoCrisAntonio&quot;,
+-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "Application.Main.executor": "Run",
++    "Application.Migracion.executor": "Run",
++    "Application.SeleccionarActivity.executor": "Run",
++    "Application.UserActivity.executor": "Run",
++    "ModuleVcsDetector.initialDetectionPerformed": "true",
++    "RunOnceActivity.MCP Project settings loaded": "true",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
++    "RunOnceActivity.git.unshallow": "true",
++    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
++    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
++    "git-widget-placeholder": "master",
++    "ignore.virus.scanning.warn.message": "true",
++    "junie.onboarding.icon.badge.shown": "true",
++    "kotlin-language-version-configured": "true",
++    "last_opened_file_path": "C:/Users/Lozano/Desktop/programacion-daw-main/TrabajoCrisAntonio",
++    "node.js.detected.package.eslint": "true",
++    "node.js.detected.package.tslint": "true",
++    "node.js.selected.package.eslint": "(autodetect)",
++    "node.js.selected.package.tslint": "(autodetect)",
++    "nodejs_package_manager_path": "npm",
++    "to.speed.mode.migration.done": "true",
++    "vue.rearranger.settings.migration": "true"
+   }
+-}</component>
++}]]></component>
+   <component name="RunManager">
+     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+       <option name="MAIN_CLASS_NAME" value="com.trabajocrisantonio.Main" />
+       <module name="TrabajoCrisAntonio" />
+       <extension name="coverage">
+         <pattern>
+-          <option name="PATTERN" value="com.trabajocrisantonio.*" />
++          <option name="PATTERN" value="com.trabajocrisantonio.Views.*" />
+           <option name="ENABLED" value="true" />
+         </pattern>
+       </extension>
+@@ -98,8 +111,8 @@
+   <component name="SharedIndexes">
+     <attachedChunks>
+       <set>
+-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
++        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
++        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.138" />
+       </set>
+     </attachedChunks>
+   </component>
+@@ -113,10 +126,24 @@
+       <workItem from="1773070758617" duration="252000" />
+       <workItem from="1773138907129" duration="1463000" />
+       <workItem from="1773140677406" duration="3342000" />
++      <workItem from="1773152617119" duration="1426000" />
+     </task>
++    <task id="LOCAL-00001" summary="Merge">
++      <option name="closed" value="true" />
++      <created>1773144150747</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1773144150747</updated>
++    </task>
++    <option name="localTasksCounter" value="2" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+     <option name="version" value="3" />
+   </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="Merge" />
++    <option name="LAST_COMMIT_MESSAGE" value="Merge" />
++  </component>
+ </project>
+\ No newline at end of file
+Index: src/main/java/com/trabajocrisantonio/Views/SeleccionarVista.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Views/SeleccionarVista.java b/src/main/java/com/trabajocrisantonio/Views/SeleccionarVista.java
+new file mode 100644
+--- /dev/null	(date 1773153856790)
++++ b/src/main/java/com/trabajocrisantonio/Views/SeleccionarVista.java	(date 1773153856790)
+@@ -0,0 +1,100 @@
++package com.trabajocrisantonio.Views;
++
++import com.trabajocrisantonio.App;
++
++import javax.swing.*;
++import java.awt.*;
++import java.awt.event.MouseAdapter;
++import java.awt.event.MouseEvent;
++
++/**
++ * Pantalla de selección de rol (Usuario o Administrador).
++ * Diseño minimalista siguiendo Material Design.
++ */
++public class SeleccionarVista extends JFrame {
++
++    public SeleccionarVista() {
++        setTitle("Seleccionar Perfil");
++        setUndecorated(true); // Estilo limpio sin bordes
++        setSize(500, 300);
++        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
++        setLocationRelativeTo(null);
++
++        // Panel Principal con degradado sutil o color sólido Material
++        JPanel mainPanel = new JPanel();
++        mainPanel.setLayout(new BorderLayout());
++        mainPanel.setBackground(Color.WHITE);
++        mainPanel.setBorder(BorderFactory.createLineBorder(new Color(230, 230, 230), 2));
++
++        // --- Header (Título) ---
++        JLabel lblTitulo = new JLabel("¿Cómo desea ingresar?", SwingConstants.CENTER);
++        lblTitulo.setFont(new Font("Roboto", Font.BOLD, 22));
++        lblTitulo.setForeground(new Color(33, 33, 33));
++        lblTitulo.setPreferredSize(new Dimension(500, 80));
++        mainPanel.add(lblTitulo, BorderLayout.NORTH);
++
++        // --- Panel de Botones (Centro) ---
++        JPanel panelBotones = new JPanel(new GridLayout(1, 2, 20, 0));
++        panelBotones.setBackground(Color.WHITE);
++        panelBotones.setBorder(BorderFactory.createEmptyBorder(20, 40, 40, 40));
++
++        JButton btnUsuario = createRoleButton("MODO USUARIO", new Color(33, 150, 243));
++        JButton btnAdmin = createRoleButton("MODO ADMIN", new Color(66, 66, 66));
++
++        // Acciones
++        btnUsuario.addActionListener(e -> {
++            new UserActivity();
++            this.dispose();
++        });
++
++        btnAdmin.addActionListener(e -> {
++            new App();
++            this.dispose();
++        });
++
++        panelBotones.add(btnUsuario);
++        panelBotones.add(btnAdmin);
++
++        mainPanel.add(panelBotones, BorderLayout.CENTER);
++
++        // Añadimos los componentes a la vista
++        JPanel topPanel = new JPanel(new BorderLayout());
++        topPanel.setBackground(Color.WHITE);
++        topPanel.add(lblTitulo, BorderLayout.CENTER);
++
++        mainPanel.add(topPanel, BorderLayout.NORTH);
++
++        setContentPane(mainPanel);
++        setVisible(true);
++    }
++
++    /**
++     * Crea un botón estilizado como una tarjeta Material Design.
++     */
++    private JButton createRoleButton(String text, Color baseColor) {
++        JButton btn = new JButton(text);
++        btn.setFont(new Font("Roboto", Font.BOLD, 14));
++        btn.setForeground(Color.WHITE);
++        btn.setBackground(baseColor);
++        btn.setFocusPainted(false);
++        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
++        btn.setBorder(BorderFactory.createCompoundBorder(
++                BorderFactory.createLineBorder(baseColor.darker(), 1),
++                BorderFactory.createEmptyBorder(20, 10, 20, 10)));
++
++        // Efecto Hover simple
++        btn.addMouseListener(new MouseAdapter() {
++            @Override
++            public void mouseEntered(MouseEvent e) {
++                btn.setBackground(baseColor.brighter());
++            }
++
++            @Override
++            public void mouseExited(MouseEvent e) {
++                btn.setBackground(baseColor);
++            }
++        });
++
++        return btn;
++    }
++}
+Index: src/main/java/com/trabajocrisantonio/Views/LibroVista.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Views/LibroVista.java b/src/main/java/com/trabajocrisantonio/Views/Admin/LibroVista.java
+rename from src/main/java/com/trabajocrisantonio/Views/LibroVista.java
+rename to src/main/java/com/trabajocrisantonio/Views/Admin/LibroVista.java
+--- a/src/main/java/com/trabajocrisantonio/Views/LibroVista.java	(revision b8ecc54d105228ad39150981aaeb2c3530a3ec44)
++++ b/src/main/java/com/trabajocrisantonio/Views/Admin/LibroVista.java	(date 1773153856900)
+@@ -1,4 +1,4 @@
+-package com.trabajocrisantonio.Views;
++package com.trabajocrisantonio.Views.Admin;
+ 
+ import javax.swing.*;
+ import javax.swing.table.DefaultTableModel;
+Index: src/main/java/com/trabajocrisantonio/Views/UserActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Views/UserActivity.java b/src/main/java/com/trabajocrisantonio/Views/UserActivity.java
+new file mode 100644
+--- /dev/null	(date 1773153856770)
++++ b/src/main/java/com/trabajocrisantonio/Views/UserActivity.java	(date 1773153856770)
+@@ -0,0 +1,39 @@
++package com.trabajocrisantonio.Views;
++
++import com.trabajocrisantonio.Controllers.User.PrestarController;
++import com.trabajocrisantonio.Views.User.PrestarVista;
++import com.trabajocrisantonio.Views.User.UserLibrosVista;
++
++import javax.swing.*;
++
++public class UserActivity extends JFrame {
++    public UserActivity() {
++        setTitle("User Activity");
++        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
++
++        JTabbedPane tabbedPane = new JTabbedPane();
++
++        // Inicializar Vistas
++        UserLibrosVista userLibrosVista = new UserLibrosVista();
++        PrestarVista prestarVista = new PrestarVista();
++
++        // Controladores
++        new PrestarController(prestarVista);
++
++        // Añadir tabs
++        tabbedPane.addTab("Mis libros prestados", userLibrosVista);
++        tabbedPane.addTab("Solicitar", prestarVista);
++
++        // Añadir a la ventana
++        add(tabbedPane);
++
++        // Configuración final de la ventana
++        setSize(800, 500);
++        setLocationRelativeTo(null); // Centrar después de dar tamaño
++        setVisible(true); // Mostrar al final
++    }
++
++    public static void main(String[] args) {
++        new UserActivity();
++    }
++}

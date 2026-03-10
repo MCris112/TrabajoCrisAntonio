@@ -1,4 +1,4 @@
-package com.trabajocrisantonio.Views;
+package com.trabajocrisantonio.Views.Admin;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -7,6 +7,7 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 
 public class UsuarioVista extends JPanel {
+
     public JButton btnInsertar = new JButton("Insertar");
     public JButton btnActualizar = new JButton("Actualizar");
     public JButton btnBorrar = new JButton("Borrar");
