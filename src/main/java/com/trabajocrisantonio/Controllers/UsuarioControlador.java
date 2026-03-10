@@ -77,10 +77,10 @@ public class UsuarioControlador {
     try{
     QueryBuilder.use(Usuario.class).whereKey(vista.fieldNombre.getText()).update(builder -> {
         builder.set("nif", vista.fieldNif.getText());
-        builder.set("Nombre", vista.fieldNombre.getText());
-        builder.set("Apellido", vista.fieldApellido.getText());
-        builder.set("Direccion", vista.fieldDireccion.getText());
-        builder.set("Telefono", vista.fieldTelefono.getText());
+        builder.set("nombre", vista.fieldNombre.getText());
+        builder.set("apellidos", vista.fieldApellido.getText());
+        builder.set("direccion", vista.fieldDireccion.getText());
+        builder.set("telefono", vista.fieldTelefono.getText());
     });} catch (SQLException e){
         JOptionPane.showMessageDialog(vista, e.getMessage(),"SQL error", JOptionPane.ERROR_MESSAGE);
         
