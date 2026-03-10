@@ -73,8 +73,24 @@ public class UsuarioControlador {
         cargarTabla();
         limpiar();
     }
-    public void actualizar(){}
-    public void borrar(){}
+    public void actualizar(){
+    try{
+    QueryBuilder.use(Usuario.class).whereKey(vista.fieldNombre.getText()).update(builder -> {
+        builder.set("nif", vista.fieldNif.getText());
+        builder.set("Nombre", vista.fieldNombre.getText());
+        builder.set("Apellido", vista.fieldApellido.getText());
+        builder.set("Direccion", vista.fieldDireccion.getText());
+        builder.set("Telefono", vista.fieldTelefono.getText());
+    });} catch (SQLException e){
+        JOptionPane.showMessageDialog(vista, e.getMessage(),"SQL error", JOptionPane.ERROR_MESSAGE);
+        
+    }
+    cargarTabla();
+    limpiar();
+    }
+    public void borrar(){
+
+    }
     public void limpiar(){
         vista.fieldNif.setText("");
         vista.fieldNombre.setText("");
@@ -82,7 +98,9 @@ public class UsuarioControlador {
         vista.fieldDireccion.setText("");
         vista.fieldTelefono.setText("");
     }
-    public void seleccionarFila(){}
+    public void seleccionarFila(){
+
+    }
 
     
     
