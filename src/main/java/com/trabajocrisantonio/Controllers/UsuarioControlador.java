@@ -99,7 +99,14 @@ public class UsuarioControlador {
         vista.fieldTelefono.setText("");
     }
     public void seleccionarFila(){
+    int fila = vista.table.getSelectedRow();
+    if(fila < 0) return;
 
+    vista.fieldNif.setText( (String)vista.modeloTabla.getValueAt(fila, 1));
+    vista.fieldNombre.setText( (String)vista.modeloTabla.getValueAt(fila, 2));
+    vista.fieldApellido.setText( (String)vista.modeloTabla.getValueAt(fila, 3));
+    vista.fieldDireccion.setText( (String)vista.modeloTabla.getValueAt(fila, 4));
+    vista.fieldTelefono.setText( (String)vista.modeloTabla.getValueAt(fila, 5));
     }
 
     
