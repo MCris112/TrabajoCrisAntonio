@@ -2,6 +2,7 @@ package com.trabajocrisantonio.Views;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 public class LibroVista extends JPanel {
     public JButton btnInsertar = new JButton("Insertar");
@@ -23,6 +24,7 @@ public class LibroVista extends JPanel {
 
     public JTable table = new JTable(modeloTabla);
 
+
     JPanel panelFormulario = new JPanel();
 
     public LibroVista() {
@@ -40,6 +42,8 @@ public class LibroVista extends JPanel {
         //Contenedor donde se ven los datos de los libros
         JScrollPane scroll = new JScrollPane(table);
         scroll.setBorder(BorderFactory.createTitledBorder("Listado libros"));
+
+        panelFormulario.setLayout(new GridLayout(1, 0));
 
         //Linea datos usuario, los campos que pertenecen a usuario
         panelFormulario.add(new JLabel("idLibro"));
@@ -59,6 +63,9 @@ public class LibroVista extends JPanel {
 
         panelFormulario.add(new JLabel("genero"));
         panelFormulario.add(fieldGenero);
+
+        panelFormulario.add(new JLabel("precio"));
+        panelFormulario.add(fieldPrecio);
 
         panelFormulario.add(new JLabel("bestseller"));
         panelFormulario.add(fieldBestseller);

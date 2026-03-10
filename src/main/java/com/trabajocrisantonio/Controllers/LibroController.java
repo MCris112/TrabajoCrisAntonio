@@ -29,6 +29,7 @@ public class LibroController {
         try {
             MCList<Libro> listaLibros = QueryBuilder.use(Libro.class).get();
             for (Libro libro : listaLibros) {
+                // TODO QueryMC problema
                 String[] columna = {String.valueOf(libro.getId_libro()), libro.getEditorial(), String.valueOf(libro.getNumero_hojas()), libro.getTitulo(), libro.getAutor(), libro.getGenero(), String.valueOf(libro.getPrecio()), String.valueOf(libro.isBestseller())};
 
                 vista.modeloTabla.addRow(
@@ -69,7 +70,7 @@ public class LibroController {
                     vista.fieldTitulo.getText(),
                     vista.fieldAutor.getText(),
                     vista.fieldGenero.getText(),
-                    Double.parseDouble(vista.fieldPrecio.getText()),
+                    Integer.parseInt(vista.fieldPrecio.getText()),
                     Boolean.parseBoolean(vista.fieldBestseller.getText()));
 
             libro.save();

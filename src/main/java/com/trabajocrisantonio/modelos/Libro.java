@@ -8,7 +8,7 @@ public class Libro extends Model {
 
     public Libro(){}
 
-    public Libro(int id_libro, String editorial, int numero_hojas, String titulo, String autor, String genero, double precio, boolean bestseller) {
+    public Libro(int id_libro, String editorial, int numero_hojas, String titulo, String autor, String genero, int precio, boolean bestseller) {
         this.idLibro = idLibro;
         this.editorial = editorial;
         this.numero_hojas = numero_hojas;
@@ -39,7 +39,7 @@ public class Libro extends Model {
     private String genero;
 
     @Column
-    private double precio;
+    private int precio;
 
     @Column
     private boolean bestseller;
@@ -96,7 +96,7 @@ public class Libro extends Model {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(int precio) {
         this.precio = precio;
     }
 
