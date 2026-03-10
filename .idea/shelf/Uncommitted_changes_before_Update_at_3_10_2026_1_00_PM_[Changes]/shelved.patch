@@ -1,0 +1,488 @@
+Index: src/main/java/com/trabajocrisantonio/App.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trabajocrisantonio;\r\n\r\nimport javax.swing.*;\r\n\r\nimport com.trabajocrisantonio.Controllers.UsuarioControlador;\r\nimport com.trabajocrisantonio.Views.UsuarioVista;\r\n\r\nimport java.awt.*;\r\n\r\npublic class App extends JFrame {\r\n\r\n    public App() {\r\n        JTabbedPane tabbedPane = new JTabbedPane();\r\n        tabbedPane.setBounds(50, 50, 300, 200);\r\n\r\n        UsuarioVista usuarioVista = new UsuarioVista();\r\n\r\n        tabbedPane.addTab(\"Usuario\", usuarioVista);\r\n\r\n        UsuarioControlador usuarioControlador = new UsuarioControlador(usuarioVista);\r\n//        tabbedPane.addTab(\"Pieza\", piezaView);\r\n//        tabbedPane.addTab(\"Proovedor\", proveedorView);\r\n//        tabbedPane.addTab(\"Suministro\", suministroView);\r\n\r\n        setContentPane(tabbedPane);\r\n        setSize(800, 400);\r\n        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\r\n        setLocationRelativeTo(null);\r\n        setVisible(true);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/App.java b/src/main/java/com/trabajocrisantonio/App.java
+--- a/src/main/java/com/trabajocrisantonio/App.java	(revision 2d2923eb503612ff1a972f204571f32aec3377fc)
++++ b/src/main/java/com/trabajocrisantonio/App.java	(date 1773143926099)
+@@ -1,31 +1,124 @@
+ package com.trabajocrisantonio;
+ 
+ import javax.swing.*;
+-
++import java.awt.*;
++import java.awt.event.MouseAdapter;
++import java.awt.event.MouseEvent;
+ import com.trabajocrisantonio.Controllers.UsuarioControlador;
+ import com.trabajocrisantonio.Views.UsuarioVista;
+ 
+-import java.awt.*;
+-
+ public class App extends JFrame {
+ 
++    // Variables para el arrastre de la ventana (necesario si es undecorated)
++    private int xMouse, yMouse;
++
++    private JPanel toolbar;
++
+     public App() {
+-        JTabbedPane tabbedPane = new JTabbedPane();
+-        tabbedPane.setBounds(50, 50, 300, 200);
+-
+-        UsuarioVista usuarioVista = new UsuarioVista();
+-
+-        tabbedPane.addTab("Usuario", usuarioVista);
+-
+-        UsuarioControlador usuarioControlador = new UsuarioControlador(usuarioVista);
+-//        tabbedPane.addTab("Pieza", piezaView);
+-//        tabbedPane.addTab("Proovedor", proveedorView);
+-//        tabbedPane.addTab("Suministro", suministroView);
+-
+-        setContentPane(tabbedPane);
+-        setSize(800, 400);
++        setUndecorated(true); // Estilo Material real sin marcos del sistema
++        setSize(1000, 600);
+         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+         setLocationRelativeTo(null);
++
++        // Contenedor principal
++        JPanel mainPanel = new JPanel(new BorderLayout());
++        mainPanel.setBackground(Color.WHITE);
++
++        // Toolbar Material
++        initToolbar();
++
++        // App Body (Tabs en la izquierda)
++        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
++        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
++        tabbedPane.setFont(new Font("Roboto", Font.BOLD, 14));
++        tabbedPane.setBackground(new Color(245, 245, 245)); // Gris claro Material
++        tabbedPane.setForeground(new Color(66, 66, 66));
++        tabbedPane.setBorder(null); // Quitar bordes para que parezca una sidebar integrada
++
++        UsuarioVista usuarioVista = new UsuarioVista();
++        tabbedPane.addTab("Usuarios", usuarioVista);
++
++        // Estilo de "caja" para la pestaña
++        JLabel lab = new JLabel("Usuarios");
++        lab.setPreferredSize(new Dimension(150, 40)); // Ancho fijo para la sidebar
++        lab.setFont(new Font("Roboto", Font.BOLD, 14));
++        lab.setForeground(new Color(33, 150, 243)); // Azul Material
++        lab.setHorizontalAlignment(SwingConstants.CENTER);
++        tabbedPane.setTabComponentAt(0, lab);
++
++        // Inicializar controlador (si existe)
++        try {
++            new UsuarioControlador(usuarioVista);
++        } catch (Exception e) {
++            System.err.println("No se pudo cargar el controlador: " + e.getMessage());
++        }
++
++        // Unir todo
++        mainPanel.add(toolbar, BorderLayout.NORTH);
++        mainPanel.add(tabbedPane, BorderLayout.CENTER);
++
++        setContentPane(mainPanel);
+         setVisible(true);
+     }
++
++    public void initToolbar()
++    {
++        toolbar = new JPanel(new BorderLayout());
++        toolbar.setPreferredSize(new Dimension(0, 50));
++        toolbar.setBackground(Color.WHITE);
++
++        // Soporte para arrastrar la ventana desde el toolbar
++        toolbar.addMouseListener(new MouseAdapter() {
++            public void mousePressed(MouseEvent e) {
++                xMouse = e.getX();
++                yMouse = e.getY();
++            }
++        });
++        toolbar.addMouseMotionListener(new MouseAdapter() {
++            public void mouseDragged(MouseEvent e) {
++                int x = e.getXOnScreen();
++                int y = e.getYOnScreen();
++                setLocation(x - xMouse, y - yMouse);
++            }
++        });
++
++        // Botón cerrar (Simulado con un Panel y Label)
++        JPanel closeBtnContainer = new JPanel(new GridBagLayout());
++        closeBtnContainer.setPreferredSize(new Dimension(50, 50));
++        closeBtnContainer.setBackground(Color.WHITE);
++        closeBtnContainer.setCursor(new Cursor(Cursor.HAND_CURSOR));
++
++        JLabel closeLabel = new JLabel("x"); // Símbolo X
++        closeLabel.setFont(new Font("Roboto", Font.PLAIN, 20));
++        closeLabel.setForeground(Color.BLACK);
++        closeBtnContainer.add(closeLabel);
++
++        // Eventos Hover para el botón cerrar
++        closeBtnContainer.addMouseListener(new MouseAdapter() {
++            @Override
++            public void mouseEntered(MouseEvent e) {
++                closeBtnContainer.setBackground(Color.RED);
++                closeLabel.setForeground(Color.WHITE);
++            }
++
++            @Override
++            public void mouseExited(MouseEvent e) {
++                closeBtnContainer.setBackground(Color.WHITE);
++                closeLabel.setForeground(Color.BLACK);
++            }
++
++            @Override
++            public void mouseClicked(MouseEvent e) {
++                System.exit(0);
++            }
++        });
++
++        toolbar.add(closeBtnContainer, BorderLayout.EAST);
++
++        // Titulo en Toolbar
++        JLabel title = new JLabel("     Gestor Biblioteca - Trabajo Cristopher - Antonio");
++        title.setFont(new Font("Roboto", Font.BOLD, 14));
++        title.setForeground(new Color(33, 33, 33));
++        toolbar.add(title, BorderLayout.WEST);
++    }
+ }
+Index: src/main/java/com/trabajocrisantonio/Controllers/BaseController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trabajocrisantonio.Controllers;\r\n\r\nimport com.darkredgm.User;\r\nimport com.darkredgm.querymc.Collections.MCList;\r\nimport com.darkredgm.querymc.Database.Model;\r\nimport com.darkredgm.querymc.Database.ModelAttribute;\r\nimport com.darkredgm.querymc.Database.ORM.QueryBuilder;\r\nimport com.trabajocrisantonio.Core.PanelField;\r\nimport com.trabajocrisantonio.Views.BaseView;\r\n\r\nimport javax.swing.*;\r\nimport javax.swing.event.ListSelectionEvent;\r\nimport javax.swing.event.ListSelectionListener;\r\nimport javax.swing.table.TableColumn;\r\nimport java.lang.reflect.InvocationTargetException;\r\nimport java.sql.SQLException;\r\nimport java.util.ArrayList;\r\n\r\nabstract public class BaseController {\r\n\r\n    private BaseView view;\r\n\r\n    public BaseController(BaseView view) {\r\n        this.view = view;\r\n\r\n        initController();\r\n        cargarTabla();\r\n    }\r\n\r\n    abstract public Model getModel();\r\n\r\n    private void cargarTabla() {\r\n\r\n        view.modeloTabla.setRowCount(0);\r\n\r\n        try{\r\n            MCList<Model> list = (MCList<Model>) QueryBuilder.use(getModel().getClass()).get();\r\n\r\n            for(Model m : list){\r\n\r\n                ArrayList<Object> columns = new ArrayList<>();\r\n                for (ModelAttribute attr: m.getFieldAttributes() )\r\n                {\r\n                    columns.add(attr.getValue());\r\n                }\r\n\r\n                view.modeloTabla.addRow(columns.toArray());\r\n            }\r\n        } catch (SQLException e) {\r\n\r\n            JOptionPane.showMessageDialog(view, e.getMessage(), \"SQL Error\", JOptionPane.ERROR_MESSAGE);\r\n        } catch (IllegalAccessException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n    }\r\n\r\n    public void initController()\r\n    {\r\n        view.btnInsertar.addActionListener( e -> insertar() );\r\n        view.btnActualizar.addActionListener( e -> actualizar() );\r\n        view.btnEliminar.addActionListener( e -> eliminar() );\r\n        view.btnLimpiar.addActionListener( e -> limpiar() );\r\n\r\n        view.tabla.getSelectionModel().addListSelectionListener(new ListSelectionListener() {\r\n                    @Override\r\n                    public void valueChanged(ListSelectionEvent e) {\r\n                        if (!e.getValueIsAdjusting()) {\r\n                            selecionarFila();\r\n                        }\r\n                    }\r\n                });\r\n    }\r\n\r\n    public void insertar()\r\n    {\r\n        try{\r\n            Model model = this.getModel().getClass().getConstructor().newInstance();\r\n\r\n\r\n            for ( ModelAttribute attr: model.getFieldAttributes() )\r\n            {\r\n\r\n                PanelField field = view.getFields().get( attr.getName() );\r\n\r\n                if ( field != null )\r\n                {\r\n                    field.setValueTo(attr);\r\n                }\r\n            }\r\n\r\n            // Lo guarda en la base de datos\r\n            model.save();\r\n        } catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {\r\n            JOptionPane.showMessageDialog(view, e.getMessage(), \"Error\", JOptionPane.ERROR_MESSAGE);\r\n        } catch (SQLException e) {\r\n            JOptionPane.showMessageDialog(view, e.getMessage(), \"SQL Error\", JOptionPane.ERROR_MESSAGE);\r\n        }\r\n\r\n        cargarTabla();\r\n        limpiar();\r\n    }\r\n\r\n    private void actualizar() {\r\n\r\n        ModelAttribute primaryKey = this.getModel().getFieldPrimaryKey();\r\n        PanelField field = view.getFields().get( primaryKey.getName() );\r\n\r\n        if ( field != null )\r\n        {\r\n            try{\r\n                QueryBuilder.use(this.getModel().getClass())\r\n                        .whereKey( field.getValue() )\r\n                        .update( setBuilder -> {\r\n\r\n                            for (String key: view.getFields().keySet() )\r\n                            {\r\n                                setBuilder.set(key, view.getFields().get(key).getValue() );\r\n                            }\r\n                        });\r\n            } catch (SQLException e) {\r\n                JOptionPane.showMessageDialog(view, e.getMessage(), \"SQL Error\", JOptionPane.ERROR_MESSAGE);\r\n            }\r\n        }\r\n\r\n        cargarTabla();\r\n        limpiar();\r\n    }\r\n\r\n    private void eliminar() {\r\n\r\n        ModelAttribute primaryKey = this.getModel().getFieldPrimaryKey();\r\n        PanelField field = view.getFields().get( primaryKey.getName() );\r\n\r\n        if ( field != null )\r\n        {\r\n            if ( field.isEmpty() )\r\n            {\r\n                JOptionPane.showMessageDialog(view, \"Necesitas seleccionar para eliminar\");\r\n            }else {\r\n\r\n\r\n                try{\r\n                    QueryBuilder.use( this.getModel().getClass() ).whereKey( field.getValueFrom(primaryKey) ).delete();\r\n                } catch (SQLException e) {\r\n                    JOptionPane.showMessageDialog(view, e.getMessage(), \"SQL Error\", JOptionPane.ERROR_MESSAGE);\r\n                }\r\n\r\n            }\r\n\r\n        }\r\n\r\n        cargarTabla();\r\n        limpiar();\r\n    }\r\n\r\n    private void limpiar() {\r\n        for (String key: view.getFields().keySet())\r\n        {\r\n            view.getFields().get(key).clear();\r\n        }\r\n\r\n        view.tabla.clearSelection();\r\n    }\r\n\r\n    public void selecionarFila()\r\n    {\r\n        int fila = view.tabla.getSelectedRow();\r\n        if (fila < 0) return;\r\n\r\n        for ( String key: view.getFields().keySet() )\r\n        {\r\n            TableColumn column = view.tabla.getColumn(key);\r\n            PanelField field = view.getFields().get( key );\r\n\r\n            if ( column != null &&  field != null )\r\n            {\r\n                int col = column.getModelIndex();\r\n                field.set( view.modeloTabla.getValueAt(fila,\r\n                    col\r\n                    ) );\r\n            }\r\n        }\r\n\r\n\r\n\r\n\r\n//        PanelField field = view.getFields().get( col );\r\n//\r\n//        int col = view.modeloTabla.findColumn(column);\r\n//\r\n//        if ( col == -1 ) return;\r\n//\r\n//\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java b/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java
+--- a/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java	(revision 2d2923eb503612ff1a972f204571f32aec3377fc)
++++ b/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java	(date 1773141007099)
+@@ -182,8 +182,6 @@
+         }
+ 
+ 
+-
+-
+ //        PanelField field = view.getFields().get( col );
+ //
+ //        int col = view.modeloTabla.findColumn(column);
+Index: src/main/java/com/trabajocrisantonio/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trabajocrisantonio;\r\n\r\npublic class Main {\r\n\r\n\r\n    public static void main(String[] args) {\r\n        // Cargar migraciones\r\n\r\n        // Cargar app\r\n        new App();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Main.java b/src/main/java/com/trabajocrisantonio/Main.java
+--- a/src/main/java/com/trabajocrisantonio/Main.java	(revision 2d2923eb503612ff1a972f204571f32aec3377fc)
++++ b/src/main/java/com/trabajocrisantonio/Main.java	(date 1773144027426)
+@@ -6,6 +6,21 @@
+     public static void main(String[] args) {
+         // Cargar migraciones
+ 
++
++        // Mostrar el cargador
++//        Loader loader = new Loader();
++//
++//        // Esperar 2 segundos
++//        try {
++//            Thread.sleep(3000);
++//        } catch (InterruptedException e) {
++//            e.printStackTrace();
++//        }
++//
++//        // Esconder el cargador y mostrar la aplicación
++//        loader.setVisible(false);
++//        loader.dispose();
++        
+         // Cargar app
+         new App();
+     }
+Index: src/main/java/com/trabajocrisantonio/Views/UsuarioVista.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trabajocrisantonio.Views;\r\n\r\nimport javax.swing.BorderFactory;\r\nimport javax.swing.BoxLayout;\r\nimport javax.swing.JButton;\r\nimport javax.swing.JLabel;\r\nimport javax.swing.JPanel;\r\nimport javax.swing.JScrollPane;\r\nimport javax.swing.JTable;\r\nimport javax.swing.JTextField;\r\nimport javax.swing.table.DefaultTableModel;\r\n\r\npublic class UsuarioVista extends JPanel {\r\n    public JButton btnInsertar = new JButton(\"Insertar\");\r\n    public JButton btnActualizar = new JButton(\"Actualizar\");\r\n    public JButton btnBorrar = new JButton(\"Borrar\");\r\n    public JButton btnLimpiar = new JButton(\"Limpiar\");\r\n\r\n    public JTextField fieldNif = new JTextField(6);\r\n    public JTextField fieldNombre = new JTextField(6);\r\n    public JTextField fieldApellido = new JTextField(9);\r\n    public JTextField fieldDireccion = new JTextField(6);\r\n    public JTextField fieldTelefono = new JTextField(6);\r\n\r\n    public DefaultTableModel modeloTabla = new DefaultTableModel( new Object[]{\"nif\", \"nombre\", \"apellidos\", \"direccion\", \"telefono\"}, 0 );\r\n\r\n    public JTable table = new JTable(modeloTabla);\r\n\r\n    JPanel panelFormulario = new JPanel();\r\n    public UsuarioVista(){\r\n    setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));\r\n\r\n    panelFormulario.setBorder(BorderFactory.createTitledBorder(\"Datos Usuario\"));\r\n\r\n    // Panel donde se van a ver todos los botones creados\r\n    JPanel panelBtn = new JPanel();\r\n    panelBtn.add(btnInsertar);\r\n    panelBtn.add(btnBorrar);\r\n    panelBtn.add(btnActualizar);\r\n    panelBtn.add(btnLimpiar);\r\n\r\n    //Contenedor donde se ven los datos de los usuarios\r\n    JScrollPane scroll = new JScrollPane(table);\r\n    scroll.setBorder(BorderFactory.createTitledBorder(\"Listado usuarios\"));\r\n\r\n    //Linea datos usuario, los campos que pertenecen a usuario\r\n    panelFormulario.add(new JLabel(\"nif\"));\r\n    panelFormulario.add(fieldNif);\r\n\r\n    panelFormulario.add(new JLabel(\"nombre\"));\r\n    panelFormulario.add(fieldNombre);\r\n\r\n    panelFormulario.add(new JLabel(\"apellidos\"));\r\n    panelFormulario.add(fieldApellido);\r\n\r\n    panelFormulario.add(new JLabel(\"telefono\"));\r\n    panelFormulario.add(fieldTelefono);\r\n\r\n    panelFormulario.add(new JLabel(\"direccion\"));\r\n    panelFormulario.add(fieldDireccion);\r\n\r\n    add(panelBtn);\r\n    add(panelFormulario);\r\n    add(scroll);\r\n\r\n    }  \r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Views/UsuarioVista.java b/src/main/java/com/trabajocrisantonio/Views/UsuarioVista.java
+--- a/src/main/java/com/trabajocrisantonio/Views/UsuarioVista.java	(revision 2d2923eb503612ff1a972f204571f32aec3377fc)
++++ b/src/main/java/com/trabajocrisantonio/Views/UsuarioVista.java	(date 1773142592985)
+@@ -1,14 +1,10 @@
+ package com.trabajocrisantonio.Views;
+ 
+-import javax.swing.BorderFactory;
+-import javax.swing.BoxLayout;
+-import javax.swing.JButton;
+-import javax.swing.JLabel;
+-import javax.swing.JPanel;
+-import javax.swing.JScrollPane;
+-import javax.swing.JTable;
+-import javax.swing.JTextField;
++import javax.swing.*;
++import javax.swing.table.DefaultTableCellRenderer;
+ import javax.swing.table.DefaultTableModel;
++import javax.swing.table.JTableHeader;
++import java.awt.*;
+ 
+ public class UsuarioVista extends JPanel {
+     public JButton btnInsertar = new JButton("Insertar");
+@@ -27,42 +23,98 @@
+     public JTable table = new JTable(modeloTabla);
+ 
+     JPanel panelFormulario = new JPanel();
+-    public UsuarioVista(){
+-    setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
++    public UsuarioVista() {
++        setLayout(new BorderLayout(10, 10)); // Usar BorderLayout para mejor estructura
++        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
++
++        // Estilo de la Tabla (Material Design - Blue)
++        styleTable();
+ 
+-    panelFormulario.setBorder(BorderFactory.createTitledBorder("Datos Usuario"));
++        panelFormulario.setBorder(BorderFactory.createTitledBorder("Datos Usuario"));
++        panelFormulario.setLayout(new FlowLayout(FlowLayout.LEFT));
+ 
+-    // Panel donde se van a ver todos los botones creados
+-    JPanel panelBtn = new JPanel();
+-    panelBtn.add(btnInsertar);
+-    panelBtn.add(btnBorrar);
+-    panelBtn.add(btnActualizar);
+-    panelBtn.add(btnLimpiar);
++        // Panel donde se van a ver todos los botones creados
++        JPanel panelBtn = new JPanel(new FlowLayout(FlowLayout.CENTER));
++        styleButton(btnInsertar, new Color(33, 150, 243)); // Material Blue
++        styleButton(btnBorrar, new Color(244, 67, 54));   // Material Red
++        styleButton(btnActualizar, new Color(76, 175, 80)); // Material Green
++        styleButton(btnLimpiar, new Color(158, 158, 158)); // Material Grey
++        
++        panelBtn.add(btnInsertar);
++        panelBtn.add(btnBorrar);
++        panelBtn.add(btnActualizar);
++        panelBtn.add(btnLimpiar);
+ 
+-    //Contenedor donde se ven los datos de los usuarios
+-    JScrollPane scroll = new JScrollPane(table);
+-    scroll.setBorder(BorderFactory.createTitledBorder("Listado usuarios"));
++        // Contenedor donde se ven los datos de los usuarios
++        JScrollPane scroll = new JScrollPane(table);
++        scroll.setBorder(BorderFactory.createTitledBorder("Listado usuarios"));
++        scroll.getViewport().setBackground(Color.WHITE);
+ 
+-    //Linea datos usuario, los campos que pertenecen a usuario
+-    panelFormulario.add(new JLabel("nif"));
+-    panelFormulario.add(fieldNif);
+-
+-    panelFormulario.add(new JLabel("nombre"));
+-    panelFormulario.add(fieldNombre);
+-
+-    panelFormulario.add(new JLabel("apellidos"));
+-    panelFormulario.add(fieldApellido);
+-
+-    panelFormulario.add(new JLabel("telefono"));
+-    panelFormulario.add(fieldTelefono);
+-
+-    panelFormulario.add(new JLabel("direccion"));
+-    panelFormulario.add(fieldDireccion);
++        // Linea datos usuario
++        panelFormulario.add(new JLabel("nif"));
++        panelFormulario.add(fieldNif);
++        panelFormulario.add(new JLabel("nombre"));
++        panelFormulario.add(fieldNombre);
++        panelFormulario.add(new JLabel("apellidos"));
++        panelFormulario.add(fieldApellido);
++        panelFormulario.add(new JLabel("telefono"));
++        panelFormulario.add(fieldTelefono);
++        panelFormulario.add(new JLabel("direccion"));
++        panelFormulario.add(fieldDireccion);
+ 
+-    add(panelBtn);
+-    add(panelFormulario);
+-    add(scroll);
++        // Organizar componentes
++        JPanel topPanel = new JPanel();
++        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
++        topPanel.add(panelBtn);
++        topPanel.add(panelFormulario);
++
++        add(topPanel, BorderLayout.NORTH);
++        add(scroll, BorderLayout.CENTER);
++    }
+ 
+-    }  
++    private void styleTable() {
++        table.setRowHeight(35); // Filas más altas (Material Look)
++        table.setSelectionBackground(new Color(187, 222, 251)); // Azul claro para selección
++        table.setSelectionForeground(Color.BLACK);
++        table.setGridColor(new Color(230, 230, 230));
++        table.setShowVerticalLines(false); // Solo líneas horizontales
++        table.setFont(new Font("SansSerif", Font.PLAIN, 14));
++        table.setBackground(Color.WHITE);
++
++        // Estilo del Header
++        JTableHeader header = table.getTableHeader();
++        header.setFont(new Font("SansSerif", Font.BOLD, 14));
++        header.setBackground(new Color(33, 150, 243)); // Azul Material Principal
++        header.setForeground(Color.WHITE);
++        header.setReorderingAllowed(false);
++        header.setPreferredSize(new Dimension(100, 40));
++
++        // Renderizado de celdas para centrar y padding
++        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer() {
++            @Override
++            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
++                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
++                setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
++                if (!isSelected) {
++                    c.setBackground(row % 2 == 0 ? Color.WHITE : new Color(250, 250, 250));
++                }
++                return c;
++            }
++        };
++        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
++        
++        for (int i = 0; i < table.getColumnCount(); i++) {
++            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
++        }
++    }
++
++    private void styleButton(JButton btn, Color color) {
++        btn.setBackground(color);
++        btn.setForeground(Color.WHITE);
++        btn.setFocusPainted(false);
++        btn.setFont(new Font("SansSerif", Font.BOLD, 12));
++        btn.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
++        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
++    }
+ 
+ }
+Index: src/main/java/com/trabajocrisantonio/Loader.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trabajocrisantonio;\r\n\r\npublic class Loader {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Loader.java b/src/main/java/com/trabajocrisantonio/Loader.java
+--- a/src/main/java/com/trabajocrisantonio/Loader.java	(revision 2d2923eb503612ff1a972f204571f32aec3377fc)
++++ b/src/main/java/com/trabajocrisantonio/Loader.java	(date 1773142610046)
+@@ -1,4 +1,53 @@
++/*
++ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
++ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
++ */
+ package com.trabajocrisantonio;
+ 
+-public class Loader {
++import javax.swing.*;
++import java.awt.*;
++import java.net.URL;
++
++/**
++ *
++ * @author crisv
++ */
++public class Loader extends javax.swing.JFrame {
++
++    private JLabel imageLabel;
++
++    /**
++     * Creates new form Loader
++     */
++    public Loader() {
++        setUndecorated(true); // Estilo de Splash Screen
++        setSize(400, 400);
++        
++        JPanel panel = new JPanel();
++        panel.setBackground(Color.WHITE);
++        panel.setLayout(new BorderLayout()); // Más simple para una imagen centrada
++
++        imageLabel = new JLabel();
++        imageLabel.setHorizontalAlignment(JLabel.CENTER);
++
++        // Cargar el GIF
++        URL url = getClass().getResource("/loader.gif");
++        if (url != null) {
++            ImageIcon icon = new ImageIcon(url);
++            // Si el GIF ya tiene el tamaño adecuado o queremos que se escale
++            // Para GIFs animados, escalar con getScaledInstance puede romper la animación.
++            // Es mejor mostrar el ImageIcon directamente si es un GIF animado.
++            imageLabel.setIcon(icon);
++        } else {
++            imageLabel.setText("Cargando...");
++        }
++
++        panel.add(imageLabel, BorderLayout.CENTER);
++        setContentPane(panel);
++
++        setLocationRelativeTo(null);
++        setVisible(true);
++    }
++
++    // Se puede agregar lógica adicional aquí para el cargador si se desea.
+ }
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"45c860c1-d215-4f4c-b166-7f1d61618db8\" name=\"Changes\" comment=\"\">\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Loader.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/misc.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/misc.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM_[Changes]/shelved.patch\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM__Changes_.xml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/uiDesigner.xml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/pom.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/pom.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.form\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.form\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Usuario.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Usuario.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;MCris112&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/MCris112/TrabajoCrisAntonio.git&quot;,\r\n    &quot;accountId&quot;: &quot;df79e3d7-f232-4af6-bd23-1566a68dc2cd&quot;\r\n  }\r\n}</component>\r\n  <component name=\"McpProjectServerCommands\">\r\n    <commands />\r\n    <urls />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;customColor&quot;: &quot;&quot;,\r\n  &quot;associatedIndex&quot;: 2\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"3AiM5LweBMHV0V71hJezzpY3cPx\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;Application.Main.executor&quot;: &quot;Run&quot;,\r\n    &quot;Application.Migracion.executor&quot;: &quot;Run&quot;,\r\n    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,\r\n    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;master&quot;,\r\n    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,\r\n    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,\r\n    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"Main\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.trabajocrisantonio.Main\" />\r\n      <module name=\"TrabajoCrisAntonio\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.trabajocrisantonio.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.Main\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.138\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"45c860c1-d215-4f4c-b166-7f1d61618db8\" name=\"Changes\" comment=\"\" />\r\n      <created>1773070755142</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1773070755142</updated>\r\n      <workItem from=\"1773070758617\" duration=\"252000\" />\r\n      <workItem from=\"1773138907129\" duration=\"1463000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 2d2923eb503612ff1a972f204571f32aec3377fc)
++++ b/.idea/workspace.xml	(date 1773143880386)
+@@ -4,20 +4,13 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="">
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Loader.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM_[Changes]/shelved.patch" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM__Changes_.xml" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
++    <list default="true" id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="Solucion errores">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Loader.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.form" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Usuario.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/UsuarioVista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/UsuarioVista.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -118,11 +111,24 @@
+       <option name="presentableId" value="Default" />
+       <updated>1773070755142</updated>
+       <workItem from="1773070758617" duration="252000" />
+-      <workItem from="1773138907129" duration="1463000" />
++      <workItem from="1773138907129" duration="4923000" />
++    </task>
++    <task id="LOCAL-00001" summary="Solucion errores">
++      <option name="closed" value="true" />
++      <created>1773140543849</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1773140543849</updated>
+     </task>
++    <option name="localTasksCounter" value="2" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+     <option name="version" value="3" />
+   </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="Solucion errores" />
++    <option name="LAST_COMMIT_MESSAGE" value="Solucion errores" />
++  </component>
+ </project>
+\ No newline at end of file

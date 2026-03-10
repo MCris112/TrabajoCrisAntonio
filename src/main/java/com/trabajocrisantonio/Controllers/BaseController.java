@@ -182,8 +182,6 @@ abstract public class BaseController {
         }
 
 
-
-
 //        PanelField field = view.getFields().get( col );
 //
 //        int col = view.modeloTabla.findColumn(column);
