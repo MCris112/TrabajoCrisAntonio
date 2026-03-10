@@ -75,7 +75,7 @@ public class UsuarioControlador {
     }
     public void actualizar(){
     try{
-    QueryBuilder.use(Usuario.class).whereKey(vista.fieldNombre.getText()).update(builder -> {
+    QueryBuilder.use(Usuario.class).whereKey(vista.fieldNif.getText()).update(builder -> {
         builder.set("nif", vista.fieldNif.getText());
         builder.set("nombre", vista.fieldNombre.getText());
         builder.set("apellidos", vista.fieldApellido.getText());
@@ -89,6 +89,15 @@ public class UsuarioControlador {
     limpiar();
     }
     public void borrar(){
+    if (vista.fieldNif.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(vista, "Necesitas seleccionar para borrar");
+    }else {
+        try{
+            QueryBuilder.use(Usuario.class).whereKey(vista.fieldNif.getText()).delete();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(vista, e.getMessage(),"SQL error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     }
     public void limpiar(){
@@ -102,11 +111,11 @@ public class UsuarioControlador {
     int fila = vista.table.getSelectedRow();
     if(fila < 0) return;
 
-    vista.fieldNif.setText( (String)vista.modeloTabla.getValueAt(fila, 1));
-    vista.fieldNombre.setText( (String)vista.modeloTabla.getValueAt(fila, 2));
-    vista.fieldApellido.setText( (String)vista.modeloTabla.getValueAt(fila, 3));
-    vista.fieldDireccion.setText( (String)vista.modeloTabla.getValueAt(fila, 4));
-    vista.fieldTelefono.setText( (String)vista.modeloTabla.getValueAt(fila, 5));
+    vista.fieldNif.setText( (String)vista.modeloTabla.getValueAt(fila, 0));
+    vista.fieldNombre.setText( (String)vista.modeloTabla.getValueAt(fila, 1));
+    vista.fieldApellido.setText( (String)vista.modeloTabla.getValueAt(fila, 2));
+    vista.fieldDireccion.setText( (String)vista.modeloTabla.getValueAt(fila, 3));
+    vista.fieldTelefono.setText( (String)vista.modeloTabla.getValueAt(fila, 4));
     }
 
     
