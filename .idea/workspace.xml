@@ -4,25 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f0745b5-c5ec-42af-a20f-d02b8110f6bc" name="Changes" comment="Cambios">
-      <change afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Core/JField.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Core/PanelField.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Loader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/CategoriaController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/PiezaController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/ProveedorController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/SuministroController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Migracion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Migracion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/BaseView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/BaseView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/CategoriaView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/PiezaView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/ProveedorView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/SuministroView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Usuario.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -60,44 +54,53 @@
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 2
 }</component>
-  <component name="ProjectId" id="3AhtIt303Q1pyBeAikqKja9Ds1I" />
+  <component name="ProjectId" id="3AiM5LweBMHV0V71hJezzpY3cPx" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Migracion.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/crisv/Desktop/Project/TrabajoCrisAntonio",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Migracion.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\crisv\Desktop\Project\TrabajoCrisAntonio" />
-      <recent name="C:\Users\crisv\Desktop\Project\TrabajoCrisAntonio\src\main\java\com\trabajocrisantonio" />
-    </key>
+}</component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.trabajocrisantonio.Main" />
+      <module name="TrabajoCrisAntonio" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.trabajocrisantonio.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -109,56 +112,17 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="9f0745b5-c5ec-42af-a20f-d02b8110f6bc" name="Changes" comment="" />
-      <created>1773056556681</created>
+      <changelist id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="" />
+      <created>1773070755142</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1773056556681</updated>
-      <workItem from="1773056558907" duration="1787000" />
-      <workItem from="1773058373757" duration="908000" />
+      <updated>1773070755142</updated>
+      <workItem from="1773070758617" duration="252000" />
+      <workItem from="1773138907129" duration="1463000" />
     </task>
-    <task id="LOCAL-00001" summary="Maven">
-      <option name="closed" value="true" />
-      <created>1773056579129</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1773056579129</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Maven">
-      <option name="closed" value="true" />
-      <created>1773056642159</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1773056642159</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Maven update">
-      <option name="closed" value="true" />
-      <created>1773057785235</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1773057785235</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Cambios">
-      <option name="closed" value="true" />
-      <created>1773058343889</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1773058343889</updated>
-    </task>
-    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="Maven" />
-    <MESSAGE value="Maven update" />
-    <MESSAGE value="Cambios" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cambios" />
   </component>
 </project>

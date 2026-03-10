@@ -16,7 +16,7 @@ public class Usuario extends Model {
     }
 
     @Primary(autoincrement = false)
-    @Column
+    @Column(nullable = false)
     private String nif;
 
     @Column
@@ -47,20 +47,12 @@ public class Usuario extends Model {
         this.nombre = nombre;
     }
 
-    public String getApellido1() {
-        return apellido1;
+    public String getApellidos() {
+        return apellidos;
     }
 
-    public void setApellido1(String apellido1) {
-        this.apellido1 = apellido1;
-    }
-
-    public String getApellido2() {
-        return apellido2;
-    }
-
-    public void setApellido2(String apellido2) {
-        this.apellido2 = apellido2;
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
     }
 
     public String getDireccion() {

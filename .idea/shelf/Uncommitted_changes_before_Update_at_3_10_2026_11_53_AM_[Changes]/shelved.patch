@@ -1,0 +1,971 @@
+Index: src/main/java/com/trabajocrisantonio/App.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trabajocrisantonio;\r\n\r\nimport javax.swing.*;\r\n\r\nimport com.trabajocrisantonio.Views.UsuarioVista;\r\n\r\nimport java.awt.*;\r\n\r\npublic class App extends JFrame {\r\n\r\n    public App() {\r\n        JTabbedPane tabbedPane = new JTabbedPane();\r\n        tabbedPane.setBounds(50,50,300,200);\r\n\r\n tabbedPane.addTab(\"Usuario\", new UsuarioVista());\r\n//        tabbedPane.addTab(\"Pieza\", piezaView);\r\n//        tabbedPane.addTab(\"Proovedor\", proveedorView);\r\n//        tabbedPane.addTab(\"Suministro\", suministroView);\r\n\r\n        setContentPane(tabbedPane);\r\n        setSize(800, 400);\r\n        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\r\n        setLocationRelativeTo(null);\r\n        setVisible(true);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/App.java b/src/main/java/com/trabajocrisantonio/App.java
+--- a/src/main/java/com/trabajocrisantonio/App.java	(revision 6ec80324271c14831ad77542150e8f5cc80af5ee)
++++ b/src/main/java/com/trabajocrisantonio/App.java	(date 1773139614651)
+@@ -2,6 +2,7 @@
+ 
+ import javax.swing.*;
+ 
++import com.trabajocrisantonio.Controllers.UsuarioControlador;
+ import com.trabajocrisantonio.Views.UsuarioVista;
+ 
+ import java.awt.*;
+@@ -10,9 +11,13 @@
+ 
+     public App() {
+         JTabbedPane tabbedPane = new JTabbedPane();
+-        tabbedPane.setBounds(50,50,300,200);
++        tabbedPane.setBounds(50, 50, 300, 200);
+ 
+- tabbedPane.addTab("Usuario", new UsuarioVista());
++        UsuarioVista usuarioVista = new UsuarioVista();
++
++        tabbedPane.addTab("Usuario", usuarioVista);
++
++        UsuarioControlador usuarioControlador = new UsuarioControlador(usuarioVista);
+ //        tabbedPane.addTab("Pieza", piezaView);
+ //        tabbedPane.addTab("Proovedor", proveedorView);
+ //        tabbedPane.addTab("Suministro", suministroView);
+Index: src/main/java/com/trabajocrisantonio/Controllers/BaseController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trabajocrisantonio.Controllers;\r\n\r\nimport com.darkredgm.querymc.Collections.MCList;\r\nimport com.darkredgm.querymc.Database.Model;\r\nimport com.darkredgm.querymc.Database.ModelAttribute;\r\nimport com.darkredgm.querymc.Database.ORM.QueryBuilder;\r\nimport com.trabajocrisantonio.Core.PanelField;\r\nimport com.trabajocrisantonio.Views.BaseView;\r\n\r\nimport javax.swing.*;\r\nimport javax.swing.event.ListSelectionEvent;\r\nimport javax.swing.event.ListSelectionListener;\r\nimport javax.swing.table.TableColumn;\r\nimport java.lang.reflect.InvocationTargetException;\r\nimport java.sql.SQLException;\r\nimport java.util.ArrayList;\r\n\r\nabstract public class BaseController {\r\n\r\n    private BaseView view;\r\n\r\n    public BaseController(BaseView view) {\r\n        this.view = view;\r\n\r\n        initController();\r\n        cargarTabla();\r\n    }\r\n\r\n    abstract public Model getModel();\r\n\r\n    private void cargarTabla() {\r\n\r\n        view.modeloTabla.setRowCount(0);\r\n\r\n        try{\r\n            MCList<Model> list = (MCList<Model>) QueryBuilder.use(getModel().getClass()).get();\r\n\r\n            for(Model m : list){\r\n\r\n                ArrayList<Object> columns = new ArrayList<>();\r\n                for (ModelAttribute attr: m.getFieldAttributes() )\r\n                {\r\n                    columns.add(attr.getValue());\r\n                }\r\n\r\n                view.modeloTabla.addRow(columns.toArray());\r\n            }\r\n        } catch (SQLException e) {\r\n\r\n            JOptionPane.showMessageDialog(view, e.getMessage(), \"Error\", JOptionPane.ERROR_MESSAGE);\r\n        } catch (IllegalAccessException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n    }\r\n\r\n    public void initController()\r\n    {\r\n        view.btnInsertar.addActionListener( e -> insertar() );\r\n        view.btnActualizar.addActionListener( e -> actualizar() );\r\n        view.btnEliminar.addActionListener( e -> eliminar() );\r\n        view.btnLimpiar.addActionListener( e -> limpiar() );\r\n\r\n        view.tabla.getSelectionModel().addListSelectionListener(new ListSelectionListener() {\r\n                    @Override\r\n                    public void valueChanged(ListSelectionEvent e) {\r\n                        if (!e.getValueIsAdjusting()) {\r\n                            selecionarFila();\r\n                        }\r\n                    }\r\n                });\r\n    }\r\n\r\n    public void insertar()\r\n    {\r\n        try{\r\n            Model model = this.getModel().getClass().getConstructor().newInstance();\r\n\r\n\r\n            for ( ModelAttribute attr: model.getFieldAttributes() )\r\n            {\r\n\r\n                PanelField field = view.getFields().get( attr.getName() );\r\n\r\n                if ( field != null )\r\n                {\r\n                    field.setValueTo(attr);\r\n                }\r\n            }\r\n\r\n            // Lo guarda en la base de datos\r\n            model.save();\r\n        } catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {\r\n            JOptionPane.showMessageDialog(view, e.getMessage(), \"Error\", JOptionPane.ERROR_MESSAGE);\r\n        } catch (SQLException e) {\r\n            JOptionPane.showMessageDialog(view, e.getMessage(), \"SQL Error\", JOptionPane.ERROR_MESSAGE);\r\n        }\r\n\r\n        cargarTabla();\r\n        limpiar();\r\n    }\r\n\r\n    private void actualizar() {\r\n\r\n        ModelAttribute primaryKey = this.getModel().getFieldPrimaryKey();\r\n        PanelField field = view.getFields().get( primaryKey.getName() );\r\n\r\n        if ( field != null )\r\n        {\r\n            try{\r\n                QueryBuilder.use(this.getModel().getClass())\r\n                        .whereKey( field.getValue() )\r\n                        .update( setBuilder -> {\r\n\r\n                            for (String key: view.getFields().keySet() )\r\n                            {\r\n                                setBuilder.set(key, view.getFields().get(key).getValue() );\r\n                            }\r\n                        });\r\n            } catch (SQLException e) {\r\n                JOptionPane.showMessageDialog(view, e.getMessage(), \"SQL Error\", JOptionPane.ERROR_MESSAGE);\r\n            }\r\n        }\r\n\r\n        cargarTabla();\r\n        limpiar();\r\n    }\r\n\r\n    private void eliminar() {\r\n\r\n        ModelAttribute primaryKey = this.getModel().getFieldPrimaryKey();\r\n        PanelField field = view.getFields().get( primaryKey.getName() );\r\n\r\n        if ( field != null )\r\n        {\r\n            if ( field.isEmpty() )\r\n            {\r\n                JOptionPane.showMessageDialog(view, \"Necesitas seleccionar para eliminar\");\r\n            }else {\r\n\r\n\r\n                try{\r\n                    QueryBuilder.use( this.getModel().getClass() ).whereKey( field.getValueFrom(primaryKey) ).delete();\r\n                } catch (SQLException e) {\r\n                    JOptionPane.showMessageDialog(view, e.getMessage(), \"SQL Error\", JOptionPane.ERROR_MESSAGE);\r\n                }\r\n\r\n            }\r\n\r\n        }\r\n\r\n        cargarTabla();\r\n        limpiar();\r\n    }\r\n\r\n    private void limpiar() {\r\n        for (String key: view.getFields().keySet())\r\n        {\r\n            view.getFields().get(key).clear();\r\n        }\r\n\r\n        view.tabla.clearSelection();\r\n    }\r\n\r\n    public void selecionarFila()\r\n    {\r\n        int fila = view.tabla.getSelectedRow();\r\n        if (fila < 0) return;\r\n\r\n        for ( String key: view.getFields().keySet() )\r\n        {\r\n            TableColumn column = view.tabla.getColumn(key);\r\n            PanelField field = view.getFields().get( key );\r\n\r\n            if ( column != null &&  field != null )\r\n            {\r\n                int col = column.getModelIndex();\r\n                field.set( view.modeloTabla.getValueAt(fila,\r\n                    col\r\n                    ) );\r\n            }\r\n        }\r\n\r\n\r\n\r\n//        PanelField field = view.getFields().get( col );\r\n//\r\n//        int col = view.modeloTabla.findColumn(column);\r\n//\r\n//        if ( col == -1 ) return;\r\n//\r\n//\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java b/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java
+--- a/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java	(revision 6ec80324271c14831ad77542150e8f5cc80af5ee)
++++ b/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java	(date 1773139931638)
+@@ -1,5 +1,6 @@
+ package com.trabajocrisantonio.Controllers;
+ 
++import com.darkredgm.User;
+ import com.darkredgm.querymc.Collections.MCList;
+ import com.darkredgm.querymc.Database.Model;
+ import com.darkredgm.querymc.Database.ModelAttribute;
+@@ -47,7 +48,7 @@
+             }
+         } catch (SQLException e) {
+ 
+-            JOptionPane.showMessageDialog(view, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
++            JOptionPane.showMessageDialog(view, e.getMessage(), "SQL Error", JOptionPane.ERROR_MESSAGE);
+         } catch (IllegalAccessException e) {
+             throw new RuntimeException(e);
+         }
+@@ -182,6 +183,7 @@
+ 
+ 
+ 
++
+ //        PanelField field = view.getFields().get( col );
+ //
+ //        int col = view.modeloTabla.findColumn(column);
+Index: src/main/java/com/trabajocrisantonio/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trabajocrisantonio;\r\n\r\npublic class Main {\r\n    \r\n    static void main() {\r\n\r\n        // Cargar migraciones\r\n\r\n        // Mostrar app principal\r\n\r\n        new App();\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Main.java b/src/main/java/com/trabajocrisantonio/Main.java
+--- a/src/main/java/com/trabajocrisantonio/Main.java	(revision 6ec80324271c14831ad77542150e8f5cc80af5ee)
++++ b/src/main/java/com/trabajocrisantonio/Main.java	(date 1773139614683)
+@@ -1,14 +1,12 @@
+ package com.trabajocrisantonio;
+ 
+ public class Main {
+-    
+-    static void main() {
++
+ 
++    public static void main(String[] args) {
+         // Cargar migraciones
+ 
+-        // Mostrar app principal
+-
++        // Cargar app
+         new App();
+-
+     }
+ }
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\r\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n    <modelVersion>4.0.0</modelVersion>\r\n\r\n    <groupId>com.trabajocrisantonio</groupId>\r\n    <artifactId>TrabajoCrisAntonio</artifactId>\r\n    <version>1.0-SNAPSHOT</version>\r\n\r\n    <properties>\r\n        <maven.compiler.source>17</maven.compiler.source>\r\n        <maven.compiler.target>17</maven.compiler.target>\r\n        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\r\n    </properties>\r\n\r\n    <dependencies>\r\n        <dependency>\r\n            <groupId>com.mysql</groupId>\r\n            <artifactId>mysql-connector-j</artifactId>\r\n            <version>9.5.0</version>\r\n            <scope>system</scope>\r\n            <systemPath>${project.basedir}/lib/mysql-connector-j-9.5.0.jar</systemPath>\r\n        </dependency>\r\n\r\n        <dependency>\r\n            <groupId>com.querymc</groupId>\r\n            <artifactId>QueryMC</artifactId>\r\n            <version>0.1-SNAPSHOT</version>\r\n            <scope>system</scope>\r\n            <systemPath>${project.basedir}/lib/QueryMC-0.1-SNAPSHOT.jar</systemPath>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.netbeans.external</groupId>\r\n            <artifactId>AbsoluteLayout</artifactId>\r\n            <version>RELEASE280</version>\r\n        </dependency>\r\n    </dependencies>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pom.xml b/pom.xml
+--- a/pom.xml	(revision 6ec80324271c14831ad77542150e8f5cc80af5ee)
++++ b/pom.xml	(date 1773139614710)
+@@ -24,7 +24,7 @@
+         </dependency>
+ 
+         <dependency>
+-            <groupId>com.querymc</groupId>
++            <groupId>com.darkredgm.querymc</groupId>
+             <artifactId>QueryMC</artifactId>
+             <version>0.1-SNAPSHOT</version>
+             <scope>system</scope>
+Index: src/main/java/com/trabajocrisantonio/modelos/Usuario.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trabajocrisantonio.modelos;\r\n\r\nimport com.darkredgm.querymc.Annotations.Column;\r\nimport com.darkredgm.querymc.Annotations.Primary;\r\nimport com.darkredgm.querymc.Database.Model;\r\n\r\npublic class Usuario extends Model {\r\n\r\n    public Usuario(){}\r\n    public Usuario(String nif, String nombre, String apellidos, String direccion, String telefono) {\r\n        this.nif = nif;\r\n        this.nombre = nombre;\r\n        this.apellidos = apellidos;\r\n        this.direccion = direccion;\r\n        this.telefono = telefono;\r\n    }\r\n\r\n    @Primary(autoincrement = false)\r\n    @Column\r\n    private String nif;\r\n\r\n    @Column\r\n    private String nombre;\r\n\r\n    @Column\r\n    private String apellidos;\r\n\r\n    @Column\r\n    private String direccion;\r\n\r\n    @Column\r\n    private String telefono;\r\n\r\n    public String getNif() {\r\n        return nif;\r\n    }\r\n\r\n    public void setNif(String nif) {\r\n        this.nif = nif;\r\n    }\r\n\r\n    public String getNombre() {\r\n        return nombre;\r\n    }\r\n\r\n    public void setNombre(String nombre) {\r\n        this.nombre = nombre;\r\n    }\r\n\r\n    public String getApellido1() {\r\n        return apellido1;\r\n    }\r\n\r\n    public void setApellido1(String apellido1) {\r\n        this.apellido1 = apellido1;\r\n    }\r\n\r\n    public String getApellido2() {\r\n        return apellido2;\r\n    }\r\n\r\n    public void setApellido2(String apellido2) {\r\n        this.apellido2 = apellido2;\r\n    }\r\n\r\n    public String getDireccion() {\r\n        return direccion;\r\n    }\r\n\r\n    public void setDireccion(String direccion) {\r\n        this.direccion = direccion;\r\n    }\r\n\r\n    public String getTelefono() {\r\n        return telefono;\r\n    }\r\n\r\n    public void setTelefono(String telefono) {\r\n        this.telefono = telefono;\r\n    }\r\n\r\n    \r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/modelos/Usuario.java b/src/main/java/com/trabajocrisantonio/modelos/Usuario.java
+--- a/src/main/java/com/trabajocrisantonio/modelos/Usuario.java	(revision 6ec80324271c14831ad77542150e8f5cc80af5ee)
++++ b/src/main/java/com/trabajocrisantonio/modelos/Usuario.java	(date 1773139614723)
+@@ -16,7 +16,7 @@
+     }
+ 
+     @Primary(autoincrement = false)
+-    @Column
++    @Column(nullable = false)
+     private String nif;
+ 
+     @Column
+@@ -47,20 +47,12 @@
+         this.nombre = nombre;
+     }
+ 
+-    public String getApellido1() {
+-        return apellido1;
+-    }
+-
+-    public void setApellido1(String apellido1) {
+-        this.apellido1 = apellido1;
+-    }
+-
+-    public String getApellido2() {
+-        return apellido2;
++    public String getApellidos() {
++        return apellidos;
+     }
+ 
+-    public void setApellido2(String apellido2) {
+-        this.apellido2 = apellido2;
++    public void setApellidos(String apellidos) {
++        this.apellidos = apellidos;
+     }
+ 
+     public String getDireccion() {
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM_[Changes]/shelved.patch	(revision 6ec80324271c14831ad77542150e8f5cc80af5ee)
++++ /dev/null	(revision 6ec80324271c14831ad77542150e8f5cc80af5ee)
+@@ -1,280 +0,0 @@
+-Index: src/main/java/com/trabajocrisantonio/Main.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.trabajocrisantonio;\r\n\r\npublic class Main {\r\n\r\n    static void main() {\r\n\r\n        // Cargar migraciones\r\n\r\n        // Mostrar app principal\r\n\r\n        new App();\r\n\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/src/main/java/com/trabajocrisantonio/Main.java b/src/main/java/com/trabajocrisantonio/Main.java
+---- a/src/main/java/com/trabajocrisantonio/Main.java	(revision 35f697d024b3a1e2f93a258f437dd473da063009)
+-+++ b/src/main/java/com/trabajocrisantonio/Main.java	(date 1773058547912)
+-@@ -7,7 +7,7 @@
+-         // Cargar migraciones
+- 
+-         // Mostrar app principal
+--
+-+        DB
+-         new App();
+- 
+-     }
+-Index: .idea/uiDesigner.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/.idea/uiDesigner.xml b/.idea/uiDesigner.xml
+-new file mode 100644
+---- /dev/null	(date 1773058323126)
+-+++ b/.idea/uiDesigner.xml	(date 1773058323126)
+-@@ -0,0 +1,124 @@
+-+<?xml version="1.0" encoding="UTF-8"?>
+-+<project version="4">
+-+  <component name="Palette2">
+-+    <group name="Swing">
+-+      <item class="com.intellij.uiDesigner.HSpacer" tooltip-text="Horizontal Spacer" icon="/com/intellij/uiDesigner/icons/hspacer.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+-+        <default-constraints vsize-policy="1" hsize-policy="6" anchor="0" fill="1" />
+-+      </item>
+-+      <item class="com.intellij.uiDesigner.VSpacer" tooltip-text="Vertical Spacer" icon="/com/intellij/uiDesigner/icons/vspacer.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+-+        <default-constraints vsize-policy="6" hsize-policy="1" anchor="0" fill="2" />
+-+      </item>
+-+      <item class="javax.swing.JPanel" icon="/com/intellij/uiDesigner/icons/panel.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+-+        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3" />
+-+      </item>
+-+      <item class="javax.swing.JScrollPane" icon="/com/intellij/uiDesigner/icons/scrollPane.svg" removable="false" auto-create-binding="false" can-attach-label="true">
+-+        <default-constraints vsize-policy="7" hsize-policy="7" anchor="0" fill="3" />
+-+      </item>
+-+      <item class="javax.swing.JButton" icon="/com/intellij/uiDesigner/icons/button.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-+        <default-constraints vsize-policy="0" hsize-policy="3" anchor="0" fill="1" />
+-+        <initial-values>
+-+          <property name="text" value="Button" />
+-+        </initial-values>
+-+      </item>
+-+      <item class="javax.swing.JRadioButton" icon="/com/intellij/uiDesigner/icons/radioButton.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-+        <default-constraints vsize-policy="0" hsize-policy="3" anchor="8" fill="0" />
+-+        <initial-values>
+-+          <property name="text" value="RadioButton" />
+-+        </initial-values>
+-+      </item>
+-+      <item class="javax.swing.JCheckBox" icon="/com/intellij/uiDesigner/icons/checkBox.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-+        <default-constraints vsize-policy="0" hsize-policy="3" anchor="8" fill="0" />
+-+        <initial-values>
+-+          <property name="text" value="CheckBox" />
+-+        </initial-values>
+-+      </item>
+-+      <item class="javax.swing.JLabel" icon="/com/intellij/uiDesigner/icons/label.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+-+        <default-constraints vsize-policy="0" hsize-policy="0" anchor="8" fill="0" />
+-+        <initial-values>
+-+          <property name="text" value="Label" />
+-+        </initial-values>
+-+      </item>
+-+      <item class="javax.swing.JTextField" icon="/com/intellij/uiDesigner/icons/textField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+-+        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
+-+          <preferred-size width="150" height="-1" />
+-+        </default-constraints>
+-+      </item>
+-+      <item class="javax.swing.JPasswordField" icon="/com/intellij/uiDesigner/icons/passwordField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+-+        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
+-+          <preferred-size width="150" height="-1" />
+-+        </default-constraints>
+-+      </item>
+-+      <item class="javax.swing.JFormattedTextField" icon="/com/intellij/uiDesigner/icons/formattedTextField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+-+        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
+-+          <preferred-size width="150" height="-1" />
+-+        </default-constraints>
+-+      </item>
+-+      <item class="javax.swing.JTextArea" icon="/com/intellij/uiDesigner/icons/textArea.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+-+        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
+-+          <preferred-size width="150" height="50" />
+-+        </default-constraints>
+-+      </item>
+-+      <item class="javax.swing.JTextPane" icon="/com/intellij/uiDesigner/icons/textPane.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+-+        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
+-+          <preferred-size width="150" height="50" />
+-+        </default-constraints>
+-+      </item>
+-+      <item class="javax.swing.JEditorPane" icon="/com/intellij/uiDesigner/icons/editorPane.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+-+        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
+-+          <preferred-size width="150" height="50" />
+-+        </default-constraints>
+-+      </item>
+-+      <item class="javax.swing.JComboBox" icon="/com/intellij/uiDesigner/icons/comboBox.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+-+        <default-constraints vsize-policy="0" hsize-policy="2" anchor="8" fill="1" />
+-+      </item>
+-+      <item class="javax.swing.JTable" icon="/com/intellij/uiDesigner/icons/table.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-+        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
+-+          <preferred-size width="150" height="50" />
+-+        </default-constraints>
+-+      </item>
+-+      <item class="javax.swing.JList" icon="/com/intellij/uiDesigner/icons/list.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-+        <default-constraints vsize-policy="6" hsize-policy="2" anchor="0" fill="3">
+-+          <preferred-size width="150" height="50" />
+-+        </default-constraints>
+-+      </item>
+-+      <item class="javax.swing.JTree" icon="/com/intellij/uiDesigner/icons/tree.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-+        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
+-+          <preferred-size width="150" height="50" />
+-+        </default-constraints>
+-+      </item>
+-+      <item class="javax.swing.JTabbedPane" icon="/com/intellij/uiDesigner/icons/tabbedPane.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-+        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3">
+-+          <preferred-size width="200" height="200" />
+-+        </default-constraints>
+-+      </item>
+-+      <item class="javax.swing.JSplitPane" icon="/com/intellij/uiDesigner/icons/splitPane.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+-+        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3">
+-+          <preferred-size width="200" height="200" />
+-+        </default-constraints>
+-+      </item>
+-+      <item class="javax.swing.JSpinner" icon="/com/intellij/uiDesigner/icons/spinner.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+-+        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1" />
+-+      </item>
+-+      <item class="javax.swing.JSlider" icon="/com/intellij/uiDesigner/icons/slider.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-+        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1" />
+-+      </item>
+-+      <item class="javax.swing.JSeparator" icon="/com/intellij/uiDesigner/icons/separator.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+-+        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3" />
+-+      </item>
+-+      <item class="javax.swing.JProgressBar" icon="/com/intellij/uiDesigner/icons/progressbar.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-+        <default-constraints vsize-policy="0" hsize-policy="6" anchor="0" fill="1" />
+-+      </item>
+-+      <item class="javax.swing.JToolBar" icon="/com/intellij/uiDesigner/icons/toolbar.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+-+        <default-constraints vsize-policy="0" hsize-policy="6" anchor="0" fill="1">
+-+          <preferred-size width="-1" height="20" />
+-+        </default-constraints>
+-+      </item>
+-+      <item class="javax.swing.JToolBar$Separator" icon="/com/intellij/uiDesigner/icons/toolbarSeparator.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+-+        <default-constraints vsize-policy="0" hsize-policy="0" anchor="0" fill="1" />
+-+      </item>
+-+      <item class="javax.swing.JScrollBar" icon="/com/intellij/uiDesigner/icons/scrollbar.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-+        <default-constraints vsize-policy="6" hsize-policy="0" anchor="0" fill="2" />
+-+      </item>
+-+    </group>
+-+  </component>
+-+</project>
+-\ No newline at end of file
+-Index: .idea/workspace.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"9f0745b5-c5ec-42af-a20f-d02b8110f6bc\" name=\"Changes\" comment=\"Maven update\">\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/CategoriaController.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/PiezaController.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/ProveedorController.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/SuministroController.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/BaseView.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/CategoriaView.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/PiezaView.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/ProveedorView.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/SuministroView.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/pom.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/pom.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/libro.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Libro.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/prestamo.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Prestamo.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/usuario.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Usuario.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\"><![CDATA[{\r\n  \"lastFilter\": {\r\n    \"state\": \"OPEN\",\r\n    \"assignee\": \"MCris112\"\r\n  }\r\n}]]></component>\r\n  <component name=\"GithubPullRequestsUISettings\"><![CDATA[{\r\n  \"selectedUrlAndAccountId\": {\r\n    \"url\": \"https://github.com/MCris112/TrabajoCrisAntonio.git\",\r\n    \"accountId\": \"df79e3d7-f232-4af6-bd23-1566a68dc2cd\"\r\n  }\r\n}]]></component>\r\n  <component name=\"McpProjectServerCommands\">\r\n    <commands />\r\n    <urls />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\"><![CDATA[{\r\n  \"customColor\": \"\",\r\n  \"associatedIndex\": 2\r\n}]]></component>\r\n  <component name=\"ProjectId\" id=\"3AhtIt303Q1pyBeAikqKja9Ds1I\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"ModuleVcsDetector.initialDetectionPerformed\": \"true\",\r\n    \"RunOnceActivity.MCP Project settings loaded\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252\": \"true\",\r\n    \"RunOnceActivity.git.unshallow\": \"true\",\r\n    \"RunOnceActivity.typescript.service.memoryLimit.init\": \"true\",\r\n    \"com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1\": \"true\",\r\n    \"git-widget-placeholder\": \"master\",\r\n    \"junie.onboarding.icon.badge.shown\": \"true\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"last_opened_file_path\": \"C:/Users/crisv/Desktop/Project/TrabajoCrisAntonio/src/main/java/com/trabajocrisantonio\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"project.structure.last.edited\": \"Modules\",\r\n    \"project.structure.proportion\": \"0.0\",\r\n    \"project.structure.side.proportion\": \"0.0\",\r\n    \"to.speed.mode.migration.done\": \"true\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\crisv\\Desktop\\Project\\TrabajoCrisAntonio\\src\\main\\java\\com\\trabajocrisantonio\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.138\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"9f0745b5-c5ec-42af-a20f-d02b8110f6bc\" name=\"Changes\" comment=\"\" />\r\n      <created>1773056556681</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1773056556681</updated>\r\n      <workItem from=\"1773056558907\" duration=\"1755000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Maven\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1773056579129</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1773056579129</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"Maven\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1773056642159</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1773056642159</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"Maven update\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1773057785235</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1773057785235</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"4\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Maven\" />\r\n    <MESSAGE value=\"Maven update\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Maven update\" />\r\n  </component>\r\n</project>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+---- a/.idea/workspace.xml	(revision 35f697d024b3a1e2f93a258f437dd473da063009)
+-+++ b/.idea/workspace.xml	(date 1773058882682)
+-@@ -4,24 +4,10 @@
+-     <option name="autoReloadType" value="SELECTIVE" />
+-   </component>
+-   <component name="ChangeListManager">
+--    <list default="true" id="9f0745b5-c5ec-42af-a20f-d02b8110f6bc" name="Changes" comment="Maven update">
+--      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java" afterDir="false" />
+--      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java" afterDir="false" />
+--      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/CategoriaController.java" afterDir="false" />
+--      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/PiezaController.java" afterDir="false" />
+--      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/ProveedorController.java" afterDir="false" />
+--      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/SuministroController.java" afterDir="false" />
+--      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/BaseView.java" afterDir="false" />
+--      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/CategoriaView.java" afterDir="false" />
+--      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/PiezaView.java" afterDir="false" />
+--      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/ProveedorView.java" afterDir="false" />
+--      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/SuministroView.java" afterDir="false" />
+-+    <list default="true" id="9f0745b5-c5ec-42af-a20f-d02b8110f6bc" name="Changes" comment="Cambios">
+-+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+-       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+--      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+-       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java" afterDir="false" />
+--      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/libro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Libro.java" afterDir="false" />
+--      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/prestamo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Prestamo.java" afterDir="false" />
+--      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Usuario.java" afterDir="false" />
+-     </list>
+-     <option name="SHOW_DIALOG" value="false" />
+-     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+-@@ -38,26 +24,26 @@
+-   <component name="Git.Settings">
+-     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+-   </component>
+--  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+--  "lastFilter": {
+--    "state": "OPEN",
+--    "assignee": "MCris112"
+-+  <component name="GitHubPullRequestSearchHistory">{
+-+  &quot;lastFilter&quot;: {
+-+    &quot;state&quot;: &quot;OPEN&quot;,
+-+    &quot;assignee&quot;: &quot;MCris112&quot;
+-   }
+--}]]></component>
+--  <component name="GithubPullRequestsUISettings"><![CDATA[{
+--  "selectedUrlAndAccountId": {
+--    "url": "https://github.com/MCris112/TrabajoCrisAntonio.git",
+--    "accountId": "df79e3d7-f232-4af6-bd23-1566a68dc2cd"
+-+}</component>
+-+  <component name="GithubPullRequestsUISettings">{
+-+  &quot;selectedUrlAndAccountId&quot;: {
+-+    &quot;url&quot;: &quot;https://github.com/MCris112/TrabajoCrisAntonio.git&quot;,
+-+    &quot;accountId&quot;: &quot;df79e3d7-f232-4af6-bd23-1566a68dc2cd&quot;
+-   }
+--}]]></component>
+-+}</component>
+-   <component name="McpProjectServerCommands">
+-     <commands />
+-     <urls />
+-   </component>
+--  <component name="ProjectColorInfo"><![CDATA[{
+--  "customColor": "",
+--  "associatedIndex": 2
+--}]]></component>
+-+  <component name="ProjectColorInfo">{
+-+  &quot;customColor&quot;: &quot;&quot;,
+-+  &quot;associatedIndex&quot;: 2
+-+}</component>
+-   <component name="ProjectId" id="3AhtIt303Q1pyBeAikqKja9Ds1I" />
+-   <component name="ProjectViewState">
+-     <option name="hideEmptyMiddlePackages" value="true" />
+-@@ -71,8 +57,10 @@
+-     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+-     "RunOnceActivity.git.unshallow": "true",
+-     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+-+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+-     "git-widget-placeholder": "master",
+-+    "ignore.virus.scanning.warn.message": "true",
+-     "junie.onboarding.icon.badge.shown": "true",
+-     "kotlin-language-version-configured": "true",
+-     "last_opened_file_path": "C:/Users/crisv/Desktop/Project/TrabajoCrisAntonio/src/main/java/com/trabajocrisantonio",
+-@@ -108,7 +96,8 @@
+-       <option name="number" value="Default" />
+-       <option name="presentableId" value="Default" />
+-       <updated>1773056556681</updated>
+--      <workItem from="1773056558907" duration="1755000" />
+-+      <workItem from="1773056558907" duration="1787000" />
+-+      <workItem from="1773058373757" duration="504000" />
+-     </task>
+-     <task id="LOCAL-00001" summary="Maven">
+-       <option name="closed" value="true" />
+-@@ -134,7 +123,15 @@
+-       <option name="project" value="LOCAL" />
+-       <updated>1773057785235</updated>
+-     </task>
+--    <option name="localTasksCounter" value="4" />
+-+    <task id="LOCAL-00004" summary="Cambios">
+-+      <option name="closed" value="true" />
+-+      <created>1773058343889</created>
+-+      <option name="number" value="00004" />
+-+      <option name="presentableId" value="LOCAL-00004" />
+-+      <option name="project" value="LOCAL" />
+-+      <updated>1773058343889</updated>
+-+    </task>
+-+    <option name="localTasksCounter" value="5" />
+-     <servers />
+-   </component>
+-   <component name="TypeScriptGeneratedFilesManager">
+-@@ -143,6 +140,7 @@
+-   <component name="VcsManagerConfiguration">
+-     <MESSAGE value="Maven" />
+-     <MESSAGE value="Maven update" />
+--    <option name="LAST_COMMIT_MESSAGE" value="Maven update" />
+-+    <MESSAGE value="Cambios" />
+-+    <option name="LAST_COMMIT_MESSAGE" value="Cambios" />
+-   </component>
+- </project>
+-\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM__Changes_.xml	(revision 6ec80324271c14831ad77542150e8f5cc80af5ee)
++++ /dev/null	(revision 6ec80324271c14831ad77542150e8f5cc80af5ee)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM_[Changes]" date="1773058887940" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 3/9/2026 1:21 PM [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/uiDesigner.xml
+===================================================================
+diff --git a/.idea/uiDesigner.xml b/.idea/uiDesigner.xml
+deleted file mode 100644
+--- a/.idea/uiDesigner.xml	(revision 6ec80324271c14831ad77542150e8f5cc80af5ee)
++++ /dev/null	(revision 6ec80324271c14831ad77542150e8f5cc80af5ee)
+@@ -1,124 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="Palette2">
+-    <group name="Swing">
+-      <item class="com.intellij.uiDesigner.HSpacer" tooltip-text="Horizontal Spacer" icon="/com/intellij/uiDesigner/icons/hspacer.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+-        <default-constraints vsize-policy="1" hsize-policy="6" anchor="0" fill="1" />
+-      </item>
+-      <item class="com.intellij.uiDesigner.VSpacer" tooltip-text="Vertical Spacer" icon="/com/intellij/uiDesigner/icons/vspacer.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+-        <default-constraints vsize-policy="6" hsize-policy="1" anchor="0" fill="2" />
+-      </item>
+-      <item class="javax.swing.JPanel" icon="/com/intellij/uiDesigner/icons/panel.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+-        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3" />
+-      </item>
+-      <item class="javax.swing.JScrollPane" icon="/com/intellij/uiDesigner/icons/scrollPane.svg" removable="false" auto-create-binding="false" can-attach-label="true">
+-        <default-constraints vsize-policy="7" hsize-policy="7" anchor="0" fill="3" />
+-      </item>
+-      <item class="javax.swing.JButton" icon="/com/intellij/uiDesigner/icons/button.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-        <default-constraints vsize-policy="0" hsize-policy="3" anchor="0" fill="1" />
+-        <initial-values>
+-          <property name="text" value="Button" />
+-        </initial-values>
+-      </item>
+-      <item class="javax.swing.JRadioButton" icon="/com/intellij/uiDesigner/icons/radioButton.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-        <default-constraints vsize-policy="0" hsize-policy="3" anchor="8" fill="0" />
+-        <initial-values>
+-          <property name="text" value="RadioButton" />
+-        </initial-values>
+-      </item>
+-      <item class="javax.swing.JCheckBox" icon="/com/intellij/uiDesigner/icons/checkBox.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-        <default-constraints vsize-policy="0" hsize-policy="3" anchor="8" fill="0" />
+-        <initial-values>
+-          <property name="text" value="CheckBox" />
+-        </initial-values>
+-      </item>
+-      <item class="javax.swing.JLabel" icon="/com/intellij/uiDesigner/icons/label.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+-        <default-constraints vsize-policy="0" hsize-policy="0" anchor="8" fill="0" />
+-        <initial-values>
+-          <property name="text" value="Label" />
+-        </initial-values>
+-      </item>
+-      <item class="javax.swing.JTextField" icon="/com/intellij/uiDesigner/icons/textField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+-        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
+-          <preferred-size width="150" height="-1" />
+-        </default-constraints>
+-      </item>
+-      <item class="javax.swing.JPasswordField" icon="/com/intellij/uiDesigner/icons/passwordField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+-        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
+-          <preferred-size width="150" height="-1" />
+-        </default-constraints>
+-      </item>
+-      <item class="javax.swing.JFormattedTextField" icon="/com/intellij/uiDesigner/icons/formattedTextField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+-        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
+-          <preferred-size width="150" height="-1" />
+-        </default-constraints>
+-      </item>
+-      <item class="javax.swing.JTextArea" icon="/com/intellij/uiDesigner/icons/textArea.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+-        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
+-          <preferred-size width="150" height="50" />
+-        </default-constraints>
+-      </item>
+-      <item class="javax.swing.JTextPane" icon="/com/intellij/uiDesigner/icons/textPane.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+-        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
+-          <preferred-size width="150" height="50" />
+-        </default-constraints>
+-      </item>
+-      <item class="javax.swing.JEditorPane" icon="/com/intellij/uiDesigner/icons/editorPane.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+-        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
+-          <preferred-size width="150" height="50" />
+-        </default-constraints>
+-      </item>
+-      <item class="javax.swing.JComboBox" icon="/com/intellij/uiDesigner/icons/comboBox.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+-        <default-constraints vsize-policy="0" hsize-policy="2" anchor="8" fill="1" />
+-      </item>
+-      <item class="javax.swing.JTable" icon="/com/intellij/uiDesigner/icons/table.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
+-          <preferred-size width="150" height="50" />
+-        </default-constraints>
+-      </item>
+-      <item class="javax.swing.JList" icon="/com/intellij/uiDesigner/icons/list.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-        <default-constraints vsize-policy="6" hsize-policy="2" anchor="0" fill="3">
+-          <preferred-size width="150" height="50" />
+-        </default-constraints>
+-      </item>
+-      <item class="javax.swing.JTree" icon="/com/intellij/uiDesigner/icons/tree.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
+-          <preferred-size width="150" height="50" />
+-        </default-constraints>
+-      </item>
+-      <item class="javax.swing.JTabbedPane" icon="/com/intellij/uiDesigner/icons/tabbedPane.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3">
+-          <preferred-size width="200" height="200" />
+-        </default-constraints>
+-      </item>
+-      <item class="javax.swing.JSplitPane" icon="/com/intellij/uiDesigner/icons/splitPane.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+-        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3">
+-          <preferred-size width="200" height="200" />
+-        </default-constraints>
+-      </item>
+-      <item class="javax.swing.JSpinner" icon="/com/intellij/uiDesigner/icons/spinner.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+-        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1" />
+-      </item>
+-      <item class="javax.swing.JSlider" icon="/com/intellij/uiDesigner/icons/slider.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1" />
+-      </item>
+-      <item class="javax.swing.JSeparator" icon="/com/intellij/uiDesigner/icons/separator.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+-        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3" />
+-      </item>
+-      <item class="javax.swing.JProgressBar" icon="/com/intellij/uiDesigner/icons/progressbar.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-        <default-constraints vsize-policy="0" hsize-policy="6" anchor="0" fill="1" />
+-      </item>
+-      <item class="javax.swing.JToolBar" icon="/com/intellij/uiDesigner/icons/toolbar.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+-        <default-constraints vsize-policy="0" hsize-policy="6" anchor="0" fill="1">
+-          <preferred-size width="-1" height="20" />
+-        </default-constraints>
+-      </item>
+-      <item class="javax.swing.JToolBar$Separator" icon="/com/intellij/uiDesigner/icons/toolbarSeparator.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+-        <default-constraints vsize-policy="0" hsize-policy="0" anchor="0" fill="1" />
+-      </item>
+-      <item class="javax.swing.JScrollBar" icon="/com/intellij/uiDesigner/icons/scrollbar.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+-        <default-constraints vsize-policy="6" hsize-policy="0" anchor="0" fill="2" />
+-      </item>
+-    </group>
+-  </component>
+-</project>
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"9f0745b5-c5ec-42af-a20f-d02b8110f6bc\" name=\"Changes\" comment=\"Cambios\">\r\n      <change afterPath=\"$PROJECT_DIR$/.env.example\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/uiDesigner.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Core/JField.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Core/PanelField.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.env\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.env\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.gitignore\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.gitignore\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/CategoriaController.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/PiezaController.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/ProveedorController.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/SuministroController.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Migracion.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Migracion.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/BaseView.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/BaseView.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/CategoriaView.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/PiezaView.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/ProveedorView.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/SuministroView.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Usuario.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Usuario.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;MCris112&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/MCris112/TrabajoCrisAntonio.git&quot;,\r\n    &quot;accountId&quot;: &quot;df79e3d7-f232-4af6-bd23-1566a68dc2cd&quot;\r\n  }\r\n}</component>\r\n  <component name=\"McpProjectServerCommands\">\r\n    <commands />\r\n    <urls />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;customColor&quot;: &quot;&quot;,\r\n  &quot;associatedIndex&quot;: 2\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"3AhtIt303Q1pyBeAikqKja9Ds1I\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Application.Migracion.executor\": \"Run\",\r\n    \"ModuleVcsDetector.initialDetectionPerformed\": \"true\",\r\n    \"RunOnceActivity.MCP Project settings loaded\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252\": \"true\",\r\n    \"RunOnceActivity.git.unshallow\": \"true\",\r\n    \"RunOnceActivity.typescript.service.memoryLimit.init\": \"true\",\r\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\r\n    \"com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1\": \"true\",\r\n    \"git-widget-placeholder\": \"master\",\r\n    \"ignore.virus.scanning.warn.message\": \"true\",\r\n    \"junie.onboarding.icon.badge.shown\": \"true\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"last_opened_file_path\": \"C:/Users/crisv/Desktop/Project/TrabajoCrisAntonio\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"project.structure.last.edited\": \"Modules\",\r\n    \"project.structure.proportion\": \"0.0\",\r\n    \"project.structure.side.proportion\": \"0.0\",\r\n    \"to.speed.mode.migration.done\": \"true\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\crisv\\Desktop\\Project\\TrabajoCrisAntonio\" />\r\n      <recent name=\"C:\\Users\\crisv\\Desktop\\Project\\TrabajoCrisAntonio\\src\\main\\java\\com\\trabajocrisantonio\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.138\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"9f0745b5-c5ec-42af-a20f-d02b8110f6bc\" name=\"Changes\" comment=\"\" />\r\n      <created>1773056556681</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1773056556681</updated>\r\n      <workItem from=\"1773056558907\" duration=\"1787000\" />\r\n      <workItem from=\"1773058373757\" duration=\"908000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Maven\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1773056579129</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1773056579129</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"Maven\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1773056642159</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1773056642159</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"Maven update\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1773057785235</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1773057785235</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"Cambios\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1773058343889</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1773058343889</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"5\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Maven\" />\r\n    <MESSAGE value=\"Maven update\" />\r\n    <MESSAGE value=\"Cambios\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Cambios\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 6ec80324271c14831ad77542150e8f5cc80af5ee)
++++ b/.idea/workspace.xml	(date 1773139727693)
+@@ -4,25 +4,20 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="9f0745b5-c5ec-42af-a20f-d02b8110f6bc" name="Changes" comment="Cambios">
+-      <change afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Core/JField.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Core/PanelField.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
++    <list default="true" id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="">
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Loader.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM_[Changes]/shelved.patch" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_9_2026_1_21_PM__Changes_.xml" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/CategoriaController.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/PiezaController.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/ProveedorController.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/SuministroController.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Migracion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Migracion.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/BaseView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/BaseView.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/CategoriaView.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/PiezaView.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/ProveedorView.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/SuministroView.java" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/UsuarioControlador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/UsuarioControlador.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Main.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.form" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Vista.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Usuario.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+@@ -60,45 +55,34 @@
+   &quot;customColor&quot;: &quot;&quot;,
+   &quot;associatedIndex&quot;: 2
+ }</component>
+-  <component name="ProjectId" id="3AhtIt303Q1pyBeAikqKja9Ds1I" />
++  <component name="ProjectId" id="3AiM5LweBMHV0V71hJezzpY3cPx" />
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "Application.Migracion.executor": "Run",
+-    "ModuleVcsDetector.initialDetectionPerformed": "true",
+-    "RunOnceActivity.MCP Project settings loaded": "true",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+-    "RunOnceActivity.git.unshallow": "true",
+-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+-    "git-widget-placeholder": "master",
+-    "ignore.virus.scanning.warn.message": "true",
+-    "junie.onboarding.icon.badge.shown": "true",
+-    "kotlin-language-version-configured": "true",
+-    "last_opened_file_path": "C:/Users/crisv/Desktop/Project/TrabajoCrisAntonio",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.detected.package.tslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "nodejs_package_manager_path": "npm",
+-    "project.structure.last.edited": "Modules",
+-    "project.structure.proportion": "0.0",
+-    "project.structure.side.proportion": "0.0",
+-    "to.speed.mode.migration.done": "true",
+-    "vue.rearranger.settings.migration": "true"
+-  }
+-}]]></component>
+-  <component name="RecentsManager">
+-    <key name="CopyFile.RECENT_KEYS">
+-      <recent name="C:\Users\crisv\Desktop\Project\TrabajoCrisAntonio" />
+-      <recent name="C:\Users\crisv\Desktop\Project\TrabajoCrisAntonio\src\main\java\com\trabajocrisantonio" />
+-    </key>
+-  </component>
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
++    &quot;Application.Migracion.executor&quot;: &quot;Run&quot;,
++    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
++    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
++    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
++    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
++    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
++  }
++}</component>
+   <component name="SharedIndexes">
+     <attachedChunks>
+       <set>
+@@ -109,56 +93,17 @@
+   </component>
+   <component name="TaskManager">
+     <task active="true" id="Default" summary="Default task">
+-      <changelist id="9f0745b5-c5ec-42af-a20f-d02b8110f6bc" name="Changes" comment="" />
+-      <created>1773056556681</created>
++      <changelist id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="" />
++      <created>1773070755142</created>
+       <option name="number" value="Default" />
+       <option name="presentableId" value="Default" />
+-      <updated>1773056556681</updated>
+-      <workItem from="1773056558907" duration="1787000" />
+-      <workItem from="1773058373757" duration="908000" />
+-    </task>
+-    <task id="LOCAL-00001" summary="Maven">
+-      <option name="closed" value="true" />
+-      <created>1773056579129</created>
+-      <option name="number" value="00001" />
+-      <option name="presentableId" value="LOCAL-00001" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1773056579129</updated>
++      <updated>1773070755142</updated>
++      <workItem from="1773070758617" duration="252000" />
++      <workItem from="1773138907129" duration="817000" />
+     </task>
+-    <task id="LOCAL-00002" summary="Maven">
+-      <option name="closed" value="true" />
+-      <created>1773056642159</created>
+-      <option name="number" value="00002" />
+-      <option name="presentableId" value="LOCAL-00002" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1773056642159</updated>
+-    </task>
+-    <task id="LOCAL-00003" summary="Maven update">
+-      <option name="closed" value="true" />
+-      <created>1773057785235</created>
+-      <option name="number" value="00003" />
+-      <option name="presentableId" value="LOCAL-00003" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1773057785235</updated>
+-    </task>
+-    <task id="LOCAL-00004" summary="Cambios">
+-      <option name="closed" value="true" />
+-      <created>1773058343889</created>
+-      <option name="number" value="00004" />
+-      <option name="presentableId" value="LOCAL-00004" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1773058343889</updated>
+-    </task>
+-    <option name="localTasksCounter" value="5" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+     <option name="version" value="3" />
+   </component>
+-  <component name="VcsManagerConfiguration">
+-    <MESSAGE value="Maven" />
+-    <MESSAGE value="Maven update" />
+-    <MESSAGE value="Cambios" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Cambios" />
+-  </component>
+ </project>
+\ No newline at end of file
+Index: src/main/java/com/trabajocrisantonio/Vista.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template\r\n */\r\npackage com.trabajocrisantonio;\r\n\r\n/**\r\n *\r\n * @author crisv\r\n */\r\npublic class Vista extends javax.swing.JFrame {\r\n    \r\n    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Vista.class.getName());\r\n\r\n    /**\r\n     * Creates new form Vista\r\n     */\r\n    public Vista() {\r\n        initComponents();\r\n    }\r\n\r\n    /**\r\n     * This method is called from within the constructor to initialize the form.\r\n     * WARNING: Do NOT modify this code. The content of this method is always\r\n     * regenerated by the Form Editor.\r\n     */\r\n    @SuppressWarnings(\"unchecked\")\r\n    // <editor-fold defaultstate=\"collapsed\" desc=\"Generated Code\">//GEN-BEGIN:initComponents\r\n    private void initComponents() {\r\n\r\n        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);\r\n\r\n        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());\r\n        getContentPane().setLayout(layout);\r\n        layout.setHorizontalGroup(\r\n            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)\r\n            .addGap(0, 400, Short.MAX_VALUE)\r\n        );\r\n        layout.setVerticalGroup(\r\n            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)\r\n            .addGap(0, 300, Short.MAX_VALUE)\r\n        );\r\n\r\n        pack();\r\n    }// </editor-fold>//GEN-END:initComponents\r\n\r\n    /**\r\n     * @param args the command line arguments\r\n     */\r\n    public static void main(String args[]) {\r\n        /* Set the Nimbus look and feel */\r\n        //<editor-fold defaultstate=\"collapsed\" desc=\" Look and feel setting code (optional) \">\r\n        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.\r\n         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html \r\n         */\r\n        try {\r\n            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {\r\n                if (\"Nimbus\".equals(info.getName())) {\r\n                    javax.swing.UIManager.setLookAndFeel(info.getClassName());\r\n                    break;\r\n                }\r\n            }\r\n        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {\r\n            logger.log(java.util.logging.Level.SEVERE, null, ex);\r\n        }\r\n        //</editor-fold>\r\n\r\n        /* Create and display the form */\r\n        java.awt.EventQueue.invokeLater(() -> new Vista().setVisible(true));\r\n    }\r\n\r\n    // Variables declaration - do not modify//GEN-BEGIN:variables\r\n    // End of variables declaration//GEN-END:variables\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Vista.java b/src/main/java/com/trabajocrisantonio/Vista.java
+--- a/src/main/java/com/trabajocrisantonio/Vista.java	(revision 6ec80324271c14831ad77542150e8f5cc80af5ee)
++++ b/src/main/java/com/trabajocrisantonio/Vista.java	(date 1773139614816)
+@@ -28,22 +28,46 @@
+     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+     private void initComponents() {
+ 
++        jPanel1 = new javax.swing.JPanel();
++        jButton1 = new javax.swing.JButton();
++        jButton2 = new javax.swing.JButton();
++
++        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
++        jPanel1.setLayout(jPanel1Layout);
++        jPanel1Layout.setHorizontalGroup(
++            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
++            .addGap(0, 100, Short.MAX_VALUE)
++        );
++        jPanel1Layout.setVerticalGroup(
++            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
++            .addGap(0, 100, Short.MAX_VALUE)
++        );
++
+         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
++        setResizable(false);
++        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+ 
+-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+-        getContentPane().setLayout(layout);
+-        layout.setHorizontalGroup(
+-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+-            .addGap(0, 400, Short.MAX_VALUE)
+-        );
+-        layout.setVerticalGroup(
+-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+-            .addGap(0, 300, Short.MAX_VALUE)
+-        );
++        jButton1.setText("Admin");
++        jButton1.setBorder(null);
++        jButton1.addActionListener(this::jButton1ActionPerformed);
++        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 130, 100, 50));
++
++        jButton2.setText("Usuario");
++        jButton2.setBorder(null);
++        jButton2.addActionListener(this::jButton2ActionPerformed);
++        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 130, 100, 50));
+ 
+         pack();
+     }// </editor-fold>//GEN-END:initComponents
+ 
++    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
++        // TODO add your handling code here:
++    }//GEN-LAST:event_jButton1ActionPerformed
++
++    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
++        // TODO add your handling code here:
++    }//GEN-LAST:event_jButton2ActionPerformed
++
+     /**
+      * @param args the command line arguments
+      */
+@@ -70,5 +94,8 @@
+     }
+ 
+     // Variables declaration - do not modify//GEN-BEGIN:variables
++    private javax.swing.JButton jButton1;
++    private javax.swing.JButton jButton2;
++    private javax.swing.JPanel jPanel1;
+     // End of variables declaration//GEN-END:variables
+ }
+Index: src/main/java/com/trabajocrisantonio/Loader.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Loader.java b/src/main/java/com/trabajocrisantonio/Loader.java
+new file mode 100644
+--- /dev/null	(date 1773139614780)
++++ b/src/main/java/com/trabajocrisantonio/Loader.java	(date 1773139614780)
+@@ -0,0 +1,4 @@
++package com.trabajocrisantonio;
++
++public class Loader {
++}
+Index: src/main/java/com/trabajocrisantonio/Vista.form
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n\r\n<Form version=\"1.3\" maxVersion=\"1.9\" type=\"org.netbeans.modules.form.forminfo.JFrameFormInfo\">\r\n  <Properties>\r\n    <Property name=\"defaultCloseOperation\" type=\"int\" value=\"3\"/>\r\n  </Properties>\r\n  <SyntheticProperties>\r\n    <SyntheticProperty name=\"formSizePolicy\" type=\"int\" value=\"1\"/>\r\n    <SyntheticProperty name=\"generateCenter\" type=\"boolean\" value=\"false\"/>\r\n  </SyntheticProperties>\r\n  <AuxValues>\r\n    <AuxValue name=\"FormSettings_autoResourcing\" type=\"java.lang.Integer\" value=\"0\"/>\r\n    <AuxValue name=\"FormSettings_autoSetComponentName\" type=\"java.lang.Boolean\" value=\"false\"/>\r\n    <AuxValue name=\"FormSettings_generateFQN\" type=\"java.lang.Boolean\" value=\"true\"/>\r\n    <AuxValue name=\"FormSettings_generateMnemonicsCode\" type=\"java.lang.Boolean\" value=\"false\"/>\r\n    <AuxValue name=\"FormSettings_i18nAutoMode\" type=\"java.lang.Boolean\" value=\"false\"/>\r\n    <AuxValue name=\"FormSettings_layoutCodeTarget\" type=\"java.lang.Integer\" value=\"1\"/>\r\n    <AuxValue name=\"FormSettings_listenerGenerationStyle\" type=\"java.lang.Integer\" value=\"3\"/>\r\n    <AuxValue name=\"FormSettings_variablesLocal\" type=\"java.lang.Boolean\" value=\"false\"/>\r\n    <AuxValue name=\"FormSettings_variablesModifier\" type=\"java.lang.Integer\" value=\"2\"/>\r\n  </AuxValues>\r\n\r\n  <Layout>\r\n    <DimensionLayout dim=\"0\">\r\n      <Group type=\"103\" groupAlignment=\"0\" attributes=\"0\">\r\n          <EmptySpace min=\"0\" pref=\"400\" max=\"32767\" attributes=\"0\"/>\r\n      </Group>\r\n    </DimensionLayout>\r\n    <DimensionLayout dim=\"1\">\r\n      <Group type=\"103\" groupAlignment=\"0\" attributes=\"0\">\r\n          <EmptySpace min=\"0\" pref=\"300\" max=\"32767\" attributes=\"0\"/>\r\n      </Group>\r\n    </DimensionLayout>\r\n  </Layout>\r\n</Form>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Vista.form b/src/main/java/com/trabajocrisantonio/Vista.form
+--- a/src/main/java/com/trabajocrisantonio/Vista.form	(revision 6ec80324271c14831ad77542150e8f5cc80af5ee)
++++ b/src/main/java/com/trabajocrisantonio/Vista.form	(date 1773139614838)
+@@ -1,8 +1,26 @@
+ <?xml version="1.0" encoding="UTF-8" ?>
+ 
+ <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
++  <NonVisualComponents>
++    <Container class="javax.swing.JPanel" name="jPanel1">
++
++      <Layout>
++        <DimensionLayout dim="0">
++          <Group type="103" groupAlignment="0" attributes="0">
++              <EmptySpace min="0" pref="100" max="32767" attributes="0"/>
++          </Group>
++        </DimensionLayout>
++        <DimensionLayout dim="1">
++          <Group type="103" groupAlignment="0" attributes="0">
++              <EmptySpace min="0" pref="100" max="32767" attributes="0"/>
++          </Group>
++        </DimensionLayout>
++      </Layout>
++    </Container>
++  </NonVisualComponents>
+   <Properties>
+     <Property name="defaultCloseOperation" type="int" value="3"/>
++    <Property name="resizable" type="boolean" value="false"/>
+   </Properties>
+   <SyntheticProperties>
+     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+@@ -20,16 +38,41 @@
+     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+   </AuxValues>
+ 
+-  <Layout>
+-    <DimensionLayout dim="0">
+-      <Group type="103" groupAlignment="0" attributes="0">
+-          <EmptySpace min="0" pref="400" max="32767" attributes="0"/>
+-      </Group>
+-    </DimensionLayout>
+-    <DimensionLayout dim="1">
+-      <Group type="103" groupAlignment="0" attributes="0">
+-          <EmptySpace min="0" pref="300" max="32767" attributes="0"/>
+-      </Group>
+-    </DimensionLayout>
++  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
++    <Property name="useNullLayout" type="boolean" value="false"/>
+   </Layout>
++  <SubComponents>
++    <Component class="javax.swing.JButton" name="jButton1">
++      <Properties>
++        <Property name="text" type="java.lang.String" value="Admin"/>
++        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
++          <Border info="null"/>
++        </Property>
++      </Properties>
++      <Events>
++        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
++      </Events>
++      <Constraints>
++        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
++          <AbsoluteConstraints x="200" y="130" width="100" height="50"/>
++        </Constraint>
++      </Constraints>
++    </Component>
++    <Component class="javax.swing.JButton" name="jButton2">
++      <Properties>
++        <Property name="text" type="java.lang.String" value="Usuario"/>
++        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
++          <Border info="null"/>
++        </Property>
++      </Properties>
++      <Events>
++        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
++      </Events>
++      <Constraints>
++        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
++          <AbsoluteConstraints x="70" y="130" width="100" height="50"/>
++        </Constraint>
++      </Constraints>
++    </Component>
++  </SubComponents>
+ </Form>
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"MavenProjectsManager\">\r\n    <option name=\"originalFiles\">\r\n      <list>\r\n        <option value=\"$PROJECT_DIR$/pom.xml\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"ProjectRootManager\" version=\"2\" project-jdk-name=\"openjdk-25\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/out\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 6ec80324271c14831ad77542150e8f5cc80af5ee)
++++ b/.idea/misc.xml	(date 1773139614854)
+@@ -8,7 +8,5 @@
+       </list>
+     </option>
+   </component>
+-  <component name="ProjectRootManager" version="2" project-jdk-name="openjdk-25" project-jdk-type="JavaSDK">
+-    <output url="file://$PROJECT_DIR$/out" />
+-  </component>
++  <component name="ProjectRootManager" version="2" project-jdk-name="openjdk-25" project-jdk-type="JavaSDK" />
+ </project>
+\ No newline at end of file

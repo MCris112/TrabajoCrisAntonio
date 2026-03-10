@@ -1,14 +1,12 @@
 package com.trabajocrisantonio;
 
 public class Main {
-    
-    static void main() {
 
+
+    public static void main(String[] args) {
         // Cargar migraciones
 
-        // Mostrar app principal
-
+        // Cargar app
         new App();
-
     }
 }

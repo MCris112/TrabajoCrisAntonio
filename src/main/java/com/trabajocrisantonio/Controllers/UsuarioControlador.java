@@ -26,7 +26,7 @@ public class UsuarioControlador {
         try{
             MCList<Usuario> listaUsuarios = QueryBuilder.use(Usuario.class).get();
          for(Usuario usuario: listaUsuarios){
-        String[] columna = {usuario.getNif(),usuario.getNombre(),usuario.getApellido1(),usuario.getDireccion(),usuario.getTelefono()};
+        String[] columna = {usuario.getNif(),usuario.getNombre(),usuario.getApellidos(),usuario.getDireccion(),usuario.getTelefono()};
 
                 vista.modeloTabla.addRow(
                     columna

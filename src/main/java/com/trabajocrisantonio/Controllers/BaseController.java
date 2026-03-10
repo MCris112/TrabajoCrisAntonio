@@ -1,5 +1,6 @@
 package com.trabajocrisantonio.Controllers;
 
+import com.darkredgm.User;
 import com.darkredgm.querymc.Collections.MCList;
 import com.darkredgm.querymc.Database.Model;
 import com.darkredgm.querymc.Database.ModelAttribute;
@@ -47,7 +48,7 @@ abstract public class BaseController {
             }
         } catch (SQLException e) {
 
-            JOptionPane.showMessageDialog(view, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(view, e.getMessage(), "SQL Error", JOptionPane.ERROR_MESSAGE);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
@@ -179,6 +180,7 @@ abstract public class BaseController {
                     ) );
             }
         }
+
 
 
 
