@@ -1,5 +1,6 @@
 package com.trabajocrisantonio.Views;
 
+import com.trabajocrisantonio.Componentes.TabbedPane;
 import com.trabajocrisantonio.Controllers.User.PrestarController;
 import com.trabajocrisantonio.Views.User.PrestarVista;
 import com.trabajocrisantonio.Views.User.UserLibrosVista;
@@ -7,11 +8,16 @@ import com.trabajocrisantonio.Views.User.UserLibrosVista;
 import javax.swing.*;
 
 public class UserActivity extends JFrame {
-    public UserActivity() {
+
+    private String userNif;
+
+    public UserActivity( String userNif) {
+        this.userNif = userNif;
+
         setTitle("User Activity");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JTabbedPane tabbedPane = new JTabbedPane();
+        TabbedPane tabbedPane = new TabbedPane( JTabbedPane.LEFT );
 
         // Inicializar Vistas
         UserLibrosVista userLibrosVista = new UserLibrosVista();
@@ -33,7 +39,4 @@ public class UserActivity extends JFrame {
         setVisible(true); // Mostrar al final
     }
 
-    public static void main(String[] args) {
-        new UserActivity();
-    }
 }

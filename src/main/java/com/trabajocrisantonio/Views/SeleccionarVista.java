@@ -1,11 +1,15 @@
 package com.trabajocrisantonio.Views;
 
+import com.darkredgm.User;
+import com.darkredgm.querymc.Database.ORM.QueryBuilder;
 import com.trabajocrisantonio.App;
+import com.trabajocrisantonio.modelos.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 /**
  * Pantalla de selección de rol (Usuario o Administrador).
@@ -43,7 +47,19 @@ public class SeleccionarVista extends JFrame {
 
         // Acciones
         btnUsuario.addActionListener(e -> {
-            new UserActivity();
+            try{
+                Usuario user = QueryBuilder.use(Usuario.class).limit(1).first();
+
+                if ( user == null )
+                {
+                    JOptionPane.showMessageDialog( this, "No hay usuarios creados aun", "Error", JOptionPane.INFORMATION_MESSAGE );
+                    return;
+                }
+
+                new UserActivity( user.getNif() );
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
             this.dispose();
         });
 
