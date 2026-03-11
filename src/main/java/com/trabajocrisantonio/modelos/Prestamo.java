@@ -1,6 +1,7 @@
 package com.trabajocrisantonio.modelos;
 
 import com.darkredgm.querymc.Annotations.Column;
+import com.darkredgm.querymc.Annotations.Primary;
 import com.darkredgm.querymc.Database.Model;
 
 public class Prestamo extends Model {
@@ -8,22 +9,22 @@ public class Prestamo extends Model {
     public Prestamo(){
 
     }
-    public Prestamo(int id_libro, int numero_prestamo, String nif, String fecha_inicio, String fecha_fin, boolean devuelto) {
+    public Prestamo(int id, int id_libro, String nif, String fecha_inicio, String fecha_fin, boolean devuelto) {
         this.id_libro = id_libro;
-        this.numero_prestamo = numero_prestamo;
+        this.id = id;
         this.nif = nif;
         this.fecha_inicio = fecha_inicio;
         this.fecha_fin = fecha_fin;
         this.devuelto = devuelto;
     }
 
+    @Primary
+    @Column
+    private int id;
+
     @Column
     //Clave foranea
     private int id_libro;
-
-
-    @Column
-    private int numero_prestamo;
 
     @Column
     //Clave foranea
@@ -46,12 +47,12 @@ public class Prestamo extends Model {
         this.id_libro = id_libro;
     }
 
-    public int getNumero_prestamo() {
-        return numero_prestamo;
+    public int getId() {
+        return id;
     }
 
-    public void setNumero_prestamo(int numero_prestamo) {
-        this.numero_prestamo = numero_prestamo;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNif() {

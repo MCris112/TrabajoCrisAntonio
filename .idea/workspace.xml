@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="Arreglando diseño y error">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/PrestamoVista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/PrestamoVista.java" afterDir="false" />
+    <list default="true" id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="Añadiendo prestamo">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/Admin/LibroVista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/Admin/LibroVista.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Prestamo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Prestamo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +117,7 @@
       <workItem from="1773138907129" duration="1463000" />
       <workItem from="1773140677406" duration="3342000" />
       <workItem from="1773144041861" duration="1423000" />
-      <workItem from="1773228861096" duration="3262000" />
+      <workItem from="1773228861096" duration="3526000" />
     </task>
     <task id="LOCAL-00001" summary="Diseño material design">
       <option name="closed" value="true" />
@@ -133,7 +135,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773231297336</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Añadiendo prestamo">
+      <option name="closed" value="true" />
+      <created>1773232178481</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1773232178481</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -142,6 +152,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Diseño material design" />
     <MESSAGE value="Arreglando diseño y error" />
-    <option name="LAST_COMMIT_MESSAGE" value="Arreglando diseño y error" />
+    <MESSAGE value="Añadiendo prestamo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Añadiendo prestamo" />
   </component>
 </project>

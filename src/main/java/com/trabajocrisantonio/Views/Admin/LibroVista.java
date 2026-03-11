@@ -1,5 +1,7 @@
 package com.trabajocrisantonio.Views.Admin;
 
+import com.trabajocrisantonio.Style;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -32,8 +34,15 @@ public class LibroVista extends JPanel {
 
         panelFormulario.setBorder(BorderFactory.createTitledBorder("Datos Libro"));
 
+        Style.tabla(table);
         // Panel donde se van a ver todos los botones creados
         JPanel panelBtn = new JPanel();
+
+        Style.button(btnInsertar, new Color(33, 150, 243));
+        Style.button(btnBorrar, new Color(244, 67, 54));
+        Style.button(btnActualizar, new Color(76, 175, 80));
+        Style.button(btnLimpiar, new Color(158, 158, 158));
+
         panelBtn.add(btnInsertar);
         panelBtn.add(btnBorrar);
         panelBtn.add(btnActualizar);
