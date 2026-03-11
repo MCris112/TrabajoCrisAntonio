@@ -72,7 +72,7 @@ public class PrestamoController extends javax.swing.JFrame {
         try {
             Prestamo prestamo = new Prestamo(
                     Integer.parseInt(vista.fieldidLibro.getText()),
-                    Integer.parseInt(vista.fieldnumeroPrestamo.getText()),
+                    Integer.parseInt(vista.fieldid.getText()),
                     vista.fieldNif.getText(),
                     vista.fieldFechaInicio.getText(),
                     vista.fieldFechaFin.getText(),
@@ -91,7 +91,7 @@ public class PrestamoController extends javax.swing.JFrame {
         try {
             QueryBuilder.use(Usuario.class).whereKey(vista.fieldidLibro.getText()).update(builder -> {
                 builder.set("idLibro", vista.fieldidLibro.getText());
-                builder.set("Numero prestamo", vista.fieldnumeroPrestamo.getText());
+                builder.set("Numero prestamo", vista.fieldid.getText());
                 builder.set("nif", vista.fieldNif.getText());
                 builder.set("Fecha Inicio", vista.fieldFechaInicio.getText());
                 builder.set("Fecha Fin", vista.fieldFechaFin.getText());
@@ -106,7 +106,7 @@ public class PrestamoController extends javax.swing.JFrame {
     }
 
     public void borrar() {
-        if (vista.fieldidLibro.getText().isEmpty()) {
+        if (vista.fieldid.getText().isEmpty()) {
             JOptionPane.showMessageDialog(vista, "Necesitas seleccionar para borrar");
         } else {
             try {
@@ -123,7 +123,7 @@ public class PrestamoController extends javax.swing.JFrame {
 
     public void limpiar() {
         vista.fieldidLibro.setText("");
-        vista.fieldnumeroPrestamo.setText("");
+        vista.fieldid.setText("");
         vista.fieldNif.setText("");
         vista.fieldFechaInicio.setText("");
         vista.fieldFechaFin.setText("");
@@ -137,8 +137,8 @@ public class PrestamoController extends javax.swing.JFrame {
         int fila = vista.table.getSelectedRow();
         if (fila < 0) return;
 
-        vista.fieldidLibro.setText((String) vista.modeloTabla.getValueAt(fila, 0));
-        vista.fieldnumeroPrestamo.setText((String) vista.modeloTabla.getValueAt(fila, 1));
+        vista.fieldid.setText((String) vista.modeloTabla.getValueAt(fila, 0));
+        vista.fieldidLibro.setText((String) vista.modeloTabla.getValueAt(fila, 1));
         vista.fieldNif.setText((String) vista.modeloTabla.getValueAt(fila, 2));
         vista.fieldFechaInicio.setText((String) vista.modeloTabla.getValueAt(fila, 3));
         vista.fieldFechaFin.setText((String) vista.modeloTabla.getValueAt(fila, 4));

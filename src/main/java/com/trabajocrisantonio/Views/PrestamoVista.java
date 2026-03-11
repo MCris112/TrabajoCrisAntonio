@@ -11,14 +11,14 @@ public class PrestamoVista extends Container {
     public JButton btnLimpiar = new JButton("Limpiar");
 
     public JTextField fieldidLibro = new JTextField(6);
-    public JTextField fieldnumeroPrestamo = new JTextField(6);
+    public JTextField fieldid = new JTextField(6);
     public JTextField fieldNif = new JTextField(6);
     public JTextField fieldFechaInicio = new JTextField(10);
     public JTextField fieldFechaFin = new JTextField(10);
     public JTextField fieldDevuelto = new JTextField(6);
 
 
-    public DefaultTableModel modeloTabla = new DefaultTableModel(new Object[]{"idLibro", "numero_prestamo", "nif", "fechaInicio", "fechaFin", "devuelto"}, 0);
+    public DefaultTableModel modeloTabla = new DefaultTableModel(new Object[]{"id", "idLibro", "nif", "fechaInicio", "fechaFin", "devuelto"}, 0);
 
     public JTable table = new JTable(modeloTabla);
 
@@ -37,18 +37,18 @@ public class PrestamoVista extends Container {
         panelBtn.add(btnActualizar);
         panelBtn.add(btnLimpiar);
 
-        //Contenedor donde se ven los datos de los libros
+        //Contenedor donde se ven los datos de los prestamos
         JScrollPane scroll = new JScrollPane(table);
         scroll.setBorder(BorderFactory.createTitledBorder("Listado prestamos"));
 
         panelFormulario.setLayout(new GridLayout(1, 0));
 
-        //Linea datos usuario, los campos que pertenecen a usuario
+        //Linea datos usuario, los campos que pertenecen a prestamo
+        panelFormulario.add(new JLabel("Id"));
+        panelFormulario.add(fieldid);
+
         panelFormulario.add(new JLabel("idLibro"));
         panelFormulario.add(fieldidLibro);
-
-        panelFormulario.add(new JLabel("Numero prestamo"));
-        panelFormulario.add(fieldnumeroPrestamo);
 
         panelFormulario.add(new JLabel("Nif"));
         panelFormulario.add(fieldNif);
