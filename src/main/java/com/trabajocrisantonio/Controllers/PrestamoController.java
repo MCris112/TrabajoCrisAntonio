@@ -8,13 +8,15 @@ import javax.swing.event.ListSelectionListener;
 
 import com.darkredgm.querymc.Collections.MCList;
 import com.darkredgm.querymc.Database.ORM.QueryBuilder;
-import com.trabajocrisantonio.Views.Admin.UsuarioVista;
+import com.trabajocrisantonio.Views.PrestamoVista;
+import com.trabajocrisantonio.modelos.Libro;
+import com.trabajocrisantonio.modelos.Prestamo;
 import com.trabajocrisantonio.modelos.Usuario;
 
-public class  UsuarioControlador {
-    private UsuarioVista vista;
+public class PrestamoController extends javax.swing.JFrame {
+    protected PrestamoVista vista;
 
-    public UsuarioControlador(UsuarioVista vista) {
+    public PrestamoController(PrestamoVista vista) {
         this.vista = vista;
 
         initController();
@@ -25,9 +27,10 @@ public class  UsuarioControlador {
         vista.modeloTabla.setRowCount(0);
 
         try {
-            MCList<Usuario> listaUsuarios = QueryBuilder.use(Usuario.class).get();
-            for (Usuario usuario : listaUsuarios) {
-                String[] columna = {usuario.getNif(), usuario.getNombre(), usuario.getApellidos(), usuario.getDireccion(), usuario.getTelefono()};
+            MCList<Prestamo> listaPrestamos = QueryBuilder.use(Prestamo.class).get();
+            for (Prestamo prestamo : listaPrestamos) {
+                // TODO QueryMC problema
+                String[] columna = {String.valueOf(prestamo.getId_libro()), String.valueOf(prestamo.getNumero_prestamo()), String.valueOf(prestamo.getNif()), prestamo.getFecha_inicio(), prestamo.getFecha_fin(), String.valueOf(prestamo.isDevuelto())};
 
                 vista.modeloTabla.addRow(
                         columna
@@ -60,15 +63,16 @@ public class  UsuarioControlador {
 
     public void insertar() {
         try {
-            Usuario usuario = new Usuario(
+            Prestamo prestamo = new Prestamo(
+                    Integer.parseInt(vista.fieldidLibro.getText()),
+                    Integer.parseInt(vista.fieldnumeroPrestamo.getText()),
                     vista.fieldNif.getText(),
-                    vista.fieldNombre.getText(),
-                    vista.fieldApellido.getText(),
-                    vista.fieldDireccion.getText(),
-                    vista.fieldTelefono.getText()
+                    vista.fieldFechaInicio.getText(),
+                    vista.fieldFechaFin.getText(),
+                    Boolean.parseBoolean(vista.fieldDevuelto.getText())
             );
 
-            usuario.save();
+            prestamo.save();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -78,12 +82,13 @@ public class  UsuarioControlador {
 
     public void actualizar() {
         try {
-            QueryBuilder.use(Usuario.class).whereKey(vista.fieldNif.getText()).update(builder -> {
+            QueryBuilder.use(Usuario.class).whereKey(vista.fieldidLibro.getText()).update(builder -> {
+                builder.set("idLibro", vista.fieldidLibro.getText());
+                builder.set("Numero prestamo", vista.fieldnumeroPrestamo.getText());
                 builder.set("nif", vista.fieldNif.getText());
-                builder.set("nombre", vista.fieldNombre.getText());
-                builder.set("apellidos", vista.fieldApellido.getText());
-                builder.set("direccion", vista.fieldDireccion.getText());
-                builder.set("telefono", vista.fieldTelefono.getText());
+                builder.set("Fecha Inicio", vista.fieldFechaInicio.getText());
+                builder.set("Fecha Fin", vista.fieldFechaFin.getText());
+                builder.set("Devuelto", vista.fieldDevuelto.getText());
             });
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL error", JOptionPane.ERROR_MESSAGE);
@@ -94,11 +99,11 @@ public class  UsuarioControlador {
     }
 
     public void borrar() {
-        if (vista.fieldNif.getText().isEmpty()) {
+        if (vista.fieldidLibro.getText().isEmpty()) {
             JOptionPane.showMessageDialog(vista, "Necesitas seleccionar para borrar");
         } else {
             try {
-                QueryBuilder.use(Usuario.class).whereKey(vista.fieldNif.getText()).delete();
+                QueryBuilder.use(Usuario.class).whereKey(vista.fieldidLibro.getText()).delete();
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL error", JOptionPane.ERROR_MESSAGE);
             }
@@ -110,11 +115,13 @@ public class  UsuarioControlador {
     }
 
     public void limpiar() {
+        vista.fieldidLibro.setText("");
+        vista.fieldnumeroPrestamo.setText("");
         vista.fieldNif.setText("");
-        vista.fieldNombre.setText("");
-        vista.fieldApellido.setText("");
-        vista.fieldDireccion.setText("");
-        vista.fieldTelefono.setText("");
+        vista.fieldFechaInicio.setText("");
+        vista.fieldFechaFin.setText("");
+        vista.fieldDevuelto.setText("");
+
 
         vista.table.clearSelection();
     }
@@ -123,10 +130,12 @@ public class  UsuarioControlador {
         int fila = vista.table.getSelectedRow();
         if (fila < 0) return;
 
-        vista.fieldNif.setText((String) vista.modeloTabla.getValueAt(fila, 0));
-        vista.fieldNombre.setText((String) vista.modeloTabla.getValueAt(fila, 1));
-        vista.fieldApellido.setText((String) vista.modeloTabla.getValueAt(fila, 2));
-        vista.fieldDireccion.setText((String) vista.modeloTabla.getValueAt(fila, 3));
-        vista.fieldTelefono.setText((String) vista.modeloTabla.getValueAt(fila, 4));
+        vista.fieldidLibro.setText((String) vista.modeloTabla.getValueAt(fila, 0));
+        vista.fieldnumeroPrestamo.setText((String) vista.modeloTabla.getValueAt(fila, 1));
+        vista.fieldNif.setText((String) vista.modeloTabla.getValueAt(fila, 2));
+        vista.fieldFechaInicio.setText((String) vista.modeloTabla.getValueAt(fila, 3));
+        vista.fieldFechaFin.setText((String) vista.modeloTabla.getValueAt(fila, 4));
+        vista.fieldDevuelto.setText((String) vista.modeloTabla.getValueAt(fila, 5));
+
     }
 }

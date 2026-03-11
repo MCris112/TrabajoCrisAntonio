@@ -5,10 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/PrestamoController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/PrestamoVista.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/LibroController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/LibroController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/LibroVista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/LibroVista.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Libro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Libro.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/BaseController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/UsuarioControlador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/UsuarioControlador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/Admin/LibroVista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/Admin/LibroVista.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Prestamo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Prestamo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,6 +78,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Lozano\Desktop\programacion-daw-main\TrabajoCrisAntonio" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.trabajocrisantonio.Main" />
@@ -113,6 +122,8 @@
       <workItem from="1773138907129" duration="1463000" />
       <workItem from="1773140677406" duration="3342000" />
       <workItem from="1773144041861" duration="1423000" />
+      <workItem from="1773226137654" duration="8000" />
+      <workItem from="1773229114980" duration="2846000" />
     </task>
     <servers />
   </component>

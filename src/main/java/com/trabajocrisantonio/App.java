@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import com.trabajocrisantonio.Controllers.LibroController;
 import com.trabajocrisantonio.Controllers.UsuarioControlador;
 import com.trabajocrisantonio.Views.Admin.LibroVista;
 import com.trabajocrisantonio.Views.Admin.UsuarioVista;
@@ -51,6 +53,7 @@ public class App extends JFrame {
 
         LibroVista libroVista = new LibroVista();
         tabbedPane.addTab("Libros", libroVista);
+        new LibroController(libroVista);
 
         // Unir todo
         mainPanel.add(toolbar, BorderLayout.NORTH);
