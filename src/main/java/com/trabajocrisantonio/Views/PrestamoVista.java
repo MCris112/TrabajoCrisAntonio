@@ -47,19 +47,19 @@ public class PrestamoVista extends Container {
         panelFormulario.add(new JLabel("idLibro"));
         panelFormulario.add(fieldidLibro);
 
-        panelFormulario.add(new JLabel("editorial"));
+        panelFormulario.add(new JLabel("Numero prestamo"));
         panelFormulario.add(fieldnumeroPrestamo);
 
-        panelFormulario.add(new JLabel("autor"));
+        panelFormulario.add(new JLabel("Nif"));
         panelFormulario.add(fieldNif);
 
-        panelFormulario.add(new JLabel("numeroHojas"));
+        panelFormulario.add(new JLabel("Fecha inicio"));
         panelFormulario.add(fieldFechaInicio);
 
-        panelFormulario.add(new JLabel("titulo"));
+        panelFormulario.add(new JLabel("Fecha fin"));
         panelFormulario.add(fieldFechaFin);
 
-        panelFormulario.add(new JLabel("autor"));
+        panelFormulario.add(new JLabel("Devuelto"));
         panelFormulario.add(fieldDevuelto);
 
 
