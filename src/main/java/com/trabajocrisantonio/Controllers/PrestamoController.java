@@ -30,7 +30,14 @@ public class PrestamoController extends javax.swing.JFrame {
             MCList<Prestamo> listaPrestamos = QueryBuilder.use(Prestamo.class).get();
             for (Prestamo prestamo : listaPrestamos) {
                 // TODO QueryMC problema
-                String[] columna = {String.valueOf(prestamo.getId_libro()), String.valueOf(prestamo.getNumero_prestamo()), String.valueOf(prestamo.getNif()), prestamo.getFecha_inicio(), prestamo.getFecha_fin(), String.valueOf(prestamo.isDevuelto())};
+                String[] columna = {
+                        String.valueOf(prestamo.getId()),
+                        String.valueOf(prestamo.getId_libro()),
+                        String.valueOf(prestamo.getNif()),
+                        prestamo.getFecha_inicio(),
+                        prestamo.getFecha_fin(),
+                        String.valueOf(prestamo.isDevuelto())
+                };
 
                 vista.modeloTabla.addRow(
                         columna
