@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import com.trabajocrisantonio.Componentes.TabbedPane;
 import com.trabajocrisantonio.Controllers.UsuarioControlador;
 import com.trabajocrisantonio.Views.Admin.LibroVista;
 import com.trabajocrisantonio.Views.Admin.UsuarioVista;
@@ -29,25 +31,14 @@ public class App extends JFrame {
         initToolbar();
 
         // App Body (Tabs en la izquierda)
-        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
-        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        tabbedPane.setFont(new Font("Roboto", Font.BOLD, 14));
-        tabbedPane.setBackground(new Color(245, 245, 245)); // Gris claro Material
-        tabbedPane.setForeground(new Color(66, 66, 66));
-        tabbedPane.setBorder(null);
+        TabbedPane tabbedPane = new TabbedPane(JTabbedPane.LEFT);
+
 
         UsuarioVista usuarioVista = new UsuarioVista();
         new UsuarioControlador(usuarioVista);
-
         tabbedPane.addTab("Usuarios", usuarioVista);
 
         // Estilo de "caja" para la pestaña
-        JLabel lab = new JLabel("Usuarios");
-        lab.setPreferredSize(new Dimension(160, 45)); // Ancho fijo para la sidebar
-        lab.setFont(new Font("Roboto", Font.BOLD, 14));
-        lab.setForeground(new Color(33, 150, 243)); // Azul Material
-        lab.setHorizontalAlignment(SwingConstants.CENTER);
-        tabbedPane.setTabComponentAt(0, lab);
 
         LibroVista libroVista = new LibroVista();
         tabbedPane.addTab("Libros", libroVista);

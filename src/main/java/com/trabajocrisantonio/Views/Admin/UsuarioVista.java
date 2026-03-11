@@ -1,5 +1,7 @@
 package com.trabajocrisantonio.Views.Admin;
 
+import com.trabajocrisantonio.Style;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -28,18 +30,18 @@ public class UsuarioVista extends JPanel {
         setLayout(new BorderLayout(10, 10)); // Usar BorderLayout para mejor estructura
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Estilo de la Tabla (Material Design - Blue)
-        styleTable();
+        // Estilo de la Tabla
+        Style.tabla(table);
 
         panelFormulario.setBorder(BorderFactory.createTitledBorder("Datos Usuario"));
         panelFormulario.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         // Panel donde se van a ver todos los botones creados
         JPanel panelBtn = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        styleButton(btnInsertar, new Color(33, 150, 243)); // Material Blue
-        styleButton(btnBorrar, new Color(244, 67, 54));   // Material Red
-        styleButton(btnActualizar, new Color(76, 175, 80)); // Material Green
-        styleButton(btnLimpiar, new Color(158, 158, 158)); // Material Grey
+        Style.button(btnInsertar, new Color(33, 150, 243));
+        Style.button(btnBorrar, new Color(244, 67, 54));
+        Style.button(btnActualizar, new Color(76, 175, 80));
+        Style.button(btnLimpiar, new Color(158, 158, 158));
         
         panelBtn.add(btnInsertar);
         panelBtn.add(btnBorrar);
@@ -71,51 +73,6 @@ public class UsuarioVista extends JPanel {
 
         add(topPanel, BorderLayout.NORTH);
         add(scroll, BorderLayout.CENTER);
-    }
-
-    private void styleTable() {
-        table.setRowHeight(35); // Filas más altas (Material Look)
-        table.setSelectionBackground(new Color(187, 222, 251)); // Azul claro para selección
-        table.setSelectionForeground(Color.BLACK);
-        table.setGridColor(new Color(230, 230, 230));
-        table.setShowVerticalLines(false); // Solo líneas horizontales
-        table.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        table.setBackground(Color.WHITE);
-
-        // Estilo del Header
-        JTableHeader header = table.getTableHeader();
-        header.setFont(new Font("SansSerif", Font.BOLD, 14));
-        header.setBackground(new Color(33, 150, 243)); // Azul Material Principal
-        header.setForeground(Color.WHITE);
-        header.setReorderingAllowed(false);
-        header.setPreferredSize(new Dimension(100, 40));
-
-        // Renderizado de celdas para centrar y padding
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-                if (!isSelected) {
-                    c.setBackground(row % 2 == 0 ? Color.WHITE : new Color(250, 250, 250));
-                }
-                return c;
-            }
-        };
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-    }
-
-    private void styleButton(JButton btn, Color color) {
-        btn.setBackground(color);
-        btn.setForeground(Color.WHITE);
-        btn.setFocusPainted(false);
-        btn.setFont(new Font("SansSerif", Font.BOLD, 12));
-        btn.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
 }
