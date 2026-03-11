@@ -59,6 +59,17 @@ public class  UsuarioControlador {
     }
 
     public void insertar() {
+
+        if ( vista.fieldNif.getText().isEmpty() ) {
+            JOptionPane.showMessageDialog(vista, "El Debe haber un nif para poder insertar", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if ( vista.fieldNombre.getText().isEmpty() ) {
+            JOptionPane.showMessageDialog(vista, "El Debe haber un nombre para poder insertar", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         try {
             Usuario usuario = new Usuario(
                     vista.fieldNif.getText(),

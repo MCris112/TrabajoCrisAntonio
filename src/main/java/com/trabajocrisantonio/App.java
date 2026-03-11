@@ -6,9 +6,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import com.trabajocrisantonio.Componentes.TabbedPane;
+import com.trabajocrisantonio.Controllers.LibroController;
+import com.trabajocrisantonio.Controllers.PrestamoController;
 import com.trabajocrisantonio.Controllers.UsuarioControlador;
 import com.trabajocrisantonio.Views.Admin.LibroVista;
 import com.trabajocrisantonio.Views.Admin.UsuarioVista;
+import com.trabajocrisantonio.Views.PrestamoVista;
 
 public class App extends JFrame {
 
@@ -43,6 +46,11 @@ public class App extends JFrame {
         LibroVista libroVista = new LibroVista();
         tabbedPane.addTab("Libros", libroVista);
         new LibroController(libroVista);
+
+
+        PrestamoVista prestamoVista = new PrestamoVista();
+        tabbedPane.addTab("Prestamo", prestamoVista);
+        new PrestamoController(prestamoVista);
 
         // Unir todo
         mainPanel.add(toolbar, BorderLayout.NORTH);

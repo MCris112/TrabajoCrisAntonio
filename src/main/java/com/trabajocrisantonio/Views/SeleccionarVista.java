@@ -56,7 +56,7 @@ public class SeleccionarVista extends JFrame {
                     return;
                 }
 
-                new UserActivity( user.getNif() );
+                new UserActivity( user );
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }

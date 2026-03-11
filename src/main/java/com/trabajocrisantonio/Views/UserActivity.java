@@ -4,17 +4,18 @@ import com.trabajocrisantonio.Componentes.TabbedPane;
 import com.trabajocrisantonio.Controllers.User.PrestarController;
 import com.trabajocrisantonio.Views.User.PrestarVista;
 import com.trabajocrisantonio.Views.User.UserLibrosVista;
+import com.trabajocrisantonio.modelos.Usuario;
 
 import javax.swing.*;
 
 public class UserActivity extends JFrame {
 
-    private String userNif;
+    private Usuario usuario;
 
-    public UserActivity( String userNif) {
-        this.userNif = userNif;
+    public UserActivity( Usuario usuario) {
+        this.usuario = usuario;
 
-        setTitle("User Activity");
+        setTitle("Bienvenido "+usuario.getNombre());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         TabbedPane tabbedPane = new TabbedPane( JTabbedPane.LEFT );

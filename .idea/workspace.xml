@@ -4,14 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="Diseño material design">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Componentes/TabbedPane.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Style.java" afterDir="false" />
+    <list default="true" id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="Arreglando diseño y error">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/Admin/UsuarioVista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/Admin/UsuarioVista.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/UsuarioControlador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/UsuarioControlador.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/SeleccionarVista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/SeleccionarVista.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/User/UserLibrosVista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/User/UserLibrosVista.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/UserActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/UserActivity.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -122,7 +119,7 @@
       <workItem from="1773138907129" duration="1463000" />
       <workItem from="1773140677406" duration="3342000" />
       <workItem from="1773144041861" duration="1423000" />
-      <workItem from="1773228861096" duration="2185000" />
+      <workItem from="1773228861096" duration="3262000" />
     </task>
     <task id="LOCAL-00001" summary="Diseño material design">
       <option name="closed" value="true" />
@@ -132,7 +129,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773154557394</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Arreglando diseño y error">
+      <option name="closed" value="true" />
+      <created>1773231297336</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1773231297336</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -140,6 +145,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Diseño material design" />
-    <option name="LAST_COMMIT_MESSAGE" value="Diseño material design" />
+    <MESSAGE value="Arreglando diseño y error" />
+    <option name="LAST_COMMIT_MESSAGE" value="Arreglando diseño y error" />
   </component>
 </project>
