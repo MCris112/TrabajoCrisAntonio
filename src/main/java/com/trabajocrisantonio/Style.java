@@ -9,10 +9,10 @@ public class Style {
 
     /**
      * Dar estilo a la tabla en Material Design
+     * 
      * @param tabla
      */
-    public static void tabla( JTable tabla )
-    {
+    public static void tabla(JTable tabla) {
         tabla.setRowHeight(35); // Filas más altas (Material Look)
         tabla.setSelectionBackground(new Color(187, 222, 251)); // Azul claro para selección
         tabla.setSelectionForeground(Color.BLACK);
@@ -32,7 +32,8 @@ public class Style {
         // Renderizado de celdas para centrar y padding
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
                 if (!isSelected) {
@@ -48,15 +49,12 @@ public class Style {
         }
     }
 
-    public static void button( JButton btn, Color color )
-    {
+    public static void button(JButton btn, Color color) {
         btn.setBackground(color);
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
         btn.setFont(new Font("SansSerif", Font.BOLD, 12));
-        btn.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        btn.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
-
-
 }

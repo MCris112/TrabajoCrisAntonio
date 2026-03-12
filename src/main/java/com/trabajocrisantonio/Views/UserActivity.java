@@ -1,7 +1,7 @@
 package com.trabajocrisantonio.Views;
 
 import com.trabajocrisantonio.Componentes.TabbedPane;
-import com.trabajocrisantonio.Controllers.User.PrestarController;
+import com.trabajocrisantonio.Controllers.User.UsuarioLibroPrestadoController;
 import com.trabajocrisantonio.Views.User.PrestarVista;
 import com.trabajocrisantonio.Views.User.UserLibrosVista;
 import com.trabajocrisantonio.modelos.Usuario;
@@ -25,7 +25,7 @@ public class UserActivity extends JFrame {
         PrestarVista prestarVista = new PrestarVista();
 
         // Controladores
-        new PrestarController(prestarVista);
+        new UsuarioLibroPrestadoController(userLibrosVista, usuario);
 
         // Añadir tabs
         tabbedPane.addTab("Mis libros prestados", userLibrosVista);

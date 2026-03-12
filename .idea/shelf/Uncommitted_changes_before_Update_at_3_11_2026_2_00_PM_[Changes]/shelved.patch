@@ -1,0 +1,168 @@
+Index: src/main/java/com/trabajocrisantonio/Views/UserActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trabajocrisantonio.Views;\r\n\r\nimport com.trabajocrisantonio.Componentes.TabbedPane;\r\nimport com.trabajocrisantonio.Controllers.User.PrestarController;\r\nimport com.trabajocrisantonio.Views.User.PrestarVista;\r\nimport com.trabajocrisantonio.Views.User.UserLibrosVista;\r\nimport com.trabajocrisantonio.modelos.Usuario;\r\n\r\nimport javax.swing.*;\r\n\r\npublic class UserActivity extends JFrame {\r\n\r\n    private Usuario usuario;\r\n\r\n    public UserActivity( Usuario usuario) {\r\n        this.usuario = usuario;\r\n\r\n        setTitle(\"Bienvenido \"+usuario.getNombre());\r\n        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\r\n\r\n        TabbedPane tabbedPane = new TabbedPane( JTabbedPane.LEFT );\r\n\r\n        // Inicializar Vistas\r\n        UserLibrosVista userLibrosVista = new UserLibrosVista();\r\n        PrestarVista prestarVista = new PrestarVista();\r\n\r\n        // Controladores\r\n        new PrestarController(prestarVista);\r\n\r\n        // Añadir tabs\r\n        tabbedPane.addTab(\"Mis libros prestados\", userLibrosVista);\r\n        tabbedPane.addTab(\"Solicitar\", prestarVista);\r\n\r\n        // Añadir a la ventana\r\n        add(tabbedPane);\r\n\r\n        // Configuración final de la ventana\r\n        setSize(800, 500);\r\n        setLocationRelativeTo(null); // Centrar después de dar tamaño\r\n        setVisible(true); // Mostrar al final\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Views/UserActivity.java b/src/main/java/com/trabajocrisantonio/Views/UserActivity.java
+--- a/src/main/java/com/trabajocrisantonio/Views/UserActivity.java	(revision 77ad7862c26166a287aec07f0cd104877d26f2d8)
++++ b/src/main/java/com/trabajocrisantonio/Views/UserActivity.java	(date 1773233975423)
+@@ -1,7 +1,7 @@
+ package com.trabajocrisantonio.Views;
+ 
+ import com.trabajocrisantonio.Componentes.TabbedPane;
+-import com.trabajocrisantonio.Controllers.User.PrestarController;
++import com.trabajocrisantonio.Controllers.User.UsuarioLibroPrestadoController;
+ import com.trabajocrisantonio.Views.User.PrestarVista;
+ import com.trabajocrisantonio.Views.User.UserLibrosVista;
+ import com.trabajocrisantonio.modelos.Usuario;
+@@ -25,7 +25,7 @@
+         PrestarVista prestarVista = new PrestarVista();
+ 
+         // Controladores
+-        new PrestarController(prestarVista);
++        new UsuarioLibroPrestadoController(userLibrosVista, usuario);
+ 
+         // Añadir tabs
+         tabbedPane.addTab("Mis libros prestados", userLibrosVista);
+Index: src/main/java/com/trabajocrisantonio/Views/User/PrestarVista.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.trabajocrisantonio.Views.User;\r\n\r\nimport javax.swing.*;\r\nimport javax.swing.table.*;\r\nimport java.awt.*;\r\n\r\n/**\r\n * Vista para realizar préstamos de libros.\r\n * Sigue los principios de Material Design.\r\n */\r\npublic class PrestarVista extends JPanel {\r\n\r\n    // Componentes de búsqueda\r\n    public JTextField fieldBuscar = new JTextField(20);\r\n    public JButton btnBuscar = new JButton(\"Buscar Libro\");\r\n\r\n    // Componentes de resultados\r\n    public DefaultTableModel modeloTabla = new DefaultTableModel(\r\n            new Object[] { \"ID\", \"Título\", \"Autor\", \"ISBN\", \"Estado\" }, 0);\r\n    public JTable tableResultados = new JTable(modeloTabla);\r\n\r\n    // Botón de acción principal\r\n    public JButton btnPrestar = new JButton(\"Solicitar Libro Seleccionado\");\r\n\r\n    public PrestarVista() {\r\n        setLayout(new BorderLayout(15, 15));\r\n        setBackground(Color.WHITE);\r\n        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));\r\n\r\n        // --- Panel de Búsqueda (Arriba) ---\r\n        JPanel panelBusqueda = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));\r\n        panelBusqueda.setBackground(Color.WHITE);\r\n        panelBusqueda.setBorder(BorderFactory.createTitledBorder(\"Buscador de Libros\"));\r\n\r\n        JLabel lblBuscar = new JLabel(\"Ingrese título o autor:\");\r\n        lblBuscar.setFont(new Font(\"Roboto\", Font.PLAIN, 14));\r\n\r\n        styleTextField(fieldBuscar);\r\n        styleButton(btnBuscar, new Color(33, 150, 243)); // Material Blue\r\n\r\n        panelBusqueda.add(lblBuscar);\r\n        panelBusqueda.add(fieldBuscar);\r\n        panelBusqueda.add(btnBuscar);\r\n\r\n        // --- Tabla de Resultados (Centro) ---\r\n        styleTable();\r\n        JScrollPane scrollPane = new JScrollPane(tableResultados);\r\n        scrollPane.setBorder(BorderFactory.createTitledBorder(\"Resultados de la búsqueda\"));\r\n        scrollPane.getViewport().setBackground(Color.WHITE);\r\n\r\n        // --- Panel de Acción (Abajo) ---\r\n        JPanel panelAccion = new JPanel(new FlowLayout(FlowLayout.RIGHT));\r\n        panelAccion.setBackground(Color.WHITE);\r\n\r\n        styleButton(btnPrestar, new Color(76, 175, 80)); // Material Green\r\n        btnPrestar.setFont(new Font(\"Roboto\", Font.BOLD, 14));\r\n        btnPrestar.setPreferredSize(new Dimension(250, 45));\r\n\r\n        panelAccion.add(btnPrestar);\r\n\r\n        // Añadirlo al panel\r\n        add(panelBusqueda, BorderLayout.NORTH);\r\n        add(scrollPane, BorderLayout.CENTER);\r\n        add(panelAccion, BorderLayout.SOUTH);\r\n    }\r\n\r\n    private void styleTable() {\r\n        tableResultados.setRowHeight(40);\r\n        tableResultados.setSelectionBackground(new Color(225, 245, 254));\r\n        tableResultados.setSelectionForeground(Color.BLACK);\r\n        tableResultados.setShowVerticalLines(false);\r\n        tableResultados.setGridColor(new Color(240, 240, 240));\r\n        tableResultados.setFont(new Font(\"Roboto\", Font.PLAIN, 14));\r\n\r\n        // Header de la tabla\r\n        JTableHeader header = tableResultados.getTableHeader();\r\n        header.setFont(new Font(\"Roboto\", Font.BOLD, 14));\r\n        header.setBackground(new Color(33, 150, 243));\r\n        header.setForeground(Color.WHITE);\r\n        header.setPreferredSize(new Dimension(0, 40));\r\n\r\n        // Renderizado de celdas\r\n        DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer() {\r\n            @Override\r\n            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,\r\n                    boolean hasFocus, int row, int column) {\r\n                JLabel c = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,\r\n                        column);\r\n                c.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));\r\n                if (!isSelected) {\r\n                    c.setBackground(row % 2 == 0 ? Color.WHITE : new Color(252, 252, 252));\r\n                }\r\n                return c;\r\n            }\r\n        };\r\n\r\n        for (int i = 0; i < tableResultados.getColumnCount(); i++) {\r\n            tableResultados.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);\r\n        }\r\n    }\r\n\r\n    private void styleTextField(JTextField field) {\r\n        field.setPreferredSize(new Dimension(250, 35));\r\n        field.setFont(new Font(\"Roboto\", Font.PLAIN, 14));\r\n        field.setBorder(BorderFactory.createCompoundBorder(\r\n                BorderFactory.createLineBorder(new Color(200, 200, 200)),\r\n                BorderFactory.createEmptyBorder(5, 10, 5, 10)));\r\n    }\r\n\r\n    private void styleButton(JButton btn, Color color) {\r\n        btn.setBackground(color);\r\n        btn.setForeground(Color.WHITE);\r\n        btn.setFocusPainted(false);\r\n        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));\r\n        btn.setFont(new Font(\"Roboto\", Font.BOLD, 13));\r\n        btn.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Views/User/PrestarVista.java b/src/main/java/com/trabajocrisantonio/Views/User/PrestarVista.java
+--- a/src/main/java/com/trabajocrisantonio/Views/User/PrestarVista.java	(revision 77ad7862c26166a287aec07f0cd104877d26f2d8)
++++ b/src/main/java/com/trabajocrisantonio/Views/User/PrestarVista.java	(date 1773233797882)
+@@ -16,7 +16,7 @@
+ 
+     // Componentes de resultados
+     public DefaultTableModel modeloTabla = new DefaultTableModel(
+-            new Object[] { "ID", "Título", "Autor", "ISBN", "Estado" }, 0);
++            new Object[] { "ID", "Título", "Autor", "Estado" }, 0);
+     public JTable tableResultados = new JTable(modeloTabla);
+ 
+     // Botón de acción principal
+Index: src/main/java/com/trabajocrisantonio/Controllers/User/PrestarController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/trabajocrisantonio/Controllers/User/PrestarController.java b/src/main/java/com/trabajocrisantonio/Controllers/User/UsuarioLibroPrestadoController.java
+rename from src/main/java/com/trabajocrisantonio/Controllers/User/PrestarController.java
+rename to src/main/java/com/trabajocrisantonio/Controllers/User/UsuarioLibroPrestadoController.java
+--- a/src/main/java/com/trabajocrisantonio/Controllers/User/PrestarController.java	(revision 77ad7862c26166a287aec07f0cd104877d26f2d8)
++++ b/src/main/java/com/trabajocrisantonio/Controllers/User/UsuarioLibroPrestadoController.java	(date 1773234012523)
+@@ -1,12 +1,42 @@
+ package com.trabajocrisantonio.Controllers.User;
+ 
+-import com.trabajocrisantonio.Views.User.PrestarVista;
++import com.darkredgm.querymc.Collections.MCList;
++import com.darkredgm.querymc.Database.ORM.QueryBuilder;
++import com.trabajocrisantonio.Views.User.UserLibrosVista;
++import com.trabajocrisantonio.modelos.Prestamo;
++import com.trabajocrisantonio.modelos.Usuario;
+ 
+-public class PrestarController {
++import javax.swing.*;
++import java.sql.SQLException;
+ 
+-    private PrestarVista vista;
++public class UsuarioLibroPrestadoController {
+ 
+-    public PrestarController(PrestarVista vista) {
++    private UserLibrosVista vista;
++    private Usuario usuario;
++
++    public UsuarioLibroPrestadoController(UserLibrosVista vista, Usuario usuario) {
+         this.vista = vista;
++        this.usuario = usuario;
++
++        cargarTabla();
++    }
++
++    public void cargarTabla()
++    {
++        vista.modeloTabla.setRowCount(0);
++
++        try{
++            MCList<Prestamo> listaLibros = QueryBuilder.use(Prestamo.class).where("nif", this.usuario.getNif()).get();
++
++            for (Prestamo prestamo : listaLibros) {
++                String[] columna = {String.valueOf(prestamo.getId()), String.valueOf(prestamo.getId_libro()), prestamo.getFecha_inicio(), prestamo.getFecha_fin(), String.valueOf(prestamo.isDevuelto())};
++
++                vista.modeloTabla.addRow(
++                        columna
++                );
++            }
++        } catch (SQLException e) {
++            JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL Error", JOptionPane.ERROR_MESSAGE);
++        }
+     }
+ }
+Index: TODO.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/TODO.md b/TODO.md
+new file mode 100644
+--- /dev/null	(date 1773233354144)
++++ b/TODO.md	(date 1773233354144)
+@@ -0,0 +1,4 @@
++# Libros
++- [ ] Cuando dejas vacio tira error, debe generar automaticamente el id, colocar en null
++- Usar el JComboBox para el bestseller
++- 
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"45c860c1-d215-4f4c-b166-7f1d61618db8\" name=\"Changes\" comment=\"Añadiendo prestamo\">\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/PrestamoController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/PrestamoController.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;MCris112&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/MCris112/TrabajoCrisAntonio.git&quot;,\r\n    &quot;accountId&quot;: &quot;df79e3d7-f232-4af6-bd23-1566a68dc2cd&quot;\r\n  }\r\n}</component>\r\n  <component name=\"McpProjectServerCommands\">\r\n    <commands />\r\n    <urls />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;customColor&quot;: &quot;&quot;,\r\n  &quot;associatedIndex&quot;: 2\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"3AiM5LweBMHV0V71hJezzpY3cPx\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;Application.Main.executor&quot;: &quot;Run&quot;,\r\n    &quot;Application.Migracion.executor&quot;: &quot;Run&quot;,\r\n    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,\r\n    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;master&quot;,\r\n    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,\r\n    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,\r\n    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/Lozano/Desktop/programacion-daw-main/TrabajoCrisAntonio&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\Lozano\\Desktop\\programacion-daw-main\\TrabajoCrisAntonio\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"Main\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.trabajocrisantonio.Main\" />\r\n      <module name=\"TrabajoCrisAntonio\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.trabajocrisantonio.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.Main\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.138\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"45c860c1-d215-4f4c-b166-7f1d61618db8\" name=\"Changes\" comment=\"\" />\r\n      <created>1773070755142</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1773070755142</updated>\r\n      <workItem from=\"1773070758617\" duration=\"252000\" />\r\n      <workItem from=\"1773138907129\" duration=\"1463000\" />\r\n      <workItem from=\"1773140677406\" duration=\"3342000\" />\r\n      <workItem from=\"1773144041861\" duration=\"1423000\" />\r\n      <workItem from=\"1773228861096\" duration=\"3526000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Diseño material design\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1773154557393</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1773154557394</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"Arreglando diseño y error\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1773231297336</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1773231297336</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"Añadiendo prestamo\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1773232178481</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1773232178481</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"4\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Diseño material design\" />\r\n    <MESSAGE value=\"Arreglando diseño y error\" />\r\n    <MESSAGE value=\"Añadiendo prestamo\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Añadiendo prestamo\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 77ad7862c26166a287aec07f0cd104877d26f2d8)
++++ b/.idea/workspace.xml	(date 1773234012550)
+@@ -5,7 +5,11 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="Añadiendo prestamo">
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/PrestamoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/PrestamoController.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/TODO.md" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/User/PrestarController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/User/UsuarioLibroPrestadoController.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/User/PrestarVista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/User/PrestarVista.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/UserActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/UserActivity.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -115,7 +119,7 @@
+       <workItem from="1773138907129" duration="1463000" />
+       <workItem from="1773140677406" duration="3342000" />
+       <workItem from="1773144041861" duration="1423000" />
+-      <workItem from="1773228861096" duration="3526000" />
++      <workItem from="1773228861096" duration="5096000" />
+     </task>
+     <task id="LOCAL-00001" summary="Diseño material design">
+       <option name="closed" value="true" />
+@@ -141,7 +145,15 @@
+       <option name="project" value="LOCAL" />
+       <updated>1773232178481</updated>
+     </task>
+-    <option name="localTasksCounter" value="4" />
++    <task id="LOCAL-00004" summary="Añadiendo prestamo">
++      <option name="closed" value="true" />
++      <created>1773232521364</created>
++      <option name="number" value="00004" />
++      <option name="presentableId" value="LOCAL-00004" />
++      <option name="project" value="LOCAL" />
++      <updated>1773232521364</updated>
++    </task>
++    <option name="localTasksCounter" value="5" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">

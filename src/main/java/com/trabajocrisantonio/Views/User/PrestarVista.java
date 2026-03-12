@@ -16,7 +16,7 @@ public class PrestarVista extends JPanel {
 
     // Componentes de resultados
     public DefaultTableModel modeloTabla = new DefaultTableModel(
-            new Object[] { "ID", "Título", "Autor", "ISBN", "Estado" }, 0);
+            new Object[] { "ID", "Título", "Autor", "Estado" }, 0);
     public JTable tableResultados = new JTable(modeloTabla);
 
     // Botón de acción principal

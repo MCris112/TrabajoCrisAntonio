@@ -11,7 +11,7 @@ import com.trabajocrisantonio.Controllers.PrestamoController;
 import com.trabajocrisantonio.Controllers.UsuarioControlador;
 import com.trabajocrisantonio.Views.Admin.LibroVista;
 import com.trabajocrisantonio.Views.Admin.UsuarioVista;
-import com.trabajocrisantonio.Views.PrestamoVista;
+import com.trabajocrisantonio.Views.Admin.PrestamoVista;
 
 public class App extends JFrame {
 

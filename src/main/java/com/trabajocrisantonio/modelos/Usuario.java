@@ -7,6 +7,7 @@ import com.darkredgm.querymc.Database.Model;
 public class Usuario extends Model {
 
     public Usuario(){}
+
     public Usuario(String nif, String nombre, String apellidos, String direccion, String telefono) {
         this.nif = nif;
         this.nombre = nombre;

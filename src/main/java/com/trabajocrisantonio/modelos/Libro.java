@@ -8,26 +8,27 @@ public class Libro extends Model {
 
     public Libro(){}
 
-    public Libro(int id_libro, String editorial, int numero_hojas, String titulo, String autor, String genero, int precio, boolean bestseller) {
-        this.idLibro = idLibro;
+    public Libro(Integer id_libro, String editorial, int numero_hojas, String titulo, String autor, String genero, int precio, boolean bestseller, String imageUrl) {
+        this.idLibro = id_libro;
         this.editorial = editorial;
-        this.numero_hojas = numero_hojas;
+        this.numeroHojas = numero_hojas;
         this.titulo = titulo;
         this.autor = autor;
         this.genero = genero;
         this.precio = precio;
         this.bestseller = bestseller;
+        this.imageUrl = imageUrl;
     }
 
     @Primary
     @Column(nullable = false)
-    private int idLibro;
+    private Integer idLibro;
 
     @Column
     private String editorial;
 
     @Column
-    private int numero_hojas;
+    private int numeroHojas;
 
     @Column
     private String titulo;
@@ -43,6 +44,9 @@ public class Libro extends Model {
 
     @Column
     private boolean bestseller;
+
+    @Column
+    private String imageUrl;
 
     public int getId_libro() {
         return idLibro;
@@ -61,11 +65,11 @@ public class Libro extends Model {
     }
 
     public int getNumero_hojas() {
-        return numero_hojas;
+        return numeroHojas;
     }
 
     public void setNumero_hojas(int numero_hojas) {
-        this.numero_hojas = numero_hojas;
+        this.numeroHojas = numero_hojas;
     }
 
     public String getTitulo() {
@@ -106,5 +110,13 @@ public class Libro extends Model {
 
     public void setBestseller(boolean bestseller) {
         this.bestseller = bestseller;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

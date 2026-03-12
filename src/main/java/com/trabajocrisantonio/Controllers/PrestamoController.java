@@ -8,10 +8,8 @@ import javax.swing.event.ListSelectionListener;
 
 import com.darkredgm.querymc.Collections.MCList;
 import com.darkredgm.querymc.Database.ORM.QueryBuilder;
-import com.trabajocrisantonio.Views.PrestamoVista;
-import com.trabajocrisantonio.modelos.Libro;
+import com.trabajocrisantonio.Views.Admin.PrestamoVista;
 import com.trabajocrisantonio.modelos.Prestamo;
-import com.trabajocrisantonio.modelos.Usuario;
 
 public class PrestamoController extends javax.swing.JFrame {
     protected PrestamoVista vista;
@@ -28,7 +26,13 @@ public class PrestamoController extends javax.swing.JFrame {
 
         try {
             MCList<Prestamo> listaPrestamos = QueryBuilder.use(Prestamo.class).get();
+
+            System.out.println("----------");
+
             for (Prestamo prestamo : listaPrestamos) {
+
+                System.out.println( prestamo );
+
                 // TODO QueryMC problema
                 String[] columna = {
                         String.valueOf(prestamo.getId()),
@@ -36,13 +40,16 @@ public class PrestamoController extends javax.swing.JFrame {
                         String.valueOf(prestamo.getNif()),
                         prestamo.getFecha_inicio(),
                         prestamo.getFecha_fin(),
-                        String.valueOf(prestamo.isDevuelto())
+                        decisionDevuelto(prestamo.isDevuelto()) // Si | No
                 };
 
                 vista.modeloTabla.addRow(
                         columna
                 );
             }
+
+            System.out.println("----------");
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -69,14 +76,35 @@ public class PrestamoController extends javax.swing.JFrame {
     }
 
     public void insertar() {
+
+        if ( vista.fieldidLibro.getText().isEmpty() ) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar el libro", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if ( vista.fieldNif.getText().isEmpty() )
+        {
+            JOptionPane.showMessageDialog(null, "Debe ingresar el nif", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Integer id = null;
+
+        if ( !vista.fieldid.getText().isEmpty() )
+        {
+            id =  Integer.parseInt(vista.fieldid.getText());
+        }
+
+
+
         try {
             Prestamo prestamo = new Prestamo(
+                    id,
                     Integer.parseInt(vista.fieldidLibro.getText()),
-                    Integer.parseInt(vista.fieldid.getText()),
                     vista.fieldNif.getText(),
                     vista.fieldFechaInicio.getText(),
                     vista.fieldFechaFin.getText(),
-                    Boolean.parseBoolean(vista.fieldDevuelto.getText())
+                    esDevuelto()
             );
 
             prestamo.save();
@@ -88,14 +116,18 @@ public class PrestamoController extends javax.swing.JFrame {
     }
 
     public void actualizar() {
+
         try {
-            QueryBuilder.use(Usuario.class).whereKey(vista.fieldidLibro.getText()).update(builder -> {
-                builder.set("idLibro", vista.fieldidLibro.getText());
-                builder.set("Numero prestamo", vista.fieldid.getText());
+
+            QueryBuilder.use(Prestamo.class).whereKey(vista.fieldidLibro.getText()).update(builder -> {
+
+                // Tira error
+               // builder.set("id", vista.fieldid.getText());
+                builder.set("id_libro", vista.fieldidLibro.getText());
                 builder.set("nif", vista.fieldNif.getText());
-                builder.set("Fecha Inicio", vista.fieldFechaInicio.getText());
-                builder.set("Fecha Fin", vista.fieldFechaFin.getText());
-                builder.set("Devuelto", vista.fieldDevuelto.getText());
+                builder.set("fecha_inicio", vista.fieldFechaInicio.getText());
+                builder.set("fecha_fin", vista.fieldFechaFin.getText());
+                builder.set("devuelto", esDevuelto() );
             });
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL error", JOptionPane.ERROR_MESSAGE);
@@ -110,7 +142,7 @@ public class PrestamoController extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(vista, "Necesitas seleccionar para borrar");
         } else {
             try {
-                QueryBuilder.use(Usuario.class).whereKey(vista.fieldidLibro.getText()).delete();
+                QueryBuilder.use(Prestamo.class).whereKey(vista.fieldid.getText()).delete();
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL error", JOptionPane.ERROR_MESSAGE);
             }
@@ -127,7 +159,7 @@ public class PrestamoController extends javax.swing.JFrame {
         vista.fieldNif.setText("");
         vista.fieldFechaInicio.setText("");
         vista.fieldFechaFin.setText("");
-        vista.fieldDevuelto.setText("");
+        vista.fieldDevuelto.setActionCommand("Si");
 
 
         vista.table.clearSelection();
@@ -142,7 +174,36 @@ public class PrestamoController extends javax.swing.JFrame {
         vista.fieldNif.setText((String) vista.modeloTabla.getValueAt(fila, 2));
         vista.fieldFechaInicio.setText((String) vista.modeloTabla.getValueAt(fila, 3));
         vista.fieldFechaFin.setText((String) vista.modeloTabla.getValueAt(fila, 4));
-        vista.fieldDevuelto.setText((String) vista.modeloTabla.getValueAt(fila, 5));
 
+        vista.fieldDevuelto.setActionCommand((String) vista.modeloTabla.getValueAt(fila, 5));
+
+    }
+
+    public boolean esDevuelto()
+    {
+
+        boolean esDevuelto = false;
+
+        if( ((String) vista.fieldDevuelto.getSelectedItem()).equalsIgnoreCase("Si") )
+        {
+            esDevuelto = true;
+        }
+
+        return esDevuelto;
+    }
+
+    /**
+     * En base al boolean de la tabla, convierte el valor en formato string
+     * @return Si | No
+     */
+    public String decisionDevuelto( boolean esDevuelto )
+    {
+
+        if( esDevuelto )
+        {
+            return "SI";
+        }
+
+        return "No";
     }
 }
