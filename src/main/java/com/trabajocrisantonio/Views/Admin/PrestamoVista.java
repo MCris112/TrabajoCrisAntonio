@@ -1,6 +1,7 @@
 package com.trabajocrisantonio.Views.Admin;
 
 import com.trabajocrisantonio.Componentes.MatComboBox;
+import com.trabajocrisantonio.Componentes.MatFechaField;
 import com.trabajocrisantonio.Componentes.MatTextField;
 import com.trabajocrisantonio.Style;
 
@@ -17,8 +18,9 @@ public class PrestamoVista extends JPanel {
     public MatTextField fieldid = new MatTextField();
     public MatTextField fieldidLibro = new MatTextField();
     public MatTextField fieldNif = new MatTextField();
-    public MatTextField fieldFechaInicio = new MatTextField();
-    public MatTextField fieldFechaFin = new MatTextField();
+    // Campos con máscara para fechas (dd/mm/yyyy)
+    public MatFechaField fieldFechaInicio = new MatFechaField();
+    public MatFechaField fieldFechaFin = new MatFechaField();
     public MatComboBox<String> fieldDevuelto = new MatComboBox<>(new String[] { "SI", "NO" });
 
     public DefaultTableModel modeloTabla = new DefaultTableModel(

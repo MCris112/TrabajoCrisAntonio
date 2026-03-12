@@ -2,6 +2,7 @@ package com.trabajocrisantonio.Views.Admin;
 
 import com.trabajocrisantonio.Componentes.MatComboBox;
 import com.trabajocrisantonio.Componentes.MatTextField;
+import com.trabajocrisantonio.SoloNumerosAdapter;
 import com.trabajocrisantonio.Style;
 
 import javax.swing.*;
@@ -179,28 +180,17 @@ public class LibroVista extends JPanel {
         add(topContainer, BorderLayout.NORTH);
         add(scroll, BorderLayout.CENTER);
 
-        // --- Restricciones Numéricas (Lo más sencillo posible) ---
-        
+
+
+        // --- Restricciones Numéricas ---
+
+        // Restricción para Id del libro
+        fieldidLibro.addKeyListener( new SoloNumerosAdapter() );
+
         // Restricción para Número de Hojas
-        fieldNumerohojas.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                // Si el carácter no es un número, ignorar el evento
-                if (!Character.isDigit(c)) {
-                    e.consume(); 
-                }
-            }
-        });
+        fieldNumerohojas.addKeyListener( new SoloNumerosAdapter() );
 
         // Restricción para Precio
-        fieldPrecio.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                // Si el carácter no es un número, ignorar el evento
-                if (!Character.isDigit(c)) {
-                    e.consume();
-                }
-            }
-        });
+        fieldPrecio.addKeyListener( new SoloNumerosAdapter() );
     }
 }

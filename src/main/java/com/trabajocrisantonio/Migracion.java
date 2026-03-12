@@ -17,4 +17,9 @@ public class Migracion {
         DB.createDatabase("tareaDomingo");
         DB.verify(Libro.class, Usuario.class, Prestamo.class);
     }
+
+    public static void cargarValoresPorDefecto()
+    {
+        new Usuario();
+    }
 }

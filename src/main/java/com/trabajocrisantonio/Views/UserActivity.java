@@ -1,8 +1,9 @@
 package com.trabajocrisantonio.Views;
 
 import com.trabajocrisantonio.Componentes.TabbedPane;
+import com.trabajocrisantonio.Controllers.User.UserSolicitarLibroController;
 import com.trabajocrisantonio.Controllers.User.UsuarioLibroPrestadoController;
-import com.trabajocrisantonio.Views.User.PrestarVista;
+import com.trabajocrisantonio.Views.User.UserSolicitarLibroVista;
 import com.trabajocrisantonio.Views.User.UserLibrosVista;
 import com.trabajocrisantonio.modelos.Usuario;
 
@@ -11,6 +12,7 @@ import javax.swing.*;
 public class UserActivity extends JFrame {
 
     private Usuario usuario;
+    private UsuarioLibroPrestadoController prestadoController;
 
     public UserActivity( Usuario usuario) {
         this.usuario = usuario;
@@ -22,14 +24,22 @@ public class UserActivity extends JFrame {
 
         // Inicializar Vistas
         UserLibrosVista userLibrosVista = new UserLibrosVista();
-        PrestarVista prestarVista = new PrestarVista();
+        UserSolicitarLibroVista userSolicitarLibroVista = new UserSolicitarLibroVista();
 
         // Controladores
-        new UsuarioLibroPrestadoController(userLibrosVista, usuario);
+        prestadoController = new UsuarioLibroPrestadoController(userLibrosVista, usuario);
+        new UserSolicitarLibroController(userSolicitarLibroVista, usuario);
 
         // Añadir tabs
         tabbedPane.addTab("Mis libros prestados", userLibrosVista);
-        tabbedPane.addTab("Solicitar", prestarVista);
+        tabbedPane.addTab("Solicitar", userSolicitarLibroVista);
+
+        // Refrescar tabla cuando se cambia de pestaña
+        tabbedPane.addChangeListener(e -> {
+            if (tabbedPane.getSelectedIndex() == 0) { // Tab de "Mis libros prestados"
+                prestadoController.cargarTabla();
+            }
+        });
 
         // Añadir a la ventana
         add(tabbedPane);

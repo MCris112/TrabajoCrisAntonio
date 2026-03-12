@@ -1,6 +1,8 @@
 package com.trabajocrisantonio.Controllers;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -77,16 +79,8 @@ public class PrestamoController extends javax.swing.JFrame {
 
     public void insertar() {
 
-        if ( vista.fieldidLibro.getText().isEmpty() ) {
-            JOptionPane.showMessageDialog(null, "Debe ingresar el libro", "Error", JOptionPane.ERROR_MESSAGE);
+        if ( !validarFields() )
             return;
-        }
-
-        if ( vista.fieldNif.getText().isEmpty() )
-        {
-            JOptionPane.showMessageDialog(null, "Debe ingresar el nif", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
 
         Integer id = null;
 
@@ -116,6 +110,10 @@ public class PrestamoController extends javax.swing.JFrame {
     }
 
     public void actualizar() {
+
+
+        if ( !validarFields() )
+            return;
 
         try {
 
@@ -205,5 +203,39 @@ public class PrestamoController extends javax.swing.JFrame {
         }
 
         return "No";
+    }
+
+    public boolean validarFields()
+    {
+
+        if ( vista.fieldidLibro.getText().isEmpty() ) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar el libro", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if ( vista.fieldNif.getText().isEmpty() )
+        {
+            JOptionPane.showMessageDialog(null, "Debe ingresar el nif", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Comparar si fecha fin no puede ser menor que fecha inicio
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            sdf.setLenient(false); // Validación estricta
+
+            Date fechaInicio = sdf.parse(vista.fieldFechaInicio.getText());
+            Date fechaFin = sdf.parse(vista.fieldFechaFin.getText());
+
+            if (fechaFin.before(fechaInicio)) {
+                JOptionPane.showMessageDialog(null, "La fecha de fin no puede ser anterior a la de inicio", "Error de Fecha", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Asegúrese de rellenar las fechas correctamente (dd/mm/aaaa)", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
     }
 }
