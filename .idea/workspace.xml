@@ -4,16 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="Añadiendo detalles">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/SoloNumerosAdapter.java" afterDir="false" />
+    <list default="true" id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="cambios">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/QueryMC-0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/QueryMC-0.1-SNAPSHOT.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/PrestamoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/PrestamoController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/User/UsuarioLibroPrestadoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/User/UsuarioLibroPrestadoController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Migracion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Migracion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/Admin/LibroVista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/Admin/LibroVista.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/Admin/PrestamoVista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/Admin/PrestamoVista.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/User/PrestarVista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/User/UserSolicitarLibroVista.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/UserActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Views/UserActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Libro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Libro.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Prestamo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Prestamo.java" afterDir="false" />
     </list>
     <list id="8e9e46bc-c522-4e11-8638-4c3f7e8b38b4" name="Changes by Lozano" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,6 +29,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -60,6 +60,8 @@
   &quot;keyToString&quot;: {
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
     &quot;Application.Migracion.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.TrabajoCrisAntonio [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.TrabajoCrisAntonio [install].executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
@@ -72,7 +74,7 @@
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Lozano/Desktop/programacion-daw-main/TrabajoCrisAntonio&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/crisv/Desktop/Project/TrabajoCrisAntonio/lib&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -89,6 +91,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\crisv\Desktop\Project\TrabajoCrisAntonio\lib" />
       <recent name="C:\Users\Lozano\Desktop\programacion-daw-main\TrabajoCrisAntonio" />
     </key>
   </component>
@@ -149,7 +152,10 @@
       <workItem from="1773262047438" duration="29000" />
       <workItem from="1773299024727" duration="3466000" />
       <workItem from="1773305093945" duration="45000" />
-      <workItem from="1773334420391" duration="3268000" />
+      <workItem from="1773334420391" duration="5001000" />
+      <workItem from="1773384321964" duration="1040000" />
+      <workItem from="1773390561813" duration="257000" />
+      <workItem from="1773390882819" duration="1489000" />
     </task>
     <task id="LOCAL-00001" summary="Diseño material design">
       <option name="closed" value="true" />
@@ -191,7 +197,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773302284767</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="cambios">
+      <option name="closed" value="true" />
+      <created>1773337828963</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1773337828963</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -202,7 +216,8 @@
     <MESSAGE value="Arreglando diseño y error" />
     <MESSAGE value="Añadiendo prestamo" />
     <MESSAGE value="Añadiendo detalles" />
-    <option name="LAST_COMMIT_MESSAGE" value="Añadiendo detalles" />
+    <MESSAGE value="cambios" />
+    <option name="LAST_COMMIT_MESSAGE" value="cambios" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -216,6 +231,11 @@
           <url>jar://$PROJECT_DIR$/lib/QueryMC-0.1-SNAPSHOT.jar!/com/darkredgm/querymc/Database/ORM/QueryBuilder.class</url>
           <line>106</line>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/PrestamoController.java</url>
+          <line>36</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

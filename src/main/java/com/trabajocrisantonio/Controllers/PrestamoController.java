@@ -33,8 +33,6 @@ public class PrestamoController extends javax.swing.JFrame {
 
             for (Prestamo prestamo : listaPrestamos) {
 
-                System.out.println( prestamo );
-
                 // TODO QueryMC problema
                 String[] columna = {
                         String.valueOf(prestamo.getId()),

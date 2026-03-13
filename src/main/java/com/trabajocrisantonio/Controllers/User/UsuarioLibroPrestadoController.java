@@ -47,7 +47,6 @@ public class UsuarioLibroPrestadoController {
         vista.tableLibros.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                // TODO Auto-generated method stub
                 if (!e.getValueIsAdjusting()) {
                     seleccionarFila();
                 }
@@ -61,7 +60,7 @@ public class UsuarioLibroPrestadoController {
 
         try{
             MCList<Prestamo> listaLibros = QueryBuilder.use(Prestamo.class)
-                    .where("nif", this.usuario.getNif())
+                    .where("usuario_nif", this.usuario.getNif())
                     .where("devuelto", false)
                     .get();
 

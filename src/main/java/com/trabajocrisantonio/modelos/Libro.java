@@ -119,4 +119,19 @@ public class Libro extends Model {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    @Override
+    public String toString() {
+        return "Libro{" +
+                "idLibro=" + idLibro +
+                ", editorial='" + editorial + '\'' +
+                ", numeroHojas=" + numeroHojas +
+                ", titulo='" + titulo + '\'' +
+                ", autor='" + autor + '\'' +
+                ", genero='" + genero + '\'' +
+                ", precio=" + precio +
+                ", bestseller=" + bestseller +
+                ", imageUrl='" + imageUrl + '\'' +
+                '}';
+    }
 }

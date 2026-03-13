@@ -1,5 +1,6 @@
 package com.trabajocrisantonio.modelos;
 
+import com.darkredgm.querymc.Annotations.BelongsTo;
 import com.darkredgm.querymc.Annotations.Column;
 import com.darkredgm.querymc.Annotations.Primary;
 import com.darkredgm.querymc.Database.Model;
@@ -10,9 +11,13 @@ public class Prestamo extends Model {
 
     }
     public Prestamo(Integer id, int id_libro, String nif, String fecha_inicio, String fecha_fin, boolean devuelto) {
-        this.idLibro = id_libro;
+        this.libro = new Libro();
+        libro.setId_libro(id_libro);
+
         this.id = id;
-        this.nif = nif;
+        this.usuario = new Usuario();
+        usuario.setNif(nif);
+
         this.fechaInicio = fecha_inicio;
         this.fechaFin = fecha_fin;
         this.devuelto = devuelto;
@@ -22,13 +27,19 @@ public class Prestamo extends Model {
     @Column
     private Integer id;
 
-    @Column
-    //Clave foranea
-    private int idLibro;
+//    @Column
+//    //Clave foranea
+//    private int idLibro;
 
-    @Column
-    //Clave foranea
-    private String nif;
+    @BelongsTo( model = Libro.class )
+    private Libro libro;
+
+//    @Column
+//    //Clave foranea
+//    private String nif;
+
+    @BelongsTo( model =  Usuario.class, column = "usuario_nif")
+    private Usuario usuario;
 
     @Column
     private String fechaInicio;
@@ -40,11 +51,11 @@ public class Prestamo extends Model {
     private boolean devuelto;
 
     public int getId_libro() {
-        return idLibro;
+        return libro.getId_libro();
     }
 
     public void setId_libro(int id_libro) {
-        this.idLibro = id_libro;
+        this.libro.setId_libro(id_libro);
     }
 
     public int getId() {
@@ -56,11 +67,7 @@ public class Prestamo extends Model {
     }
 
     public String getNif() {
-        return nif;
-    }
-
-    public void setNif(String nif) {
-        this.nif = nif;
+        return usuario.getNif();
     }
 
     public String getFecha_inicio() {
@@ -91,8 +98,8 @@ public class Prestamo extends Model {
     public String toString() {
         return "Prestamo{" +
                 "id=" + id +
-                ", id_libro=" + idLibro +
-                ", nif='" + nif + '\'' +
+                ", id_libro=" + getId_libro() +
+                ", nif='" + getNif() + '\'' +
                 ", fecha_inicio='" + fechaInicio + '\'' +
                 ", fecha_fin='" + fechaFin + '\'' +
                 ", devuelto=" + devuelto +
