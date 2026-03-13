@@ -88,36 +88,48 @@ public class  UsuarioControlador {
     }
 
     public void actualizar() {
-        try {
-            QueryBuilder.use(Usuario.class).whereKey(vista.fieldNif.getText()).update(builder -> {
-                builder.set("nif", vista.fieldNif.getText());
-                builder.set("nombre", vista.fieldNombre.getText());
-                builder.set("apellidos", vista.fieldApellido.getText());
-                builder.set("direccion", vista.fieldDireccion.getText());
-                builder.set("telefono", vista.fieldTelefono.getText());
-            });
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL error", JOptionPane.ERROR_MESSAGE);
+        int opcion = JOptionPane.showConfirmDialog(vista,
+                "¿Deseas actualizar este usuario?",
+                "Confirmar Actualización",
+                JOptionPane.YES_NO_OPTION);
 
+        if (opcion == JOptionPane.YES_OPTION) {
+            try {
+                QueryBuilder.use(Usuario.class).whereKey(vista.fieldNif.getText()).update(builder -> {
+                    builder.set("nif", vista.fieldNif.getText());
+                    builder.set("nombre", vista.fieldNombre.getText());
+                    builder.set("apellidos", vista.fieldApellido.getText());
+                    builder.set("direccion", vista.fieldDireccion.getText());
+                    builder.set("telefono", vista.fieldTelefono.getText());
+                });
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL error", JOptionPane.ERROR_MESSAGE);
+
+            }
+            cargarTabla();
+            limpiar();
         }
-        cargarTabla();
-        limpiar();
     }
 
     public void borrar() {
         if (vista.fieldNif.getText().isEmpty()) {
             JOptionPane.showMessageDialog(vista, "Necesitas seleccionar para borrar");
         } else {
-            try {
-                QueryBuilder.use(Usuario.class).whereKey(vista.fieldNif.getText()).delete();
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL error", JOptionPane.ERROR_MESSAGE);
+            int opcion = JOptionPane.showConfirmDialog(vista,
+                    "¿Deseas eliminar este usuario?",
+                    "Confirmar Eliminación",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (opcion == JOptionPane.YES_OPTION) {
+                try {
+                    QueryBuilder.use(Usuario.class).whereKey(vista.fieldNif.getText()).delete();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL error", JOptionPane.ERROR_MESSAGE);
+                }
+                cargarTabla();
+                limpiar();
             }
-            cargarTabla();
-            limpiar();
         }
-
-
     }
 
     public void limpiar() {

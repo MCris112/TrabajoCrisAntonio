@@ -113,40 +113,52 @@ public class PrestamoController extends javax.swing.JFrame {
         if ( !validarFields() )
             return;
 
-        try {
+        int opcion = JOptionPane.showConfirmDialog(vista,
+                "¿Deseas actualizar este préstamo?",
+                "Confirmar Actualización",
+                JOptionPane.YES_NO_OPTION);
 
-            QueryBuilder.use(Prestamo.class).whereKey(vista.fieldidLibro.getText()).update(builder -> {
+        if (opcion == JOptionPane.YES_OPTION) {
+            try {
 
-                // Tira error
-               // builder.set("id", vista.fieldid.getText());
-                builder.set("id_libro", vista.fieldidLibro.getText());
-                builder.set("nif", vista.fieldNif.getText());
-                builder.set("fecha_inicio", vista.fieldFechaInicio.getText());
-                builder.set("fecha_fin", vista.fieldFechaFin.getText());
-                builder.set("devuelto", esDevuelto() );
-            });
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL error", JOptionPane.ERROR_MESSAGE);
+                QueryBuilder.use(Prestamo.class).whereKey(vista.fieldidLibro.getText()).update(builder -> {
 
+                    // Tira error
+                    // builder.set("id", vista.fieldid.getText());
+                    builder.set("libro_id", vista.fieldidLibro.getText());
+                    builder.set("usuario_nif", vista.fieldNif.getText());
+                    builder.set("fecha_inicio", vista.fieldFechaInicio.getText());
+                    builder.set("fecha_fin", vista.fieldFechaFin.getText());
+                    builder.set("devuelto", esDevuelto());
+                });
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL error", JOptionPane.ERROR_MESSAGE);
+
+            }
+            cargarTabla();
+            limpiar();
         }
-        cargarTabla();
-        limpiar();
     }
 
     public void borrar() {
         if (vista.fieldid.getText().isEmpty()) {
             JOptionPane.showMessageDialog(vista, "Necesitas seleccionar para borrar");
         } else {
-            try {
-                QueryBuilder.use(Prestamo.class).whereKey(vista.fieldid.getText()).delete();
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL error", JOptionPane.ERROR_MESSAGE);
+            int opcion = JOptionPane.showConfirmDialog(vista,
+                    "¿Deseas eliminar este préstamo?",
+                    "Confirmar Eliminación",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (opcion == JOptionPane.YES_OPTION) {
+                try {
+                    QueryBuilder.use(Prestamo.class).whereKey(vista.fieldid.getText()).delete();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL error", JOptionPane.ERROR_MESSAGE);
+                }
+                cargarTabla();
+                limpiar();
             }
-            cargarTabla();
-            limpiar();
         }
-
-
     }
 
     public void limpiar() {

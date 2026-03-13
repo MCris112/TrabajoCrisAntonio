@@ -29,7 +29,6 @@ public class LibroController {
         try {
             MCList<Libro> listaLibros = QueryBuilder.use(Libro.class).get();
             for (Libro libro : listaLibros) {
-                // TODO QueryMC problema
                 String[] columna = {
                         String.valueOf(libro.getId_libro()),
                         libro.getEditorial(),
@@ -91,38 +90,54 @@ public class LibroController {
     }
 
     public void actualizar() {
-        try {
-            QueryBuilder.use(Libro.class).whereKey(vista.fieldidLibro.getText()).update(builder -> {
-                builder.set("id_Libro", vista.fieldidLibro.getText());
-                builder.set("editorial", vista.fieldEditorial.getText());
-                builder.set("numero_hojas", vista.fieldNumerohojas.getText());
-                builder.set("titulo", vista.fieldTitulo.getText());
-                builder.set("autor", vista.fieldAutor.getText());
-                builder.set("genero", vista.fieldGenero.getText());
-                builder.set("precio", vista.fieldPrecio.getText());
-                builder.set("bestseller", esBestSeller());
-                builder.set("image_url", vista.fieldImagen.getText());
-            });
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL error", JOptionPane.ERROR_MESSAGE);
-            return;
+        int opcion = JOptionPane.showConfirmDialog(vista,
+                "¿Deseas actualizar este libro?",
+                "Confirmar Actualización",
+                JOptionPane.YES_NO_OPTION);
 
+        if (opcion == JOptionPane.YES_OPTION) {
+            try {
+                QueryBuilder.use(Libro.class).whereKey(vista.fieldidLibro.getText()).update(builder -> {
+                    builder.set("id_libro", vista.fieldidLibro.getText());
+                    builder.set("editorial", vista.fieldEditorial.getText());
+                    builder.set("numero_hojas", vista.fieldNumerohojas.getText());
+                    builder.set("titulo", vista.fieldTitulo.getText());
+                    builder.set("autor", vista.fieldAutor.getText());
+                    builder.set("genero", vista.fieldGenero.getText());
+                    builder.set("precio", vista.fieldPrecio.getText());
+                    builder.set("bestseller", esBestSeller());
+                    builder.set("image_url", vista.fieldImagen.getText());
+                });
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL error", JOptionPane.ERROR_MESSAGE);
+                return;
+
+            }
+            cargarTabla();
+            limpiar();
         }
-        cargarTabla();
-        limpiar();
     }
 
     public void borrar() {
         if (vista.fieldidLibro.getText().isEmpty()) {
             JOptionPane.showMessageDialog(vista, "Necesitas seleccionar para borrar");
         } else {
-            try {
-                QueryBuilder.use(Libro.class).whereKey(vista.fieldidLibro.getText()).delete();
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL error", JOptionPane.ERROR_MESSAGE);
+
+            int opcion = JOptionPane.showConfirmDialog(vista,
+                    "¿Deseas eliminar?",
+                    "Confirmación",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (opcion == JOptionPane.YES_OPTION) {
+                try {
+                    QueryBuilder.use(Libro.class).whereKey(vista.fieldidLibro.getText()).delete();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(vista, e.getMessage(), "SQL error", JOptionPane.ERROR_MESSAGE);
+                }
+                cargarTabla();
+                limpiar();
             }
-            cargarTabla();
-            limpiar();
         }
 
     }

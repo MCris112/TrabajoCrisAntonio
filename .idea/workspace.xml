@@ -4,15 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="cambios">
+    <list default="true" id="45c860c1-d215-4f4c-b166-7f1d61618db8" name="Changes" comment="Arreglo de la libreria de QueryMC-0.1-SNAPSHOT.jar">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/QueryMC-0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/QueryMC-0.1-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/LibroController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/LibroController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/PrestamoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/PrestamoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/User/UsuarioLibroPrestadoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/User/UsuarioLibroPrestadoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Migracion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Migracion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Libro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Libro.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Prestamo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/modelos/Prestamo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/UsuarioControlador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trabajocrisantonio/Controllers/UsuarioControlador.java" afterDir="false" />
     </list>
     <list id="8e9e46bc-c522-4e11-8638-4c3f7e8b38b4" name="Changes by Lozano" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -155,7 +152,8 @@
       <workItem from="1773334420391" duration="5001000" />
       <workItem from="1773384321964" duration="1040000" />
       <workItem from="1773390561813" duration="257000" />
-      <workItem from="1773390882819" duration="1489000" />
+      <workItem from="1773390882819" duration="1728000" />
+      <workItem from="1773405594442" duration="2761000" />
     </task>
     <task id="LOCAL-00001" summary="Diseño material design">
       <option name="closed" value="true" />
@@ -205,7 +203,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773337828963</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Arreglo de la libreria de QueryMC-0.1-SNAPSHOT.jar">
+      <option name="closed" value="true" />
+      <created>1773393177159</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1773393177159</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -217,7 +223,8 @@
     <MESSAGE value="Añadiendo prestamo" />
     <MESSAGE value="Añadiendo detalles" />
     <MESSAGE value="cambios" />
-    <option name="LAST_COMMIT_MESSAGE" value="cambios" />
+    <MESSAGE value="Arreglo de la libreria de QueryMC-0.1-SNAPSHOT.jar" />
+    <option name="LAST_COMMIT_MESSAGE" value="Arreglo de la libreria de QueryMC-0.1-SNAPSHOT.jar" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
